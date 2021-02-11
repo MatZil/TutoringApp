@@ -41,6 +41,8 @@ namespace TutoringApp
             {
                 endpoints.MapControllers();
             });
+
+            app.StartAngularProject(env);
         }
     }
 }
