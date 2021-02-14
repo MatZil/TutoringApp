@@ -28,7 +28,13 @@ namespace TutoringApp.Configurations
         public static void AddIdentity(this IServiceCollection services)
         {
             services
-                .AddIdentity<AppUser, IdentityRole>()
+                .AddIdentity<AppUser, IdentityRole>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
         }
         #endregion

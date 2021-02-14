@@ -12,6 +12,6 @@ export class UrlService {
   public getApiEndpointUrl(controller: string, endpoint: string): string {
     const baseApiUrl = this.baseUrl + 'api/';
 
-    return baseApiUrl + controller + endpoint;
+    return baseApiUrl + controller + `/${endpoint}`;
   }
 }

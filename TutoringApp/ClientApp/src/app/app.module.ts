@@ -7,10 +7,12 @@ import { AppComponent } from './app.component';
 import { ButtonModule } from 'primeng/button';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { RegistrationComponent } from './components/auth/registration/registration.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
