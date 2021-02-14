@@ -20,6 +20,7 @@ namespace TutoringApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.SetUpDatabase(Configuration);
+            services.AddIdentity();
             services.AddControllers();
         }
 

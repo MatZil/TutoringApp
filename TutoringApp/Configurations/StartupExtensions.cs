@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TutoringApp.Data;
+using TutoringApp.Data.Models;
 
 namespace TutoringApp.Configurations
 {
     public static class StartupExtensions
     {
+        #region ConfigureServices extensions
         public static void SetUpDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -22,6 +25,15 @@ namespace TutoringApp.Configurations
                 .Database.Migrate();
         }
 
+        public static void AddIdentity(this IServiceCollection services)
+        {
+            services
+                .AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+        }
+        #endregion
+
+        #region Configure extensions
         public static void StartAngularProject(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSpa(spa =>
@@ -35,5 +47,6 @@ namespace TutoringApp.Configurations
                 }
             });
         }
+        #endregion
     }
 }
