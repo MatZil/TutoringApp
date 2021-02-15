@@ -6,6 +6,7 @@ import { UserRegistration } from 'src/app/models/auth/user-registration';
 import { HttpService } from '../http.service';
 import { AppConstants } from 'src/app/app.constants';
 import { tap } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class AuthService {
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(
-    private httpService: HttpService
+    private httpService: HttpService,
+    private jwtHelperService: JwtHelperService
   ) { }
 
   public register(userRegistration: UserRegistration): Observable<any> {
@@ -34,6 +36,12 @@ export class AuthService {
   public logout(): void {
     localStorage.removeItem(AppConstants.WebTokenKey);
     this.changeAuthState(false);
+  }
+
+  public isCurrentlyAuthenticated(): boolean {
+    const token = localStorage.getItem(AppConstants.WebTokenKey);
+
+    return token && !this.jwtHelperService.isTokenExpired();
   }
 
   private changeAuthState(isAuthenticated: boolean): void {
