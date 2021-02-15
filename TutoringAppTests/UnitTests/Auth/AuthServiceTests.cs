@@ -11,7 +11,7 @@ using TutoringApp.Data.Dtos.Auth;
 using TutoringApp.Data.Models;
 using TutoringApp.Services.Auth;
 using TutoringApp.Services.Interfaces;
-using TutoringAppTests.Configuration;
+using TutoringAppTests.Setup;
 using Xunit;
 
 namespace TutoringAppTests.UnitTests.Auth

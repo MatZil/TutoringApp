@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using TutoringApp.Data.Models;
 
-namespace TutoringAppTests.Configuration.Seeds
+namespace TutoringAppTests.Setup.Seeds
 {
     public static class AppUserSeeder
     {

@@ -12,9 +12,9 @@ using System.IO;
 using TutoringApp.Configurations.Mapping;
 using TutoringApp.Data;
 using TutoringApp.Data.Models;
-using TutoringAppTests.Configuration.Seeds;
+using TutoringAppTests.Setup.Seeds;
 
-namespace TutoringAppTests.Configuration
+namespace TutoringAppTests.Setup
 {
     public class UnitTestSetup
     {
