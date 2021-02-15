@@ -38,14 +38,14 @@ namespace TutoringApp.Services.Auth
 
         public JwtSecurityToken GetSecurityToken(SigningCredentials signingCredentials, IEnumerable<Claim> claims)
         {
-            var expirationTimeString = _webTokenSettings.GetSection("ExpiryInMinutes").Value;
-            var expirationTime = Convert.ToDouble(expirationTimeString);
+            var lifetimeString = _webTokenSettings.GetSection("LifetimeInHours").Value;
+            var lifetime = Convert.ToDouble(lifetimeString);
 
             return new JwtSecurityToken(
                 issuer: _webTokenSettings.GetSection("ValidIssuer").Value,
                 audience: _webTokenSettings.GetSection("ValidAudience").Value,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(expirationTime),
+                expires: DateTime.Now.AddHours(lifetime),
                 signingCredentials: signingCredentials
                 );
         }

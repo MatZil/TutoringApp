@@ -1,3 +1,5 @@
+import { AppConstants } from '../app.constants';
+
 export function TokenGetter(): string {
-    return localStorage.getItem('web_token');
+    return localStorage.getItem(AppConstants.WebTokenKey);
 }

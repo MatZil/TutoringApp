@@ -4,6 +4,8 @@ import { LoginResponse } from 'src/app/models/auth/login-response';
 import { UserLogin } from 'src/app/models/auth/user-login';
 import { UserRegistration } from 'src/app/models/auth/user-registration';
 import { HttpService } from '../http.service';
+import { AppConstants } from 'src/app/app.constants';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,15 +25,18 @@ export class AuthService {
   }
 
   public login(userLogin: UserLogin): Observable<LoginResponse> {
-    return this.httpService.post(this.authController, 'login', userLogin);
+    return this.httpService.post(this.authController, 'login', userLogin).pipe(
+      tap(response => localStorage.setItem(AppConstants.WebTokenKey, response.webToken)),
+      tap(_ => this.changeAuthState(true))
+    );
   }
 
   public logout(): void {
-    localStorage.removeItem('web_token');
+    localStorage.removeItem(AppConstants.WebTokenKey);
     this.changeAuthState(false);
   }
 
-  public changeAuthState(isAuthenticated: boolean): void {
+  private changeAuthState(isAuthenticated: boolean): void {
     if (this.isAuthenticatedSubject.value !== isAuthenticated) {
       this.isAuthenticatedSubject.next(isAuthenticated);
     }

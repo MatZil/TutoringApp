@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 using TutoringApp.Data;
 using TutoringApp.Data.Models;
@@ -64,7 +65,8 @@ namespace TutoringApp.Configurations
 
                         ValidIssuer = settings.GetSection("ValidIssuer").Value,
                         ValidAudience = settings.GetSection("ValidAudience").Value,
-                        IssuerSigningKey = new SymmetricSecurityKey(securityKeyBytes)
+                        IssuerSigningKey = new SymmetricSecurityKey(securityKeyBytes),
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
         }

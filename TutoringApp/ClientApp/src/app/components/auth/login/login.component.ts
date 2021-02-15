@@ -27,10 +27,7 @@ export class LoginComponent implements OnInit {
       password: 'sixlet'
     };
 
-    this.authService.login(userLogin).subscribe(response => {
-      localStorage.setItem('web_token', response.webToken);
-      this.authService.changeAuthState(true);
-    });
+    this.authService.login(userLogin).subscribe();
   }
 
   public logout(): void {
