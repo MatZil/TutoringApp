@@ -1,0 +1,22 @@
+:host ::ng-deep .p-toolbar {
+  position: sticky;
+  position: -webkit-sticky;
+  z-index: 10000;
+  top: 0;
+  margin-bottom: 0.5em;
+}
+
+.icon-container {
+  margin: -0.3em;
+}
+
+.icon-container:hover {
+  background-color: gainsboro;
+  border-radius: 50px;
+}
+
+.icon-container > i {
+  cursor: pointer;
+  font-size: 30px;
+  margin: 0.2em;
+}

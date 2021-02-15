@@ -1,9 +1,5 @@
 <button pButton label="Login" (click)="login()"></button>
 <button pButton label="Logout" (click)="logout()"></button>
 <button pButton label="Mock" (click)="mockRequest()"></button>
-<p *ngIf="isLoggedIn | async">
-    LOGGED IN
-</p>
-<p *ngIf="!(isLoggedIn | async)">
-    LOGGED OUT
-</p>
+<p *ngIf="isLoggedIn | async">LOGGED IN</p>
+<p *ngIf="!(isLoggedIn | async)">LOGGED OUT</p>

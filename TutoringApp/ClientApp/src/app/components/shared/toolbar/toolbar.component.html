@@ -1,0 +1,13 @@
+<p-toolbar>
+  <div class="p-toolbar-group-left">
+    <div class="icon-container">
+      <i class="pi pi-home" (click)="navigateHome()"></i>
+    </div>
+  </div>
+  <div class="p-toolbar-group-right">
+    <div class="icon-container">
+      <i class="pi pi-user" (click)="userMenu.toggle($event)"></i>
+      <p-menu #userMenu [popup]="true" [model]="userMenuItems"></p-menu>
+    </div>
+  </div>
+</p-toolbar>
