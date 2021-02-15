@@ -6,6 +6,11 @@
   margin-bottom: 0.5em;
 }
 
+:host ::ng-deep .p-menu {
+  position: absolute;
+  top: 60px !important;
+}
+
 .icon-container {
   margin: -0.3em;
 }
