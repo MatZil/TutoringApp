@@ -18,10 +18,10 @@ export class RegistrationComponent implements OnInit {
 
   public register() {
     const userRegistration: UserRegistration = {
-      firstName: ' sdgfsd',
+      firstName: ' Matas',
       lastName: 'Zilinskas',
-      username: 'hjgdjfgk',
-      password: 'matjas'
+      email: 'zilinskas.matas1999@gmail.com',
+      password: 'sixlet'
     };
 
     this.authService.register(userRegistration).subscribe();
