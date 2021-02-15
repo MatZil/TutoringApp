@@ -32,7 +32,7 @@ namespace TutoringApp.Services.Auth
             ValidateUserRegistration(userRegistration);
 
             var user = _mapper.Map<AppUser>(userRegistration);
-            var identityResult = await _userManager.CreateAsync(user);
+            var identityResult = await _userManager.CreateAsync(user, userRegistration.Password);
 
             if (!identityResult.Succeeded)
             {
@@ -40,11 +40,15 @@ namespace TutoringApp.Services.Auth
                 _logger.LogError(errorMessage);
                 throw new InvalidOperationException(errorMessage);
             }
-
-            await _userManager.AddPasswordAsync(user, userRegistration.Password);
         }
 
-        public void ValidateUserRegistration(UserRegistrationDto userRegistration)
+        public async Task<LoginResponseDto> Login(UserLoginDto userLogin)
+        {
+            var user = await _userManager.FindByEmailAsync(userLogin.Email);
+
+        }
+
+        private void ValidateUserRegistration(UserRegistrationDto userRegistration)
         {
             if (userRegistration.FirstName.IsNullOrEmpty() || userRegistration.LastName.IsNullOrEmpty())
             {

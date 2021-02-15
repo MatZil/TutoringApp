@@ -19,8 +19,9 @@ namespace TutoringApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.SetUpDatabase(Configuration);
+            services.SetupDatabase(Configuration);
             services.AddIdentity();
+            services.SetupWebToken(Configuration);
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.ConfigureDependencyInjections();
@@ -38,6 +39,7 @@ namespace TutoringApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -6,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TutoringApp.Data;
 using TutoringApp.Data.Models;
 
@@ -14,7 +17,7 @@ namespace TutoringApp.Configurations
     public static class StartupExtensions
     {
         #region ConfigureServices extensions
-        public static void SetUpDatabase(this IServiceCollection services, IConfiguration configuration)
+        public static void SetupDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(connectionString));
@@ -36,6 +39,34 @@ namespace TutoringApp.Configurations
                     options.Password.RequireUppercase = false;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+        }
+
+        public static void SetupWebToken(this IServiceCollection services, IConfiguration configuration)
+        {
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    var settings = configuration.GetSection("WebTokenSettings");
+                    var securityKey = settings.GetSection("SecurityKey").Value;
+                    var securityKeyBytes = Encoding.UTF8.GetBytes(securityKey);
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+
+                        ValidIssuer = settings.GetSection("ValidIssuer").Value,
+                        ValidAudience = settings.GetSection("ValidAudience").Value,
+                        IssuerSigningKey = new SymmetricSecurityKey(securityKeyBytes)
+                    };
+                });
         }
         #endregion
 

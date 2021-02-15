@@ -9,7 +9,12 @@ namespace TutoringApp.Configurations
         public static void ConfigureDependencyInjections(this IServiceCollection services)
         {
             services
-                .AddScoped<IAuthService, AuthService>();
+
+                // Services
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<IWebTokenService, WebTokenService>()
+
+                ;
         }
     }
 }

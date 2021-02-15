@@ -6,5 +6,6 @@ namespace TutoringApp.Services.Interfaces
     public interface IAuthService
     {
         Task Register(UserRegistrationDto userRegistration);
+        Task<LoginResponseDto> Login(UserLoginDto userLogin);
     }
 }
