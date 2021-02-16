@@ -18,17 +18,26 @@ namespace TutoringApp.Services.Auth
         private readonly ILogger<IAuthService> _logger;
         private readonly IMapper _mapper;
         private readonly IWebTokenService _webTokenService;
+        private readonly IUrlService _urlService;
+        private readonly IEncodingService _encodingService;
+        private readonly IEmailService _emailService;
 
         public AuthService(
             UserManager<AppUser> userManager,
             ILogger<IAuthService> logger,
             IMapper mapper,
-            IWebTokenService webTokenService)
+            IWebTokenService webTokenService, 
+            IUrlService urlService,
+            IEncodingService encodingService,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
             _webTokenService = webTokenService;
+            _urlService = urlService;
+            _encodingService = encodingService;
+            _emailService = emailService;
         }
 
         #region Interface implementation
@@ -45,6 +54,11 @@ namespace TutoringApp.Services.Auth
                 _logger.LogError(errorMessage);
                 throw new InvalidOperationException(errorMessage);
             }
+
+            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var encodedEmailConfirmationToken = _encodingService.GetWebEncodedString(emailConfirmationToken);
+            var emailConfirmationLink = _urlService.GetEmailConfirmationLink(user.Email, encodedEmailConfirmationToken);
+            await _emailService.SendConfirmationEmail(user.Email, emailConfirmationLink);
         }
 
         public async Task<LoginResponseDto> Login(UserLoginDto userLogin)

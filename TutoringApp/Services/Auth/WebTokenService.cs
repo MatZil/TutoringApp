@@ -12,10 +12,12 @@ namespace TutoringApp.Services.Auth
 {
     public class WebTokenService : IWebTokenService
     {
+        private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _webTokenSettings;
 
         public WebTokenService(IConfiguration configuration)
         {
+            _configuration = configuration;
             _webTokenSettings = configuration.GetSection("WebTokenSettings");
         }
 
@@ -43,7 +45,7 @@ namespace TutoringApp.Services.Auth
 
             return new JwtSecurityToken(
                 issuer: _webTokenSettings.GetSection("ValidIssuer").Value,
-                audience: _webTokenSettings.GetSection("ValidAudience").Value,
+                audience: _configuration["AppSettings:RootUrl"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(lifetime),
                 signingCredentials: signingCredentials

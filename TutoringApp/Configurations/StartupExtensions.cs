@@ -39,7 +39,9 @@ namespace TutoringApp.Configurations
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                ;
         }
 
         public static void SetupWebToken(this IServiceCollection services, IConfiguration configuration)
@@ -64,7 +66,7 @@ namespace TutoringApp.Configurations
                         ValidateIssuerSigningKey = true,
 
                         ValidIssuer = settings.GetSection("ValidIssuer").Value,
-                        ValidAudience = settings.GetSection("ValidAudience").Value,
+                        ValidAudience = configuration["AppSettings:RootUrl"],
                         IssuerSigningKey = new SymmetricSecurityKey(securityKeyBytes),
                         ClockSkew = TimeSpan.Zero
                     };
