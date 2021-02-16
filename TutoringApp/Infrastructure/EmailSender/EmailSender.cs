@@ -62,8 +62,8 @@ namespace TutoringApp.Infrastructure.EmailSender
 
             try
             {
-                smtpClient.Connect(host, port, SecureSocketOptions.StartTls);
-                smtpClient.Authenticate(address, password);
+                await smtpClient.ConnectAsync(host, port, SecureSocketOptions.StartTls);
+                await smtpClient.AuthenticateAsync(address, password);
 
                 await smtpClient.SendAsync(message);
                 await smtpClient.DisconnectAsync(true);
