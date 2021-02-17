@@ -1,1 +1,22 @@
-<button pButton label="Register" (click)="register()"></button>
+<p-toast></p-toast>
+<div class="registration-container">
+  <h1>Registration</h1>
+  <div class="p-grid p-fluid" [formGroup]="registrationFormGroup">
+    <div class="p-col-6">
+      <input pInputText formControlName="email" placeholder="Email">
+    </div>
+    <div class="p-col-6">
+      <input pInputText formControlName="password" placeholder="Password" type="password">
+    </div>
+    <div class="p-col-6">
+      <input pInputText formControlName="firstName" placeholder="First Name">
+    </div>
+    <div class="p-col-6">
+      <input pInputText formControlName="confirmPassword" placeholder="Confirm Password" type="password">
+    </div>
+    <div class="p-col-6">
+      <input pInputText formControlName="lastName" placeholder="Last Name">
+    </div>
+  </div>
+  <button pButton label="Register" (click)="register()"></button>
+</div>

@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Data.Dtos.Auth;
+using TutoringApp.Data.Extensions;
 using TutoringApp.Data.Models;
 using TutoringApp.Services.Interfaces;
 
@@ -44,6 +45,7 @@ namespace TutoringApp.Services.Auth
         public async Task Register(UserRegistrationDto userRegistration)
         {
             ValidateUserRegistration(userRegistration);
+            await DeleteUnconfirmedUser(userRegistration.Email);
 
             var user = _mapper.Map<AppUser>(userRegistration);
             var identityResult = await _userManager.CreateAsync(user, userRegistration.Password);
@@ -59,6 +61,16 @@ namespace TutoringApp.Services.Auth
             var encodedEmailConfirmationToken = _encodingService.GetWebEncodedString(emailConfirmationToken);
             var emailConfirmationLink = _urlService.GetEmailConfirmationLink(user.Email, encodedEmailConfirmationToken);
             await _emailService.SendConfirmationEmail(user.Email, emailConfirmationLink);
+        }
+
+        private async Task DeleteUnconfirmedUser(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (!user.EmailConfirmed)
+            {
+                await _userManager.DeleteAsync(user);
+            }
         }
 
         public async Task ConfirmEmail(string email, string encodedToken)
@@ -101,6 +113,13 @@ namespace TutoringApp.Services.Auth
         #region Private methods
         private void ValidateUserRegistration(UserRegistrationDto userRegistration)
         {
+            if (!userRegistration.Email.IsKtuEmail())
+            {
+                const string errorMessage = "Could not register user: email is not in ktu.edu domain.";
+                _logger.LogError(errorMessage);
+                throw new ArgumentException(errorMessage);
+            }
+
             if (userRegistration.FirstName.IsNullOrEmpty() || userRegistration.LastName.IsNullOrEmpty())
             {
                 const string errorMessage = "Could not register user: first name and last name are mandatory.";

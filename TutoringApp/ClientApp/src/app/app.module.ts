@@ -19,6 +19,10 @@ import { EmailConfirmationComponent } from './components/auth/email-confirmation
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './components/shared/home/home.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -26,13 +30,15 @@ import { MessagesModule } from 'primeng/messages';
     RegistrationComponent,
     LoginComponent,
     ToolbarComponent,
-    EmailConfirmationComponent
+    EmailConfirmationComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
 
     // JWT Management
     JwtModule.forRoot({
@@ -49,6 +55,8 @@ import { MessagesModule } from 'primeng/messages';
     ProgressSpinnerModule,
     MessagesModule,
     MessageModule,
+    InputTextModule,
+    ToastModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
