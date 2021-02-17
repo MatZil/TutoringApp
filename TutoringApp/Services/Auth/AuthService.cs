@@ -67,7 +67,7 @@ namespace TutoringApp.Services.Auth
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if (!user.EmailConfirmed)
+            if (user != null && !user.EmailConfirmed)
             {
                 await _userManager.DeleteAsync(user);
             }

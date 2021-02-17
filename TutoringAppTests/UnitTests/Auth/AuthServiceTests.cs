@@ -47,7 +47,7 @@ namespace TutoringAppTests.UnitTests.Auth
         }
 
         [Theory]
-        [InlineData("matas.zilinskas@ktu.edu")]
+        [InlineData("matas.pavardenis@ktu.edu")]
         public async Task When_Registering_Expect_UserRegistered(string email)
         {
             var userRegistration = new UserRegistrationDto
@@ -76,7 +76,7 @@ namespace TutoringAppTests.UnitTests.Auth
             {
                 FirstName = "",
                 LastName = "Zilinskas",
-                Email = "matas.zilinskas@ktu.edu",
+                Email = "matas.pavardenis@ktu.edu",
                 Password = "Password1"
             };
 
@@ -92,7 +92,23 @@ namespace TutoringAppTests.UnitTests.Auth
             {
                 FirstName = "Matas",
                 LastName = "",
-                Email = "matas.zilinskas@ktu.edu",
+                Email = "matas.pavardenis@ktu.edu",
+                Password = "Password1"
+            };
+
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
+                await _authService.Register(userRegistration)
+            );
+        }
+
+        [Fact]
+        public async Task When_RegisteringWithoutKtuEmail_Expect_Exception()
+        {
+            var userRegistration = new UserRegistrationDto
+            {
+                FirstName = "Matas",
+                LastName = "Zilinskas",
+                Email = "matas.pavardenis@ktu.lt",
                 Password = "Password1"
             };
 
@@ -106,7 +122,7 @@ namespace TutoringAppTests.UnitTests.Auth
         {
             var userLogin = new UserLoginDto
             {
-                Email = "matzil@ktu.lt",
+                Email = "matas.zilinskas@ktu.edu",
                 Password = "Password1"
             };
 
@@ -132,7 +148,7 @@ namespace TutoringAppTests.UnitTests.Auth
         {
             var userLogin = new UserLoginDto
             {
-                Email = "matzil@ktu.lt",
+                Email = "matas.zilinskas@ktu.edu",
                 Password = "Invalid"
             };
 
@@ -142,7 +158,7 @@ namespace TutoringAppTests.UnitTests.Auth
         }
 
         [Theory]
-        [InlineData("matas.zilinskas@ktu.edu")]
+        [InlineData("matas.pavardenis@ktu.edu")]
         public async Task When_Registering_Expect_ConfirmationEmailSent(string email)
         {
             var userRegistration = new UserRegistrationDto

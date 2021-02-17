@@ -10,8 +10,8 @@ namespace TutoringAppTests.Setup.Seeds
         {
             var firstUser = new AppUser
             {
-                Email = "matzil@ktu.lt",
-                UserName = "matzil@ktu.lt",
+                Email = "matas.zilinskas@ktu.edu",
+                UserName = "matas.zilinskas@ktu.edu",
                 EmailConfirmed = true,
                 FirstName = "Matas",
                 LastName = "Zilinskas"
