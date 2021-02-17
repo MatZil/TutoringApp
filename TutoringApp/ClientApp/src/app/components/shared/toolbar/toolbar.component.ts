@@ -34,14 +34,14 @@ export class ToolbarComponent implements OnInit {
 
   private initializeAuthenticatedItems(): void {
     this.userMenuItems = [
-      { label: 'Atsijungti', icon: 'pi pi-sign-out', command: _ => this.logout() }
+      { label: 'Logout', icon: 'pi pi-sign-out', command: _ => this.logout() }
     ];
   }
 
   private initializeUnauthenticatedItems(): void {
     this.userMenuItems = [
-      { label: 'Užsiregistruoti', icon: 'pi pi-check-square', routerLink: AppConstants.RegistrationRoute },
-      { label: 'Prisijungti', icon: 'pi pi-sign-in', routerLink: AppConstants.LoginRoute }
+      { label: 'Register', icon: 'pi pi-check-square', routerLink: AppConstants.RegistrationRoute },
+      { label: 'Login', icon: 'pi pi-sign-in', routerLink: AppConstants.LoginRoute }
     ];
   }
   //#endregion
