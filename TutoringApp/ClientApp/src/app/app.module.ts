@@ -15,13 +15,18 @@ import { TokenGetter } from './utils/token-getter';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ToolbarComponent } from './components/shared/toolbar/toolbar.component';
 import { MenuModule } from 'primeng/menu';
+import { EmailConfirmationComponent } from './components/auth/email-confirmation/email-confirmation.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegistrationComponent,
     LoginComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    EmailConfirmationComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +46,9 @@ import { MenuModule } from 'primeng/menu';
     ButtonModule,
     ToolbarModule,
     MenuModule,
+    ProgressSpinnerModule,
+    MessagesModule,
+    MessageModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }

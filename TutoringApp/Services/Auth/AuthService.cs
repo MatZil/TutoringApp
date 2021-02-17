@@ -61,6 +61,27 @@ namespace TutoringApp.Services.Auth
             await _emailService.SendConfirmationEmail(user.Email, emailConfirmationLink);
         }
 
+        public async Task ConfirmEmail(string email, string encodedToken)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var decodedToken = _encodingService.GetWebDecodedString(encodedToken);
+                var identityResult = await _userManager.ConfirmEmailAsync(user, decodedToken);
+                if (!identityResult.Succeeded)
+                {
+                    _logger.LogInformation($"Could not confirm {email}: {identityResult.Errors.First()}");
+                    throw new InvalidOperationException($"Could not confirm {email} because the token was incorrect.");
+                }
+            }
+            else
+            {
+                var errorMessage = $"Could not confirm {email} because it is not registered.";
+                _logger.LogInformation(errorMessage);
+                throw new InvalidOperationException(errorMessage);
+            }
+        }
+
         public async Task<LoginResponseDto> Login(UserLoginDto userLogin)
         {
             var user = await _userManager.FindByEmailAsync(userLogin.Email);

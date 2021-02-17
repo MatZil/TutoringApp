@@ -7,6 +7,7 @@ import { HttpService } from '../http.service';
 import { AppConstants } from 'src/app/app.constants';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { EmailConfirmation } from 'src/app/models/auth/email-confirmation';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,10 @@ export class AuthService {
 
   public register(userRegistration: UserRegistration): Observable<any> {
     return this.httpService.post(this.authController, 'register', userRegistration);
+  }
+
+  public confirmEmail(emailConfirmation: EmailConfirmation): Observable<any> {
+    return this.httpService.post(this.authController, 'confirm-email', emailConfirmation);
   }
 
   public login(userLogin: UserLogin): Observable<LoginResponse> {

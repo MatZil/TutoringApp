@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using TutoringApp.Data.Dtos.Auth;
@@ -48,11 +47,19 @@ namespace TutoringApp.Controllers
             }
         }
 
-        [HttpGet]
-        [Authorize]
-        public IActionResult MockMe()
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] EmailConfirmationDto emailConfirmation)
         {
-            return Ok("Hey you are there!");
+            try
+            {
+                await _authService.ConfirmEmail(emailConfirmation.Email, emailConfirmation.EncodedToken);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

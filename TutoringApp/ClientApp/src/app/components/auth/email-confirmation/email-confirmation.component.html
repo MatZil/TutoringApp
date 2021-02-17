@@ -1,0 +1,4 @@
+<div *ngIf="!messages">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<p-messages [(value)]="messages" [enableService]="false"></p-messages>
