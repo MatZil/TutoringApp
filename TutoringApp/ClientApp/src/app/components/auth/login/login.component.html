@@ -1,5 +1,13 @@
-<button pButton label="Login" (click)="login()"></button>
-<button pButton label="Logout" (click)="logout()"></button>
-<button pButton label="Mock" (click)="mockRequest()"></button>
-<p *ngIf="isLoggedIn | async">LOGGED IN</p>
-<p *ngIf="!(isLoggedIn | async)">LOGGED OUT</p>
+<p-toast></p-toast>
+<div class="form-container">
+  <h1>Login</h1>
+  <div class="p-grid p-fluid" [formGroup]="loginFormGroup">
+    <div class="p-col-6">
+      <input pInputText formControlName="email" placeholder="Email">
+    </div>
+    <div class="p-col-6">
+      <input pInputText formControlName="password" placeholder="Password" type="password">
+    </div>
+  </div>
+  <button pButton label="Login" (click)="login()"></button>
+</div>

@@ -1,40 +1,53 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { UserLogin } from 'src/app/models/auth/user-login';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
-  public isLoggedIn: Observable<boolean>;
+  public loginFormGroup: FormGroup;
 
   constructor(
     private authService: AuthService,
-    private httpService: HttpService
+    private formBuilder: FormBuilder,
+    private messageService: MessageService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.isLoggedIn = this.authService.isAuthenticated$;
+    this.initializeFormGroup();
   }
 
-  public login(): void {
-    const userLogin: UserLogin = {
-      email: 'zilinskas.matas1999@gmail.com',
-      password: 'sixlet'
-    };
-
-    this.authService.login(userLogin).subscribe();
+  private initializeFormGroup(): void {
+    this.loginFormGroup = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
   }
 
-  public logout(): void {
-    this.authService.logout();
+  public login() {
+    const isValid = this.validateRegistration();
+
+    if (isValid) {
+      this.authService.login(this.loginFormGroup.value).subscribe(
+        _ => this.router.navigate(['']),
+        err => this.messageService.add({ severity: 'error', summary: 'Error', detail: `${err.error}` })
+        );
+    }
   }
 
-  public mockRequest(): void {
-    this.httpService.get('Authentication', '').subscribe();
+  private validateRegistration(): boolean {
+    if (!this.loginFormGroup.valid) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please enter the required information' });
+      return false;
+    }
+
+    return true;
   }
 }
