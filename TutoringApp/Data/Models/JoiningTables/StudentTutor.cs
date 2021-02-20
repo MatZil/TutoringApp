@@ -1,6 +1,6 @@
 ﻿namespace TutoringApp.Data.Models.JoiningTables
 {
-    public class StudentTutorIgnoration
+    public class StudentTutor
     {
         public AppUser Tutor { get; set; }
         public string TutorId { get; set; }

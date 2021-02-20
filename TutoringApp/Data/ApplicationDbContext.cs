@@ -12,7 +12,7 @@ namespace TutoringApp.Data
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<TutorEvaluation> TutorEvaluations { get; set; }
-        public DbSet<StudentTutorIgnoration> StudentTutorIgnorations { get; set; }
+        public DbSet<StudentTutor> StudentTutors { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<ModuleTutor> ModuleTutors { get; set; }
         public DbSet<GlobalSetting> GlobalSettings { get; set; }
@@ -88,19 +88,19 @@ namespace TutoringApp.Data
                 .HasForeignKey(te => te.TutorId);
         }
 
-        private static void ConfigureStudentTutorIgnorations(ModelBuilder builder)
+        private static void ConfigureStudentTutors(ModelBuilder builder)
         {
-            builder.Entity<StudentTutorIgnoration>()
+            builder.Entity<StudentTutor>()
                 .HasOne(sti => sti.Student)
-                .WithMany(u => u.IgnorationsFromTutors)
+                .WithMany(u => u.IgnoresFromTutors)
                 .HasForeignKey(sti => sti.StudentId);
 
-            builder.Entity<StudentTutorIgnoration>()
+            builder.Entity<StudentTutor>()
                 .HasOne(sti => sti.Tutor)
-                .WithMany(u => u.IgnorationsToStudents)
+                .WithMany(u => u.IgnoresToStudents)
                 .HasForeignKey(sti => sti.TutorId);
 
-            builder.Entity<StudentTutorIgnoration>()
+            builder.Entity<StudentTutor>()
                 .HasKey(sti => new { sti.StudentId, sti.TutorId });
         }
 

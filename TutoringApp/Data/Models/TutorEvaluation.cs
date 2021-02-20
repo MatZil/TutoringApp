@@ -1,8 +1,9 @@
-﻿using TutoringApp.Data.Models.Enums;
+﻿using TutoringApp.Data.Models.Base;
+using TutoringApp.Data.Models.Enums;
 
 namespace TutoringApp.Data.Models
 {
-    public class TutorEvaluation
+    public class TutorEvaluation : BaseEntity
     {
         public AppUser Tutor { get; set; }
         public string TutorId { get; set; }

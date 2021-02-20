@@ -22,8 +22,8 @@ namespace TutoringApp.Data.Models
         public IList<Assignment> StudentAssignments { get; set; }
         public IList<TutorEvaluation> TutorEvaluations { get; set; }
         public IList<TutorEvaluation> StudentEvaluations { get; set; }
-        public IList<StudentTutorIgnoration> IgnorationsToStudents { get; set; }
-        public IList<StudentTutorIgnoration> IgnorationsFromTutors { get; set; }
+        public IList<StudentTutor> IgnoresToStudents { get; set; }
+        public IList<StudentTutor> IgnoresFromTutors { get; set; }
         public IList<ModuleTutor> TutorModules { get; set; }
     }
 }
