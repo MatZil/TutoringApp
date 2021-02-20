@@ -31,7 +31,7 @@ namespace TutoringApp.Data
             ConfigureChatMessages(builder);
             ConfigureAssignments(builder);
             ConfigureTutorEvaluations(builder);
-            ConfigureStudentTutorIgnorations(builder);
+            ConfigureStudentTutors(builder);
             ConfigureModuleTutors(builder);
             ConfigureGlobalSettings(builder);
         }
