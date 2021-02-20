@@ -99,9 +99,6 @@ namespace TutoringApp.Data
                 .HasOne(sti => sti.Tutor)
                 .WithMany(u => u.IgnoresToStudents)
                 .HasForeignKey(sti => sti.TutorId);
-
-            builder.Entity<StudentTutor>()
-                .HasKey(sti => new { sti.StudentId, sti.TutorId });
         }
 
         private static void ConfigureModuleTutors(ModelBuilder builder)

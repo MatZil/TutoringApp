@@ -1,6 +1,8 @@
-﻿namespace TutoringApp.Data.Models.JoiningTables
+﻿using TutoringApp.Data.Models.Base;
+
+namespace TutoringApp.Data.Models.JoiningTables
 {
-    public class StudentTutor
+    public class StudentTutor : BaseEntity
     {
         public AppUser Tutor { get; set; }
         public string TutorId { get; set; }
