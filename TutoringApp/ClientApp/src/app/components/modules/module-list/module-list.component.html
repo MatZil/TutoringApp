@@ -1,5 +1,16 @@
-<p-virtualScroller [value]="allModules" scrollHeight="500px" [itemSize]="150">
+<p-virtualScroller [value]="virtualModules" scrollHeight="900px" [itemSize]="45">
+  <ng-template pTemplate="header">
+    <div class="module-list-title">
+      <h1>Choose a tutoring module!</h1>
+    </div>
+    <div [style.text-align]="'right'">
+      <label>Find your module: </label>
+      <input pInputText (input)="filterModules()" [(ngModel)]="filterString">
+    </div>
+  </ng-template>
   <ng-template pTemplate="item" let-module>
-    <a [href]="module.id">{{module.name}}</a>
+    <div class="module-container">
+      <a [routerLink]="'modules/' + module.id">{{module.name}}</a>
+    </div>
   </ng-template>
 </p-virtualScroller>

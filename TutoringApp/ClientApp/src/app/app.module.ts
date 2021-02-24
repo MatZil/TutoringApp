@@ -19,7 +19,7 @@ import { EmailConfirmationComponent } from './components/auth/email-confirmation
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/shared/home/home.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
@@ -44,6 +44,7 @@ import { ModuleViewComponent } from './components/modules/module-view/module-vie
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
 
     // JWT Management
     JwtModule.forRoot({
