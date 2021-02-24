@@ -8,7 +8,8 @@ namespace TutoringApp.Configurations.Mapping
     {
         public AuthMappingProfile()
         {
-            CreateMap<UserRegistrationDto, AppUser>()
+            CreateMap<UserRegistrationDto, AppUser>(MemberList.Source)
+                .ForSourceMember(t => t.Password, d => d.DoNotValidate())
                 .ForMember(d => d.UserName, o => o.MapFrom(t => t.Email));
         }
     }

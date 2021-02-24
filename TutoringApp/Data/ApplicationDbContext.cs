@@ -34,6 +34,14 @@ namespace TutoringApp.Data
             ConfigureStudentTutors(builder);
             ConfigureModuleTutors(builder);
             ConfigureGlobalSettings(builder);
+            ConfigureModules(builder);
+        }
+
+        private static void ConfigureModules(ModelBuilder builder)
+        {
+            builder.Entity<Module>()
+                .HasIndex(m => m.Name)
+                .IsUnique();
         }
 
         private static void ConfigureTutoringSessions(ModelBuilder builder)

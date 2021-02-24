@@ -28,6 +28,7 @@ namespace TutoringAppTests.Setup
                 var config = new MapperConfiguration(cfg =>
                 {
                     cfg.AddProfile(new AuthMappingProfile());
+                    cfg.AddProfile(new ModuleMappingProfile());
                 });
 
                 return config.CreateMapper();
@@ -40,6 +41,7 @@ namespace TutoringAppTests.Setup
             UserManager = GetUserManager();
 
             AppUserSeeder.Seed(UserManager).Wait();
+            ModuleSeeder.Seed(Context.Modules).Wait();
 
             Context.SaveChanges();
         }

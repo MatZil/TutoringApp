@@ -6,6 +6,7 @@ using TutoringApp.Infrastructure.Repositories;
 using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Auth;
 using TutoringApp.Services.Interfaces;
+using TutoringApp.Services.Modules;
 using TutoringApp.Services.Shared;
 
 namespace TutoringApp.Configurations
@@ -22,6 +23,7 @@ namespace TutoringApp.Configurations
                 .AddScoped<IEmailService, EmailService>()
                 .AddScoped<IEncodingService, EncodingService>()
                 .AddScoped<IUrlService, UrlService>()
+                .AddScoped<IModulesService, ModulesService>()
 
                 // Infrastructure
                 .AddSingleton<IEmailSender, EmailSender>()
