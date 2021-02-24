@@ -23,6 +23,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/shared/home/home.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
+import { ModuleListComponent } from './components/modules/module-list/module-list.component';
+import { VirtualScrollerModule } from 'primeng/virtualscroller';
+import { ModuleViewComponent } from './components/modules/module-view/module-view.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,9 @@ import { ToastModule } from 'primeng/toast';
     LoginComponent,
     ToolbarComponent,
     EmailConfirmationComponent,
-    HomeComponent
+    HomeComponent,
+    ModuleListComponent,
+    ModuleViewComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +62,7 @@ import { ToastModule } from 'primeng/toast';
     MessageModule,
     InputTextModule,
     ToastModule,
+    VirtualScrollerModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }

@@ -1,1 +1,4 @@
 <p-messages [(value)]="messages" [enableService]="false"></p-messages>
+<div *ngIf="isAuthenticated$ | async">
+  <app-module-list></app-module-list>
+</div>

@@ -1,0 +1,5 @@
+<p-virtualScroller [value]="allModules" scrollHeight="500px" [itemSize]="150">
+  <ng-template pTemplate="item" let-module>
+    <a [href]="module.id">{{module.name}}</a>
+  </ng-template>
+</p-virtualScroller>
