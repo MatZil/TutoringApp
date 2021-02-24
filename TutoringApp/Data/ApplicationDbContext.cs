@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TutoringApp.Data.Models;
 using TutoringApp.Data.Models.JoiningTables;
+using TutoringApp.Data.Seeders;
 
 namespace TutoringApp.Data
 {
@@ -35,6 +36,8 @@ namespace TutoringApp.Data
             ConfigureModuleTutors(builder);
             ConfigureGlobalSettings(builder);
             ConfigureModules(builder);
+
+            builder.SeedModules();
         }
 
         private static void ConfigureModules(ModelBuilder builder)
