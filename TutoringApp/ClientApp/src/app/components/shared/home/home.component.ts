@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Message } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { HomepageMessageUseCaseEnum } from 'src/app/models/enums/homepage-message-use-case.enum';
@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public messages: Message[];
+  public messages: Message[] = [];
   public isAuthenticated$: Observable<boolean>;
 
   constructor(
@@ -27,13 +27,17 @@ export class HomeComponent implements OnInit {
 
   private initializeMessage(): void {
     this.activatedRoute.queryParams.subscribe(params => {
-      if (params.useCase === HomepageMessageUseCaseEnum.RegistrationSuccess.toString()) {
-        this.messages = [{
-          severity: 'success',
-          summary: 'Success!',
-          detail: 'You have successfully registered! Please confirm your email.'
-        }];
-      }
+      this.chooseMessage(params);
     });
+  }
+
+  private chooseMessage(params: Params): void {
+    if (params.useCase === HomepageMessageUseCaseEnum.RegistrationSuccess.toString()) {
+      this.messages = [{
+        severity: 'success',
+        summary: 'Success!',
+        detail: 'You have successfully registered! Please confirm your email.'
+      }];
+    }
   }
 }
