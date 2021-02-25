@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AppConstants } from './app.constants';
 import { AuthService } from './services/auth/auth.service';
 
 @Injectable({
@@ -9,7 +10,8 @@ import { AuthService } from './services/auth/auth.service';
 export class AuthGuard implements CanActivate {
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
@@ -20,7 +22,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    // Route to login page
+    this.router.navigate([AppConstants.LoginRoute], { queryParams: { returnUrl: state.url } });
     return false;
   }
 }
