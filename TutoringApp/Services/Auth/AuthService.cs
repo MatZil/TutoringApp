@@ -6,6 +6,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Dtos.Auth;
 using TutoringApp.Data.Extensions;
 using TutoringApp.Data.Models;
@@ -42,7 +43,7 @@ namespace TutoringApp.Services.Auth
         }
 
         #region Interface implementation
-        public async Task Register(UserRegistrationDto userRegistration)
+        public async Task<string> Register(UserRegistrationDto userRegistration)
         {
             ValidateUserRegistration(userRegistration);
             await DeleteUnconfirmedUser(userRegistration.Email);
@@ -57,6 +58,14 @@ namespace TutoringApp.Services.Auth
                 throw new InvalidOperationException(errorMessage);
             }
 
+            await _userManager.AddToRoleAsync(user, AppRoles.Student);
+
+            return user.Id;
+        }
+
+        public async Task SendConfirmationEmail(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
             var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var encodedEmailConfirmationToken = _encodingService.GetWebEncodedString(emailConfirmationToken);
             var emailConfirmationLink = _urlService.GetEmailConfirmationLink(user.Email, encodedEmailConfirmationToken);
