@@ -20,6 +20,7 @@ namespace TutoringAppTests.Setup
     {
         public ApplicationDbContext Context { get; }
         public UserManager<AppUser> UserManager { get; }
+        public RoleManager<IdentityRole> RoleManager { get; }
 
         public static IMapper Mapper
         {
@@ -39,7 +40,9 @@ namespace TutoringAppTests.Setup
         {
             Context = GetDatabase("TestDatabase");
             UserManager = GetUserManager();
+            RoleManager = GetRoleManager();
 
+            RoleSeeder.Seed(RoleManager).Wait();
             AppUserSeeder.Seed(UserManager).Wait();
             ModuleSeeder.Seed(Context.Modules).Wait();
 
@@ -79,6 +82,20 @@ namespace TutoringAppTests.Setup
             userManager.RegisterTokenProvider("Default", new EmailTokenProvider<AppUser>());
 
             return userManager;
+        }
+
+        private RoleManager<IdentityRole> GetRoleManager()
+        {
+            var roleStore = new RoleStore<IdentityRole>(Context);
+            var roleManager = new RoleManager<IdentityRole>(
+                roleStore,
+                new IRoleValidator<IdentityRole>[0],
+                null,
+                new Mock<IdentityErrorDescriber>().Object,
+                new Mock<ILogger<RoleManager<IdentityRole>>>().Object
+            );
+
+            return roleManager;
         }
 
         public static IConfiguration GetConfiguration()
