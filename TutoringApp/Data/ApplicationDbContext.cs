@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Models;
 using TutoringApp.Data.Models.JoiningTables;
 using TutoringApp.Data.Seeders;
@@ -38,6 +39,8 @@ namespace TutoringApp.Data
             ConfigureModules(builder);
 
             builder.SeedModules();
+
+            builder.ApplyConfiguration(new RoleConfiguration());
         }
 
         private static void ConfigureModules(ModelBuilder builder)
