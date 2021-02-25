@@ -109,7 +109,7 @@ namespace TutoringApp.Services.Auth
             await ValidateUserLogin(user, userLogin);
 
             var signingCredentials = _webTokenService.GetSigningCredentials();
-            var userClaims = _webTokenService.GetClaims(user);
+            var userClaims = await _webTokenService.GetClaims(user);
             var securityToken = _webTokenService.GetSecurityToken(signingCredentials, userClaims);
 
             return new LoginResponseDto

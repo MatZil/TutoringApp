@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using TutoringApp.Services.Interfaces;
 
 namespace TutoringApp.Services.Auth
@@ -14,10 +15,14 @@ namespace TutoringApp.Services.Auth
     {
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _webTokenSettings;
+        private readonly IUsersService _usersService;
 
-        public WebTokenService(IConfiguration configuration)
+        public WebTokenService(
+            IConfiguration configuration,
+            IUsersService usersService)
         {
             _configuration = configuration;
+            _usersService = usersService;
             _webTokenSettings = configuration.GetSection("WebTokenSettings");
         }
 
@@ -30,11 +35,14 @@ namespace TutoringApp.Services.Auth
             return new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
         }
 
-        public IEnumerable<Claim> GetClaims(IdentityUser user)
+        public async Task<IEnumerable<Claim>> GetClaims(IdentityUser user)
         {
+            var role = await _usersService.GetRole(user.Id);
+
             return new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Email)
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, role)
             };
         }
 
