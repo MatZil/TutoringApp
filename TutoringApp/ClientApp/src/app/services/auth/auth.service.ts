@@ -68,7 +68,7 @@ export class AuthService {
     return !!currentUser && currentUser.role === role;
   }
 
-  private changeAuthState(isAuthenticated: boolean): void {
+  public changeAuthState(isAuthenticated: boolean): void {
     if (this.isAuthenticatedSubject.value !== isAuthenticated) {
       this.isAuthenticatedSubject.next(isAuthenticated);
     }

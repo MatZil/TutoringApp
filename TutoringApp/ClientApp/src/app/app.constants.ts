@@ -1,5 +1,5 @@
 const constants: AppConstants = {
-  WebTokenKey: 'web_token',
+  WebTokenKey: 'tutoring_app_web_token',
   LoginRoute: 'login',
   RegistrationRoute: 'register',
   EmailConfirmationRoute: 'confirm-email',

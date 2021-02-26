@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor() { }
+  constructor(
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
+    this.preserveAuthenticationState();
+  }
 
+  private preserveAuthenticationState(): void {
+    const isCurrentlyAuthenticated = this.authService.isCurrentlyAuthenticated();
+
+    if (isCurrentlyAuthenticated) {
+      this.authService.changeAuthState(true);
+    }
   }
 }
