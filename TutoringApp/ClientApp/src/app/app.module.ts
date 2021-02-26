@@ -28,6 +28,7 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { ModuleViewComponent } from './components/modules/module-view/module-view.component';
 import { ModuleCreateComponent } from './components/modules/module-create/module-create.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
     ToastModule,
     VirtualScrollerModule,
     OverlayPanelModule,
+    ConfirmDialogModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
