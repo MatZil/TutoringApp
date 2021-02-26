@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using TutoringApp.Configurations.Auth;
 using TutoringApp.Services.Interfaces;
 
 namespace TutoringApp.Services.Auth
@@ -41,8 +42,8 @@ namespace TutoringApp.Services.Auth
 
             return new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(AppClaimTypes.EmailClaimType, user.Email),
+                new Claim(AppClaimTypes.RoleClaimType, role)
             };
         }
 

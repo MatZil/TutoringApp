@@ -8,6 +8,8 @@ import { AppConstants } from 'src/app/app.constants';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { EmailConfirmation } from 'src/app/models/auth/email-confirmation';
+import { CurrentUser } from 'src/app/models/auth/current-user';
+import { TokenGetter } from 'src/app/utils/token-getter';
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +46,20 @@ export class AuthService {
   }
 
   public isCurrentlyAuthenticated(): boolean {
-    const token = localStorage.getItem(AppConstants.WebTokenKey);
+    const token = TokenGetter();
 
     return token && !this.jwtHelperService.isTokenExpired();
+  }
+
+  public getCurrentUser(): CurrentUser {
+    const token = TokenGetter();
+    if (!token || this.jwtHelperService.isTokenExpired()) { return undefined; }
+
+    const decodedToken = this.jwtHelperService.decodeToken();
+    return {
+      email: decodedToken[AppConstants.EmailClaimType],
+      role: decodedToken[AppConstants.RoleClaimType]
+    };
   }
 
   private changeAuthState(isAuthenticated: boolean): void {

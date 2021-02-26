@@ -3,9 +3,10 @@
     <div class="module-list-title">
       <h1>Choose a tutoring module!</h1>
     </div>
-    <div [style.text-align]="'right'">
+    <div class="right-action-bar">
       <label>Find your module: </label>
       <input pInputText (input)="filterModules()" [(ngModel)]="filterString">
+      <button *ngIf="isAdmin" pButton icon="pi pi-plus" label="Add Module"></button>
     </div>
   </ng-template>
   <ng-template pTemplate="item" let-module>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AppConstants } from 'src/app/app.constants';
 import { NamedEntity } from 'src/app/models/shared/named-entity';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { ModulesService } from 'src/app/services/modules/modules.service';
 
 @Component({
@@ -13,12 +15,16 @@ export class ModuleListComponent implements OnInit {
 
   public filterString = '';
 
+  public isAdmin = false;
+
   constructor(
-    private modulesService: ModulesService
+    private modulesService: ModulesService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.initializeModules();
+    this.initializeIsAdmin();
   }
 
   //#region Initialization
@@ -27,6 +33,12 @@ export class ModuleListComponent implements OnInit {
       this.allModules = modules;
       this.virtualModules = modules;
     });
+  }
+
+  private initializeIsAdmin(): void {
+    const currentUser = this.authService.getCurrentUser();
+
+    this.isAdmin = currentUser?.role === AppConstants.AdminRole;
   }
   //#endregion
 

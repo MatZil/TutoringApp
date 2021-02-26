@@ -11,3 +11,11 @@
   background-color: gainsboro;
   text-align: center;
 }
+
+.right-action-bar {
+  text-align: right;
+}
+
+.right-action-bar > * {
+  margin-left: 0.5em;
+}
