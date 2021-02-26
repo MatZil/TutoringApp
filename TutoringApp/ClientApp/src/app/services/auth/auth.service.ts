@@ -62,6 +62,12 @@ export class AuthService {
     };
   }
 
+  public currentUserBelongsToRole(role: string): boolean {
+    const currentUser = this.getCurrentUser();
+
+    return !!currentUser && currentUser.role === role;
+  }
+
   private changeAuthState(isAuthenticated: boolean): void {
     if (this.isAuthenticatedSubject.value !== isAuthenticated) {
       this.isAuthenticatedSubject.next(isAuthenticated);

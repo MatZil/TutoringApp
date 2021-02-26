@@ -36,9 +36,7 @@ export class ModuleListComponent implements OnInit {
   }
 
   private initializeIsAdmin(): void {
-    const currentUser = this.authService.getCurrentUser();
-
-    this.isAdmin = currentUser?.role === AppConstants.AdminRole;
+    this.isAdmin = this.authService.currentUserBelongsToRole(AppConstants.AdminRole);
   }
   //#endregion
 
