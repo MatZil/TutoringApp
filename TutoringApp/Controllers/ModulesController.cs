@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Dtos.Modules;
 using TutoringApp.Services.Interfaces;
 
 namespace TutoringApp.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class ModulesController : ControllerBase
     {
@@ -26,6 +29,7 @@ namespace TutoringApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> CreateModule([FromBody] ModuleNewDto moduleNew)
         {
             try
@@ -41,6 +45,7 @@ namespace TutoringApp.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> DeleteModule(int id)
         {
             await _modulesService.Delete(id);

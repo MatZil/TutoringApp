@@ -26,6 +26,8 @@ import { ToastModule } from 'primeng/toast';
 import { ModuleListComponent } from './components/modules/module-list/module-list.component';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { ModuleViewComponent } from './components/modules/module-view/module-view.component';
+import { ModuleCreateComponent } from './components/modules/module-create/module-create.component';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { ModuleViewComponent } from './components/modules/module-view/module-vie
     EmailConfirmationComponent,
     HomeComponent,
     ModuleListComponent,
-    ModuleViewComponent
+    ModuleViewComponent,
+    ModuleCreateComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +67,7 @@ import { ModuleViewComponent } from './components/modules/module-view/module-vie
     InputTextModule,
     ToastModule,
     VirtualScrollerModule,
+    OverlayPanelModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }

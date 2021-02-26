@@ -6,7 +6,7 @@
     <div class="right-action-bar">
       <label>Find your module: </label>
       <input pInputText (input)="filterModules()" [(ngModel)]="filterString">
-      <button *ngIf="isAdmin" pButton icon="pi pi-plus" label="Add Module"></button>
+      <button *ngIf="isAdmin" pButton icon="pi pi-plus" label="Add Module" (click)="moduleCreate.toggleOverlay($event)"></button>
     </div>
   </ng-template>
   <ng-template pTemplate="item" let-module>
@@ -15,3 +15,5 @@
     </div>
   </ng-template>
 </p-virtualScroller>
+
+<app-module-create #moduleCreate (moduleCreated)="addCreatedModule($event)"></app-module-create>

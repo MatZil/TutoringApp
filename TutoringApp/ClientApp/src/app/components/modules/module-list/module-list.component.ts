@@ -44,5 +44,17 @@ export class ModuleListComponent implements OnInit {
   public filterModules(): void {
     this.virtualModules = this.allModules.filter(m => m.name.toLowerCase().includes(this.filterString.toLowerCase()));
   }
+
+  public addCreatedModule(module: NamedEntity): void {
+    this.allModules.push(module);
+
+    this.filterModules();
+  }
+  //#endregion
+
+  //#region Utility
+  private refreshVirtualScroller(): void {
+    this.virtualModules = [...this.virtualModules];
+  }
   //#endregion
 }

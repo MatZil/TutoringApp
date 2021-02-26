@@ -1,0 +1,14 @@
+<p-toast></p-toast>
+<p-overlayPanel>
+  <ng-template pTemplate>
+    <div class="p-grid p-fluid">
+      <div class="p-col-10">
+        <input pInputText [(ngModel)]="name">
+      </div>
+      <div class="p-col-2">
+        <button pButton class="p-button-success" label="Add" (click)="createModule()"
+          [disabled]="name.length <= 0"></button>
+      </div>
+    </div>
+  </ng-template>
+</p-overlayPanel>

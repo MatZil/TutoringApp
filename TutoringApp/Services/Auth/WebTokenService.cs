@@ -43,7 +43,8 @@ namespace TutoringApp.Services.Auth
             return new List<Claim>
             {
                 new Claim(AppClaimTypes.EmailClaimType, user.Email),
-                new Claim(AppClaimTypes.RoleClaimType, role)
+                new Claim(AppClaimTypes.RoleClaimType, role),
+                new Claim("roles", role) // Used by Identity to authorize endpoints.
             };
         }
 
