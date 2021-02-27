@@ -22,6 +22,13 @@ namespace TutoringApp.Services.Auth
             return roleClaim.Value;
         }
 
+        public string GetUserId()
+        {
+            var userIdClaim = GetUserClaim(AppClaimTypes.UserIdClaimType);
+
+            return userIdClaim.Value;
+        }
+
         private Claim GetUserClaim(string claimType)
         {
             return _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == claimType);

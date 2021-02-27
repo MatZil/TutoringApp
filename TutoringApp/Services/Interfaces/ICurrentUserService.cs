@@ -3,5 +3,6 @@
     public interface ICurrentUserService
     {
         string GetRole();
+        string GetUserId();
     }
 }

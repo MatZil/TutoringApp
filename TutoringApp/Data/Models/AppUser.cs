@@ -15,6 +15,7 @@ namespace TutoringApp.Data.Models
         [Required] public string Faculty { get; set; }
         [Required] public string StudyBranch { get; set; }
         public bool IsConfirmed { get; set; }
+        public bool IsTutor { get; set; }
 
         public IList<TutoringSession> TutoredSessions { get; set; }
         public IList<TutoringSession> LearningSessions { get; set; }

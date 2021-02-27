@@ -4,5 +4,6 @@
     {
         public const string EmailClaimType = "Email";
         public const string RoleClaimType = "Role";
+        public const string UserIdClaimType = "UserId";
     }
 }
