@@ -38,6 +38,8 @@ namespace TutoringAppTests.Setup.Seeds
                     Tutor = userManager.Users.First(u => u.Email == "matas.tutorius3@ktu.edu")
                 }
             };
+
+            await moduleTutorSet.AddRangeAsync(moduleTutors);
         }
     }
 }

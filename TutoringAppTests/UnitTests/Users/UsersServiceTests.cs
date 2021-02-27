@@ -22,6 +22,10 @@ namespace TutoringAppTests.UnitTests.Users
             var setup = new UnitTestSetup();
             _userManager = setup.UserManager;
             _currentUserServiceMock = new Mock<ICurrentUserService>();
+            _currentUserServiceMock
+                .Setup(s => s.GetRole())
+                .Returns(AppRoles.Student);
+
             _usersService = new UsersService(
                 setup.UserManager,
                 _currentUserServiceMock.Object,
@@ -41,6 +45,18 @@ namespace TutoringAppTests.UnitTests.Users
             var actualRole = await _usersService.GetRole(user.Id);
 
             Assert.Equal(expectedRole, actualRole);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task When_GettingModuleTutors_Expect_CorrectTutors(int moduleId)
+        {
+            var tutors = await _usersService.GetTutors(moduleId);
+
+            Assert.Collection(tutors,
+                t => Assert.Equal("Matas FirstTutor", t.Name),
+                t => Assert.Equal("Matas SecondTutor", t.Name)
+                );
         }
     }
 }

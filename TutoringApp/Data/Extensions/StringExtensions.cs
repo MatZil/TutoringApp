@@ -5,7 +5,7 @@
         public static bool IsKtuEmail(this string email)
         {
             var domainStartIndex = email.LastIndexOf('@') + 1;
-            var domain = email.Substring(domainStartIndex, email.Length - domainStartIndex).ToLower();
+            var domain = email[domainStartIndex..].ToLower();
 
             return domain == "ktu.edu";
         }

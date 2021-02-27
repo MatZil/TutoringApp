@@ -27,7 +27,7 @@ namespace TutoringApp.Services.Modules
 
         public async Task<IEnumerable<NamedEntityDto>> GetAll()
         {
-            var userRole = _currentUserService.GetRole();
+            var userRole = _currentUserService.GetRole(); // TODO: filter for lecturers.
             var modules = await _modulesRepository.GetAll();
             var dtos = _mapper.Map<IEnumerable<NamedEntityDto>>(modules);
 

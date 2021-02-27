@@ -27,5 +27,15 @@ namespace TutoringAppTests.UnitTests.Shared
                 actualLink
                 );
         }
+
+        [Theory]
+        [InlineData("/my-sub-route/another", "https://localhost:5001/my-sub-route/another")]
+        [InlineData("", "https://localhost:5001")]
+        public void When_Getting_AppUrl_Expect_CorrectUrl(string subRoute, string expectedResult)
+        {
+            var actualResult = _urlService.GetAppUrl(subRoute);
+
+            Assert.Equal(expectedResult, actualResult);
+        }
     }
 }

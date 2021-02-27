@@ -28,7 +28,7 @@ namespace TutoringApp.Services.Shared
 
         public async Task SendUserConfirmedEmail(string receiverEmail)
         {
-            var appUrl = _urlService.GetAppUrl("login");
+            var appUrl = _urlService.GetAppUrl("/login");
             var linkHtml = $"<a href='{appUrl}'>login</a>";
             var emailBody = $"You have been confirmed to join Tutoring App! You may {linkHtml} and start learning!";
             const string subject = "Confirmed at Tutoring App!";
