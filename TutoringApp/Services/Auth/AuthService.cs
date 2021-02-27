@@ -137,6 +137,20 @@ namespace TutoringApp.Services.Auth
                 throw new ArgumentException(errorMessage);
             }
 
+            if (!user.EmailConfirmed)
+            {
+                var errorMessage = $"Could not login: user '{userLogin.Email}' was not confirmed via email.";
+                _logger.LogError(errorMessage);
+                throw new ArgumentException(errorMessage);
+            }
+
+            if (!user.IsConfirmed)
+            {
+                var errorMessage = $"Could not login: user '{userLogin.Email}' was not confirmed by our Administrator just yet.";
+                _logger.LogError(errorMessage);
+                throw new ArgumentException(errorMessage);
+            }
+
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, userLogin.Password);
             if (!isPasswordValid)
             {
