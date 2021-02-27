@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, Output, ViewChild, EventEmitter, Input, OnInit, OnChanges } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { ModuleNew } from 'src/app/models/modules/module-new';
@@ -13,8 +13,13 @@ import { ModulesService } from 'src/app/services/modules/modules.service';
     MessageService
   ]
 })
-export class ModuleCreateComponent {
+export class ModuleCreateComponent implements OnChanges {
   public name = '';
+  public nameExists = false;
+
+  @Input()
+  private existingModules: NamedEntity[];
+  private existingNames: string[];
 
   @ViewChild(OverlayPanel)
   private overlayPanelComponent: OverlayPanel;
@@ -26,6 +31,12 @@ export class ModuleCreateComponent {
     private modulesService: ModulesService,
     private messageService: MessageService
   ) { }
+
+  ngOnChanges(): void {
+    if (this.existingModules) {
+      this.existingNames = this.existingModules.map(m => m.name);
+    }
+  }
 
   public toggleOverlay(event: any): void {
     this.overlayPanelComponent.toggle(event);
@@ -51,5 +62,9 @@ export class ModuleCreateComponent {
     this.moduleCreated.emit(createdModule);
     this.name = '';
     this.overlayPanelComponent.hide();
+  }
+
+  public validateNameExists(): void {
+    this.nameExists = this.existingNames.map(n => n.toLowerCase()).includes(this.name.toLowerCase());
   }
 }

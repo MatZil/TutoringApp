@@ -10,7 +10,7 @@ import { ModulesService } from 'src/app/services/modules/modules.service';
   styleUrls: ['./module-list.component.scss']
 })
 export class ModuleListComponent implements OnInit {
-  private allModules: NamedEntity[] = [];
+  public allModules: NamedEntity[] = [];
   public virtualModules: NamedEntity[] = [];
 
   public filterString = '';
@@ -47,6 +47,7 @@ export class ModuleListComponent implements OnInit {
 
   public addCreatedModule(module: NamedEntity): void {
     this.allModules.push(module);
+    this.allModules = [...this.allModules];
 
     this.filterModules();
   }

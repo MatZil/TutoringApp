@@ -16,4 +16,4 @@
   </ng-template>
 </p-virtualScroller>
 
-<app-module-create #moduleCreate (moduleCreated)="addCreatedModule($event)"></app-module-create>
+<app-module-create #moduleCreate (moduleCreated)="addCreatedModule($event)" [existingModules]="allModules"></app-module-create>

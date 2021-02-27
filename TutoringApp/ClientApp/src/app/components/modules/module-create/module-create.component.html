@@ -3,11 +3,14 @@
   <ng-template pTemplate>
     <div class="p-grid p-fluid">
       <div class="p-col-10">
-        <input pInputText [(ngModel)]="name">
+        <input pInputText [(ngModel)]="name" (input)="validateNameExists()">
       </div>
       <div class="p-col-2">
         <button pButton class="p-button-success" label="Add" (click)="createModule()"
-          [disabled]="name.length <= 0"></button>
+          [disabled]="name.length <= 0 || nameExists"></button>
+      </div>
+      <div *ngIf="nameExists" class="p-col-12 danger">
+        <span>This module name already exists.</span>
       </div>
     </div>
   </ng-template>
