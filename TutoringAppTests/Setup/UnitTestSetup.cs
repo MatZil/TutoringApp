@@ -45,6 +45,7 @@ namespace TutoringAppTests.Setup
             RoleSeeder.Seed(RoleManager).Wait();
             AppUserSeeder.Seed(UserManager).Wait();
             ModuleSeeder.Seed(Context.Modules).Wait();
+            ModuleTutorSeeder.Seed(Context.ModuleTutors, UserManager).Wait();
 
             Context.SaveChanges();
         }
