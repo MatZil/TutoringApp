@@ -17,8 +17,6 @@ namespace TutoringApp.Data
         public DbSet<StudentTutor> StudentTutors { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<ModuleTutor> ModuleTutors { get; set; }
-        public DbSet<GlobalSetting> GlobalSettings { get; set; }
-        public DbSet<EmailTemplate> EmailTemplates { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -35,7 +33,6 @@ namespace TutoringApp.Data
             ConfigureTutorEvaluations(builder);
             ConfigureStudentTutors(builder);
             ConfigureModuleTutors(builder);
-            ConfigureGlobalSettings(builder);
             ConfigureModules(builder);
 
             builder.SeedModules();
@@ -129,13 +126,6 @@ namespace TutoringApp.Data
 
             builder.Entity<ModuleTutor>()
                 .HasKey(mt => new { mt.ModuleId, mt.TutorId });
-        }
-
-        private static void ConfigureGlobalSettings(ModelBuilder builder)
-        {
-            builder.Entity<GlobalSetting>()
-                .HasIndex(gs => gs.Name)
-                .IsUnique();
         }
     }
 }

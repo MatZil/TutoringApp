@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Moq;
+using System.Threading.Tasks;
 using TutoringApp.Data;
 using TutoringApp.Data.Dtos.Modules;
 using TutoringApp.Infrastructure.Repositories.ModelRepositories;
@@ -13,6 +14,7 @@ namespace TutoringAppTests.UnitTests.Modules
     public class ModulesServiceTests
     {
         private readonly IModulesService _modulesService;
+        private readonly Mock<ICurrentUserService> _currentUserServiceMock;
         private readonly ApplicationDbContext _context;
 
         public ModulesServiceTests()
@@ -20,9 +22,12 @@ namespace TutoringAppTests.UnitTests.Modules
             var setup = new UnitTestSetup();
             _context = setup.Context;
 
+            _currentUserServiceMock = new Mock<ICurrentUserService>();
+
             _modulesService = new ModulesService(
                 new ModulesRepository(setup.Context),
-                UnitTestSetup.Mapper
+                UnitTestSetup.Mapper,
+                _currentUserServiceMock.Object
                 );
         }
 
