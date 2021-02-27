@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using Moq;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Models;
 using TutoringApp.Services.Interfaces;
@@ -13,14 +14,16 @@ namespace TutoringAppTests.UnitTests.Users
     {
         private readonly IUsersService _usersService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly Mock<ICurrentUserService> _currentUserServiceMock;
 
         public UsersServiceTests()
         {
             var setup = new UnitTestSetup();
             _userManager = setup.UserManager;
-
+            _currentUserServiceMock = new Mock<ICurrentUserService>();
             _usersService = new UsersService(
-                setup.UserManager
+                setup.UserManager,
+                _currentUserServiceMock.Object
                 );
         }
 
