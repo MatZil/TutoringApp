@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
+using System.Threading.Tasks;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Models;
 using TutoringApp.Services.Interfaces;
@@ -23,7 +24,9 @@ namespace TutoringAppTests.UnitTests.Users
             _currentUserServiceMock = new Mock<ICurrentUserService>();
             _usersService = new UsersService(
                 setup.UserManager,
-                _currentUserServiceMock.Object
+                _currentUserServiceMock.Object,
+                UnitTestSetup.Mapper,
+                new Mock<ILogger<IUsersService>>().Object
                 );
         }
 

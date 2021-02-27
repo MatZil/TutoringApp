@@ -117,6 +117,42 @@ namespace TutoringAppTests.Setup.Seeds
 
             await userManager.CreateAsync(firstLecturer, "Password1");
             await userManager.AddToRoleAsync(firstLecturer, AppRoles.Lecturer);
+
+            var emailUnconfirmedStudent = new AppUser
+            {
+                Email = "matas.emailunconfirmed@ktu.edu",
+                UserName = "matas.emailunconfirmed@ktu.edu",
+                EmailConfirmed = false,
+                IsConfirmed = false,
+                FirstName = "Matas",
+                LastName = "Zilinskas",
+                Faculty = "Informatics",
+                StudyBranch = "Software Systems",
+                StudentCycle = StudentCycleEnum.Bachelor,
+                StudentYear = StudentYearEnum.FourthYear,
+                IsTutor = false
+            };
+
+            await userManager.CreateAsync(emailUnconfirmedStudent, "Password1");
+            await userManager.AddToRoleAsync(emailUnconfirmedStudent, AppRoles.Student);
+
+            var unconfirmedStudent = new AppUser
+            {
+                Email = "matas.unconfirmed@ktu.edu",
+                UserName = "matas.unconfirmed@ktu.edu",
+                EmailConfirmed = true,
+                IsConfirmed = false,
+                FirstName = "Matas",
+                LastName = "Zilinskas",
+                Faculty = "Informatics",
+                StudyBranch = "Software Systems",
+                StudentCycle = StudentCycleEnum.Bachelor,
+                StudentYear = StudentYearEnum.FourthYear,
+                IsTutor = false
+            };
+
+            await userManager.CreateAsync(unconfirmedStudent, "Password1");
+            await userManager.AddToRoleAsync(unconfirmedStudent, AppRoles.Student);
         }
     }
 }

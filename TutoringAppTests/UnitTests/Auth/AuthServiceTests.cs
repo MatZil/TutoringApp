@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TutoringApp.Data.Dtos.Auth;
 using TutoringApp.Data.Models;
+using TutoringApp.Data.Models.Enums;
 using TutoringApp.Services.Auth;
 using TutoringApp.Services.Interfaces;
 using TutoringAppTests.Setup;
@@ -55,7 +56,11 @@ namespace TutoringAppTests.UnitTests.Auth
                 FirstName = "Matas",
                 LastName = "Zilinskas",
                 Email = email,
-                Password = "Password1"
+                Password = "Password1",
+                Faculty = "Informatics",
+                StudentCycle = StudentCycleEnum.Bachelor,
+                StudentYear = StudentYearEnum.SecondYear,
+                StudyBranch = "Software Systems"
             };
 
             await _authService.Register(userRegistration);
@@ -64,34 +69,22 @@ namespace TutoringAppTests.UnitTests.Auth
 
             Assert.Equal("Matas", registeredUser.FirstName);
             Assert.Equal("Zilinskas", registeredUser.LastName);
+            Assert.Equal("Informatics", registeredUser.Faculty);
+            Assert.Equal(StudentCycleEnum.Bachelor, registeredUser.StudentCycle);
+            Assert.Equal(StudentYearEnum.SecondYear, registeredUser.StudentYear);
+            Assert.Equal("Software Systems", registeredUser.StudyBranch);
 
             var isPasswordCorrect = await _userManager.CheckPasswordAsync(registeredUser, "Password1");
             Assert.True(isPasswordCorrect);
         }
 
         [Fact]
-        public async Task When_RegisteringWithoutFirstName_Expect_Exception()
+        public async Task When_RegisteringWithIncompleteDetails_Expect_Exception()
         {
             var userRegistration = new UserRegistrationDto
             {
                 FirstName = "",
                 LastName = "Zilinskas",
-                Email = "matas.pavardenis@ktu.edu",
-                Password = "Password1"
-            };
-
-            await Assert.ThrowsAsync<ArgumentException>(async () =>
-                await _authService.Register(userRegistration)
-            );
-        }
-
-        [Fact]
-        public async Task When_RegisteringWithoutLastName_Expect_Exception()
-        {
-            var userRegistration = new UserRegistrationDto
-            {
-                FirstName = "Matas",
-                LastName = "",
                 Email = "matas.pavardenis@ktu.edu",
                 Password = "Password1"
             };
@@ -109,7 +102,11 @@ namespace TutoringAppTests.UnitTests.Auth
                 FirstName = "Matas",
                 LastName = "Zilinskas",
                 Email = "matas.pavardenis@ktu.lt",
-                Password = "Password1"
+                Password = "Password1",
+                Faculty = "Informatics",
+                StudentCycle = StudentCycleEnum.Bachelor,
+                StudentYear = StudentYearEnum.SecondYear,
+                StudyBranch = "Software Systems"
             };
 
             await Assert.ThrowsAsync<ArgumentException>(async () =>
@@ -157,19 +154,40 @@ namespace TutoringAppTests.UnitTests.Auth
             );
         }
 
-        [Theory]
-        [InlineData("matas.pavardenis@ktu.edu")]
-        public async Task When_Registering_Expect_ConfirmationEmailSent(string email)
+        [Fact]
+        public async Task When_LoggingInAsEmailUnconfirmedUser_Expect_Exception()
         {
-            var userRegistration = new UserRegistrationDto
+            var userLogin = new UserLoginDto
             {
-                FirstName = "Matas",
-                LastName = "Zilinskas",
-                Email = email,
+                Email = "matas.emailunconfirmed@ktu.edu",
                 Password = "Password1"
             };
 
-            await _authService.Register(userRegistration);
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
+                await _authService.Login(userLogin)
+            );
+        }
+
+        [Fact]
+        public async Task When_LoggingInAsUnconfirmedUser_Expect_Exception()
+        {
+            var userLogin = new UserLoginDto
+            {
+                Email = "matas.unconfirmed@ktu.edu",
+                Password = "Password1"
+            };
+
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
+                await _authService.Login(userLogin)
+            );
+        }
+
+        [Theory]
+        [InlineData("matas.emailunconfirmed@ktu.edu")]
+        public async Task When_SendingConfirmationEmail_Expect_ConfirmationEmailSent(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            await _authService.SendConfirmationEmail(user.Id);
 
             _emailServiceMock.Verify(
                 s => s.SendConfirmationEmail(email, It.IsAny<string>()),
