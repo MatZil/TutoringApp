@@ -8,5 +8,7 @@ namespace TutoringApp.Services.Interfaces
     {
         Task<string> GetRole(string userId);
         Task<IEnumerable<TutorDto>> GetTutors(int moduleId);
+        Task<IEnumerable<UserUnconfirmedDto>> GetUnconfirmedUsers();
+        Task<string> ConfirmUser(string id);
     }
 }

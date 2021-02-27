@@ -5,5 +5,6 @@ namespace TutoringApp.Services.Interfaces
     public interface IEmailService
     {
         Task SendConfirmationEmail(string receiverEmail, string emailConfirmationLink);
+        Task SendUserConfirmedEmail(string receiverEmail);
     }
 }

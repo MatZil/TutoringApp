@@ -22,6 +22,11 @@ namespace TutoringApp.Services.Shared
             return QueryHelpers.AddQueryString(url, queryParams);
         }
 
+        public string GetAppUrl(string subRoute = "")
+        {
+            return _rootUrl + subRoute;
+        }
+
         private static Dictionary<string, string> GetEmailTokenParams(string email, string token)
         {
             return new Dictionary<string, string>()
