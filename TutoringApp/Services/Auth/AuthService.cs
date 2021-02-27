@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,6 +10,7 @@ using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Dtos.Auth;
 using TutoringApp.Data.Extensions;
 using TutoringApp.Data.Models;
+using TutoringApp.Data.Models.Enums;
 using TutoringApp.Services.Interfaces;
 
 namespace TutoringApp.Services.Auth
@@ -121,11 +123,24 @@ namespace TutoringApp.Services.Auth
         #region Private methods
         private void ValidateUserRegistration(UserRegistrationDto userRegistration)
         {
-            if (userRegistration.Email.IsKtuEmail()) return;
+            if (!userRegistration.Email.IsKtuEmail())
+            {
+                const string errorMessage = "Could not register user: email is not in ktu.edu domain.";
+                _logger.LogError(errorMessage);
+                throw new ArgumentException(errorMessage);
+            }
 
-            const string errorMessage = "Could not register user: email is not in ktu.edu domain.";
-            _logger.LogError(errorMessage);
-            throw new ArgumentException(errorMessage);
+            if (
+                userRegistration.Faculty.IsNullOrEmpty()
+                || userRegistration.StudyBranch.IsNullOrEmpty()
+                || userRegistration.StudentCycle == StudentCycleEnum.Undefined
+                || userRegistration.StudentYear == StudentYearEnum.Undefined
+                )
+            {
+                const string errorMessage = "Could not register user: incomplete information.";
+                _logger.LogError(errorMessage);
+                throw new ArgumentException(errorMessage);
+            }
         }
 
         private async Task ValidateUserLogin(AppUser user, UserLoginDto userLogin)

@@ -10,10 +10,10 @@ namespace TutoringApp.Data.Models
     {
         [Required] public string FirstName { get; set; }
         [Required] public string LastName { get; set; }
-        [Required] public StudentCycleEnum StudentCycle { get; set; }
-        [Required] public StudentYearEnum StudentYear { get; set; }
-        [Required] public string Faculty { get; set; }
-        [Required] public string StudyBranch { get; set; }
+        public StudentCycleEnum StudentCycle { get; set; }
+        public StudentYearEnum StudentYear { get; set; }
+        public string Faculty { get; set; }
+        public string StudyBranch { get; set; }
         public bool IsConfirmed { get; set; }
         public bool IsTutor { get; set; }
 
