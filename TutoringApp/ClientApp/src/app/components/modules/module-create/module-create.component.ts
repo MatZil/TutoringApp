@@ -1,4 +1,4 @@
-import { Component, Output, ViewChild, EventEmitter, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Output, ViewChild, EventEmitter, Input, OnChanges } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { ModuleNew } from 'src/app/models/modules/module-new';
