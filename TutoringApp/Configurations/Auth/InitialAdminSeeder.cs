@@ -12,6 +12,8 @@ namespace TutoringApp.Configurations.Auth
             {
                 var user = new AppUser
                 {
+                    FirstName = configuration.GetValue<string>("InitialAdminCredentials:FirstName"),
+                    LastName = configuration.GetValue<string>("InitialAdminCredentials:LastName"),
                     UserName = configuration.GetValue<string>("InitialAdminCredentials:Email"),
                     Email = configuration.GetValue<string>("InitialAdminCredentials:Email"),
                     EmailConfirmed = true,
