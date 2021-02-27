@@ -26,6 +26,7 @@ namespace TutoringApp.Configurations
                 .AddScoped<IUrlService, UrlService>()
                 .AddScoped<IModulesService, ModulesService>()
                 .AddScoped<IUsersService, UsersService>()
+                .AddScoped<ICurrentUserService, CurrentUserService>()
 
                 // Infrastructure
                 .AddSingleton<IEmailSender, EmailSender>()

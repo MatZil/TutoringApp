@@ -13,17 +13,21 @@ namespace TutoringApp.Services.Modules
     {
         private readonly IRepository<Module> _modulesRepository;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
         public ModulesService(
             IRepository<Module> modulesRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ICurrentUserService currentUserService)
         {
             _modulesRepository = modulesRepository;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<IEnumerable<NamedEntityDto>> GetAll()
         {
+            var userRole = _currentUserService.GetRole();
             var modules = await _modulesRepository.GetAll();
             var dtos = _mapper.Map<IEnumerable<NamedEntityDto>>(modules);
 
