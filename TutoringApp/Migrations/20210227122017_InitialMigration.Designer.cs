@@ -10,8 +10,8 @@ using TutoringApp.Data;
 namespace TutoringApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210224180007_MadeModuleNameRequiredAndUnique")]
-    partial class MadeModuleNameRequiredAndUnique
+    [Migration("20210227122017_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,36 @@ namespace TutoringApp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ffbbf0f7-a44b-4507-9638-16f23fe8d45e",
+                            ConcurrencyStamp = "aef4be17-59c2-4348-aa62-e3240fa214bf",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "48b3c783-707f-46ea-9349-89a051066cc5",
+                            ConcurrencyStamp = "698a1fe5-0e2d-40db-bab2-7c6af6b24288",
+                            Name = "Tutor",
+                            NormalizedName = "TUTOR"
+                        },
+                        new
+                        {
+                            Id = "6e30ffbf-e691-4e41-9349-0404349a8367",
+                            ConcurrencyStamp = "81347000-aeb1-42fb-be76-80d87e0709e0",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "d2365ab4-0cf5-48ae-8216-b3f28cf4cd9f",
+                            ConcurrencyStamp = "781deac4-300c-40b4-84dc-d5e15697c752",
+                            Name = "Lecturer",
+                            NormalizedName = "LECTURER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -171,9 +201,19 @@ namespace TutoringApp.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Faculty")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTutor")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -203,6 +243,16 @@ namespace TutoringApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentCycle")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentYear")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudyBranch")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -293,46 +343,6 @@ namespace TutoringApp.Migrations
                     b.ToTable("ChatMessages");
                 });
 
-            modelBuilder.Entity("TutoringApp.Data.Models.EmailTemplate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Purpose")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailTemplates");
-                });
-
-            modelBuilder.Entity("TutoringApp.Data.Models.GlobalSetting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
-
-                    b.ToTable("GlobalSettings");
-                });
-
             modelBuilder.Entity("TutoringApp.Data.Models.JoiningTables.ModuleTutor", b =>
                 {
                     b.Property<int>("ModuleId")
@@ -387,6 +397,43 @@ namespace TutoringApp.Migrations
                         .IsUnique();
 
                     b.ToTable("Modules");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Cyber Security"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Analysis of Algorithms"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Databases"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Software Testing"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Object-Oriented Programming I"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Object-Oriented Programming II"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Mathematics I"
+                        });
                 });
 
             modelBuilder.Entity("TutoringApp.Data.Models.TutorEvaluation", b =>
