@@ -12,12 +12,12 @@ namespace TutoringApp.Configurations.Auth
             {
                 var user = new AppUser
                 {
-                    UserName = configuration.GetValue<string>("AdminData:AdminEmail"),
-                    Email = configuration.GetValue<string>("AdminData:AdminEmail"),
+                    UserName = configuration.GetValue<string>("InitialAdminCredentials:Email"),
+                    Email = configuration.GetValue<string>("InitialAdminCredentials:Email"),
                     EmailConfirmed = true,
                     IsConfirmed = true
                 };
-                var result = userManager.CreateAsync(user, configuration.GetValue<string>("AdminData:AdminPassword")).Result;
+                var result = userManager.CreateAsync(user, configuration.GetValue<string>("InitialAdminCredentials:Password")).Result;
 
                 if (result.Succeeded)
                 {
