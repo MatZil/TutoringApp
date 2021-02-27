@@ -31,7 +31,7 @@ export class EmailConfirmationComponent implements OnInit {
         _ => this.messages = [{
           severity: 'success',
           summary: 'Congratulations!',
-          detail: 'Your email has been confirmed successfully. You may login and start learning!'
+          detail: 'Your email has been confirmed successfully. Please wait for out administrator to let you in!'
         }],
         err => this.messages = [{
           severity: 'error',
