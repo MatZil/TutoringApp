@@ -23,7 +23,7 @@ namespace TutoringApp.Configurations.Auth
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, configuration.GetValue<string>(AppRoles.Admin)).Wait();
+                    userManager.AddToRoleAsync(user,AppRoles.Admin).Wait();
                 }
             }
         }
