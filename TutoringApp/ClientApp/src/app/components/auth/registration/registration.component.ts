@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { UserRegistration } from 'src/app/models/auth/user-registration';
+import { MessageService, SelectItem } from 'primeng/api';
 import { HomepageMessageUseCaseEnum } from 'src/app/models/enums/homepage-message-use-case.enum';
+import { StudentCycleEnum } from 'src/app/models/enums/student-cycle-enum';
+import { StudentYearEnum } from 'src/app/models/enums/student-year-enum';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -14,6 +15,30 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class RegistrationComponent implements OnInit {
   public registrationFormGroup: FormGroup;
+
+  public cycleOptions: SelectItem[] = [
+    { label: StudentCycleEnum[StudentCycleEnum.Bachelor], value: StudentCycleEnum.Bachelor },
+    { label: StudentCycleEnum[StudentCycleEnum.Master], value: StudentCycleEnum.Master },
+    { label: StudentCycleEnum[StudentCycleEnum.Doctorate], value: StudentCycleEnum.Doctorate }
+  ];
+
+  public yearOptions: SelectItem[] = [
+    { label: '1', value: StudentYearEnum.FirstYear },
+    { label: '2', value: StudentYearEnum.SecondYear },
+    { label: '3', value: StudentYearEnum.ThirdYear },
+    { label: '4', value: StudentYearEnum.FourthYear }
+  ];
+
+  public facultyOptions: SelectItem[] = [
+    { label: 'Informatics', value: 'Informatics' }
+  ];
+
+  public studyBranchOptions: SelectItem[] = [
+    { label: 'Software Systems', value: 'Software Systems'},
+    { label: 'IT Systems', value: 'IT Systems'},
+    { label: 'Informatics', value: 'Informatics'},
+    { label: 'Information Systems', value: 'Information Systems'}
+  ];
 
   constructor(
     private authService: AuthService,
@@ -32,7 +57,11 @@ export class RegistrationComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: [],
       firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
+      lastName: ['', Validators.required],
+      studentCycle: ['', Validators.required],
+      studentYear: ['', Validators.required],
+      faculty: ['', Validators.required],
+      studyBranch: ['', Validators.required]
     });
   }
 
@@ -43,7 +72,7 @@ export class RegistrationComponent implements OnInit {
       this.authService.register(this.registrationFormGroup.value).subscribe(
         _ => this.router.navigate([''], { queryParams: { useCase: HomepageMessageUseCaseEnum.RegistrationSuccess } }),
         err => this.messageService.add({ severity: 'error', summary: 'Errorrraaa', detail: `${err.error}` })
-        );
+      );
     }
   }
 

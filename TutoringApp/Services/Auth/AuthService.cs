@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
@@ -122,26 +121,11 @@ namespace TutoringApp.Services.Auth
         #region Private methods
         private void ValidateUserRegistration(UserRegistrationDto userRegistration)
         {
-            if (!userRegistration.Email.IsKtuEmail())
-            {
-                const string errorMessage = "Could not register user: email is not in ktu.edu domain.";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
-            }
+            if (userRegistration.Email.IsKtuEmail()) return;
 
-            if (userRegistration.FirstName.IsNullOrEmpty() || userRegistration.LastName.IsNullOrEmpty())
-            {
-                const string errorMessage = "Could not register user: first name and last name are mandatory.";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
-            }
-
-            if (userRegistration.Password?.Length < 6)
-            {
-                const string errorMessage = "Could not register user: password must consist of at least 6 symbols.";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
-            }
+            const string errorMessage = "Could not register user: email is not in ktu.edu domain.";
+            _logger.LogError(errorMessage);
+            throw new ArgumentException(errorMessage);
         }
 
         private async Task ValidateUserLogin(AppUser user, UserLoginDto userLogin)

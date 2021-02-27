@@ -17,6 +17,18 @@
     <div class="p-col-6">
       <input pInputText formControlName="lastName" placeholder="Last Name">
     </div>
+    <div class="p-col-6">
+      <p-dropdown formControlName="studentCycle" placeholder="Choose Cycle" [options]="cycleOptions"></p-dropdown>
+    </div>
+    <div class="p-col-6">
+      <p-dropdown formControlName="studentYear" placeholder="Choose Year" [options]="yearOptions"></p-dropdown>
+    </div>
+    <div class="p-col-6">
+      <p-dropdown formControlName="faculty" placeholder="Choose Faculty" [options]="facultyOptions"></p-dropdown>
+    </div>
+    <div class="p-col-6">
+      <p-dropdown formControlName="studyBranch" placeholder="Choose Study Branch" [options]="studyBranchOptions"></p-dropdown>
+    </div>
   </div>
   <button pButton label="Register" (click)="register()"></button>
 </div>

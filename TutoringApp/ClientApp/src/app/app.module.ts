@@ -29,6 +29,7 @@ import { ModuleViewComponent } from './components/modules/module-view/module-vie
 import { ModuleCreateComponent } from './components/modules/module-create/module-create.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     VirtualScrollerModule,
     OverlayPanelModule,
     ConfirmDialogModule,
+    DropdownModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
