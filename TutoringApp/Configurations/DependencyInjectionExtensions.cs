@@ -32,8 +32,6 @@ namespace TutoringApp.Configurations
                 .AddSingleton<IEmailSender, EmailSender>()
                 .AddScoped<IRepository<Assignment>, AssignmentsRepository>()
                 .AddScoped<IRepository<ChatMessage>, ChatMessagesRepository>()
-                .AddScoped<IRepository<EmailTemplate>, EmailTemplatesRepository>()
-                .AddScoped<IRepository<GlobalSetting>, GlobalSettingsRepository>()
                 .AddScoped<IRepository<Module>, ModulesRepository>()
                 .AddScoped<IRepository<TutorEvaluation>, TutorEvaluationsRepository>()
                 .AddScoped<IRepository<TutoringRequest>, TutoringRequestsRepository>()
