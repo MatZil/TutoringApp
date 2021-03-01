@@ -30,6 +30,8 @@ import { ModuleCreateComponent } from './components/modules/module-create/module
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { UnconfirmedUserTableComponent } from './components/users/unconfirmed-user-table/unconfirmed-user-table.component';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { DropdownModule } from 'primeng/dropdown';
     HomeComponent,
     ModuleListComponent,
     ModuleViewComponent,
-    ModuleCreateComponent
+    ModuleCreateComponent,
+    UnconfirmedUserTableComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +75,7 @@ import { DropdownModule } from 'primeng/dropdown';
     OverlayPanelModule,
     ConfirmDialogModule,
     DropdownModule,
+    TableModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
