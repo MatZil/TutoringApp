@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Threading.Tasks;
@@ -57,6 +58,40 @@ namespace TutoringAppTests.UnitTests.Users
                 t => Assert.Equal("Matas FirstTutor", t.Name),
                 t => Assert.Equal("Matas SecondTutor", t.Name)
                 );
+        }
+
+        [Fact]
+        public async Task When_GettingUnconfirmedUsers_Expect_CorrectUsers()
+        {
+            var actualUsers = await _usersService.GetUnconfirmedUsers();
+
+            Assert.Collection(actualUsers,
+                u => Assert.Equal("matas.unconfirmed@ktu.edu", u.Email)
+                );
+        }
+
+        [Theory]
+        [InlineData("matas.unconfirmed@ktu.edu")]
+        public async Task When_ConfirmingUser_Expect_UserConfirmed(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var actualEmail = await _usersService.ConfirmUser(user.Id);
+
+            Assert.Equal(email, actualEmail);
+            Assert.True(user.IsConfirmed);
+        }
+
+        [Theory]
+        [InlineData("non-existing@email.com")]
+        [InlineData("matas.emailunconfirmed@ktu.edu")]
+        [InlineData("matas.zilinskas@ktu.edu")]
+        public async Task When_ConfirmingInvalidUser_Expect_Exception(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _usersService.ConfirmUser(user?.Id)
+            );
         }
     }
 }
