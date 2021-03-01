@@ -33,15 +33,5 @@
     </tr>
   </ng-template>
 </p-table>
-
-<p-dialog [header]="rejectionDialogHeader" [(visible)]="isRejectionDialogVisible" [modal]="true"
-  (onHide)="cancelRejection()">
-  <div>
-    <textarea class="rejection-textarea" pInputTextarea [(ngModel)]="rejectionReason"></textarea>
-  </div>
-  <div>
-    <button pButton class="p-button-danger" label="Reject user" (click)="rejectUser()"
-      [disabled]="rejectionReason.length <= 0"></button>
-    <button [style.float]="'right'" pButton class="p-button-secondary" label="Cancel" (click)="cancelRejection()"></button>
-  </div>
-</p-dialog>
+<app-user-rejection-dialog [isVisible]="isRejectionDialogVisible" [header]="rejectionDialogHeader"
+  (userRejected)="rejectUser($event)" (rejectionCanceled)="cancelRejection()"></app-user-rejection-dialog>

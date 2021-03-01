@@ -27,7 +27,6 @@ export class UnconfirmedUserTableComponent implements OnInit {
 
   public isRejectionDialogVisible = false;
   public rejectionDialogHeader = '';
-  public rejectionReason = '';
   private userToRejectId = '';
 
   constructor(
@@ -83,9 +82,9 @@ export class UnconfirmedUserTableComponent implements OnInit {
     this.setRejectionDialogVisibility(true);
   }
 
-  public rejectUser(): void {
+  public rejectUser(rejectionReason: string): void {
     this.setRejectionDialogVisibility(false);
-    this.usersService.rejectUser(this.userToRejectId, this.rejectionReason).subscribe(
+    this.usersService.rejectUser(this.userToRejectId, rejectionReason).subscribe(
       _ => this.handleRejectionSuccess(),
       err => this.messageService.add({ severity: 'error', summary: 'Could not reject user', detail: err.error })
     );
@@ -98,9 +97,6 @@ export class UnconfirmedUserTableComponent implements OnInit {
   }
 
   public cancelRejection(): void {
-    this.userToRejectId = '';
-    this.rejectionReason = '';
-    this.rejectionDialogHeader = '';
     this.setRejectionDialogVisibility(false);
   }
 
