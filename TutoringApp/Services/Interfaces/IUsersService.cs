@@ -10,5 +10,6 @@ namespace TutoringApp.Services.Interfaces
         Task<IEnumerable<TutorDto>> GetTutors(int moduleId);
         Task<IEnumerable<UserUnconfirmedDto>> GetUnconfirmedUsers();
         Task<string> ConfirmUser(string id);
+        Task<string> RejectUser(string id);
     }
 }

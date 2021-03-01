@@ -59,5 +59,24 @@ namespace TutoringApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("{id}/reject")]
+        [Authorize(Roles = AppRoles.Admin)]
+        public async Task<IActionResult> RejectUser(string id, [FromBody] string rejectionReason)
+        {
+            try
+            {
+                var email = await _usersService.RejectUser(id);
+
+                Response.OnCompleted(async () =>
+                    await _emailService.SendUserRejectedEmail(email, rejectionReason));
+
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

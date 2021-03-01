@@ -34,5 +34,12 @@ namespace TutoringApp.Services.Shared
             const string subject = "Confirmed at Tutoring App!";
             await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
         }
+
+        public async Task SendUserRejectedEmail(string receiverEmail, string rejectionReason)
+        {
+            var emailBody = $"Unfortunately, your request to join Tutoring App has been rejected. Provided reason by admin:\n\n{rejectionReason}";
+            const string subject = "Tutoring App Rejection";
+            await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
+        }
     }
 }

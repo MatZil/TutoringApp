@@ -91,6 +91,16 @@ namespace TutoringApp.Services.Users
             return user.Email;
         }
 
+        public async Task<string> RejectUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            ValidateUserConfirmation(user, id);
+
+            await _userManager.DeleteAsync(user);
+
+            return user.Email;
+        }
+
         private void ValidateUserConfirmation(AppUser user, string id)
         {
             if (user is null)

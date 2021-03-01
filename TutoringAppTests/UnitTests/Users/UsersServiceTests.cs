@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System;
 using System.Threading.Tasks;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Models;
@@ -32,7 +32,7 @@ namespace TutoringAppTests.UnitTests.Users
                 _currentUserServiceMock.Object,
                 UnitTestSetup.Mapper,
                 new Mock<ILogger<IUsersService>>().Object
-                );
+            );
         }
 
         [Theory]
@@ -57,7 +57,7 @@ namespace TutoringAppTests.UnitTests.Users
             Assert.Collection(tutors,
                 t => Assert.Equal("Matas FirstTutor", t.Name),
                 t => Assert.Equal("Matas SecondTutor", t.Name)
-                );
+            );
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace TutoringAppTests.UnitTests.Users
 
             Assert.Collection(actualUsers,
                 u => Assert.Equal("matas.unconfirmed@ktu.edu", u.Email)
-                );
+            );
         }
 
         [Theory]
@@ -91,6 +91,34 @@ namespace TutoringAppTests.UnitTests.Users
 
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await _usersService.ConfirmUser(user?.Id)
+            );
+        }
+
+        [Theory]
+        [InlineData("matas.unconfirmed@ktu.edu")]
+        public async Task When_RejectingUser_Expect_UserRejected(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            // ReSharper disable once UseDeconstruction
+            var actualEmail = await _usersService.RejectUser(user.Id);
+
+            Assert.Equal(email, actualEmail);
+
+            var userDeleted = await _userManager.FindByEmailAsync(email);
+            Assert.Null(userDeleted);
+        }
+
+        [Theory]
+        [InlineData("non-existing@email.com")]
+        [InlineData("matas.emailunconfirmed@ktu.edu")]
+        [InlineData("matas.zilinskas@ktu.edu")]
+        public async Task When_RejectingInvalidUser_Expect_Exception(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _usersService.RejectUser(user?.Id)
             );
         }
     }

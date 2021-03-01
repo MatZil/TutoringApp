@@ -6,5 +6,6 @@ namespace TutoringApp.Services.Interfaces
     {
         Task SendConfirmationEmail(string receiverEmail, string emailConfirmationLink);
         Task SendUserConfirmedEmail(string receiverEmail);
+        Task SendUserRejectedEmail(string receiverEmail, string rejectionReason);
     }
 }
