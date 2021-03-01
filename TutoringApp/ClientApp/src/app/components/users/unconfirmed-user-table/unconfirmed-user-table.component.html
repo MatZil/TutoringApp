@@ -1,3 +1,5 @@
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
 <p-table #dt [value]="users" [columns]="columns" dataKey="id" [paginator]="true" [rows]="10"
   [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0">
   <ng-template pTemplate="caption">
@@ -13,6 +15,7 @@
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </div>
       </th>
+      <th></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-user>
@@ -23,6 +26,9 @@
       <td>{{user.studyBranch}}</td>
       <td>{{user.studentCycleDisplay}}</td>
       <td>{{user.studentYearDisplay}}</td>
+      <td>
+        <button pButton class="p-button-success" icon="pi pi-check" (click)="confirmUser(user)"></button>
+      </td>
     </tr>
   </ng-template>
 </p-table>
