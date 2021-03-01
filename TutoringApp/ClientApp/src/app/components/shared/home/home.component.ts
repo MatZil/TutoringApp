@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Message } from 'primeng/api';
 import { Observable } from 'rxjs';
+import { AppConstants } from 'src/app/app.constants';
 import { HomepageMessageUseCaseEnum } from 'src/app/models/enums/homepage-message-use-case.enum';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -13,6 +14,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class HomeComponent implements OnInit {
   public messages: Message[] = [];
   public isAuthenticated$: Observable<boolean>;
+  public isAdmin = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -23,6 +25,7 @@ export class HomeComponent implements OnInit {
     this.initializeMessage();
 
     this.isAuthenticated$ = this.authService.isAuthenticated$;
+    this.isAdmin = this.authService.currentUserBelongsToRole(AppConstants.AdminRole);
   }
 
   private initializeMessage(): void {

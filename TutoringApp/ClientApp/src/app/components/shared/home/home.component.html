@@ -1,6 +1,13 @@
 <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
 <div *ngIf="isAuthenticated$ | async">
-  <app-module-list></app-module-list>
+  <p-tabView>
+    <p-tabPanel header="Modules">
+      <app-module-list></app-module-list>
+    </p-tabPanel>
+    <p-tabPanel *ngIf="isAdmin" header="Unconfirmed users">
+      <app-unconfirmed-user-table></app-unconfirmed-user-table>
+    </p-tabPanel>
+  </p-tabView>
 </div>
 <div *ngIf="!messages.length && !(isAuthenticated$ | async)">
   <p-messages severity="info">

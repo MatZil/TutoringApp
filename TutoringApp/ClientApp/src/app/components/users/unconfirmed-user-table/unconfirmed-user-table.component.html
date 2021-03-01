@@ -1,1 +1,28 @@
-<p>unconfirmed-user-table works!</p>
+<p-table #dt [value]="users" [columns]="columns" dataKey="id" [paginator]="true" [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0">
+  <ng-template pTemplate="caption">
+    <div>
+      <span class="table-caption">Unconfirmed Users ({{users.length}})</span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        <div>
+          <span>{{col.header}}</span>
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user>
+    <tr>
+      <td>{{user.name}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.faculty}}</td>
+      <td>{{user.studyBranch}}</td>
+      <td>{{user.studentCycleDisplay}}</td>
+      <td>{{user.studentYearDisplay}}</td>
+    </tr>
+  </ng-template>
+</p-table>

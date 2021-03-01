@@ -9,4 +9,7 @@ export interface UserUnconfirmed {
   studentYear: StudentYearEnum;
   faculty: string;
   studyBranch: string;
+
+  studentCycleDisplay: string;
+  studentYearDisplay: string;
 }

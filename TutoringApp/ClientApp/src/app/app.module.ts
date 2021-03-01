@@ -32,6 +32,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { UnconfirmedUserTableComponent } from './components/users/unconfirmed-user-table/unconfirmed-user-table.component';
 import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { TableModule } from 'primeng/table';
     ConfirmDialogModule,
     DropdownModule,
     TableModule,
+    TabViewModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
