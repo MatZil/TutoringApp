@@ -37,7 +37,7 @@ namespace TutoringApp.Services.Shared
 
         public async Task SendUserRejectedEmail(string receiverEmail, string rejectionReason)
         {
-            var emailBody = $"Unfortunately, your request to join Tutoring App has been rejected. Provided reason by admin:\n\n{rejectionReason}";
+            var emailBody = $"Unfortunately, your request to join Tutoring App has been rejected. Provided reason by admin:<br><br>{rejectionReason}";
             const string subject = "Tutoring App Rejection";
             await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
         }

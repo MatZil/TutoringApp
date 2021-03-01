@@ -25,6 +25,11 @@ export class UnconfirmedUserTableComponent implements OnInit {
     { field: 'studentYearDisplay', header: 'Year' }
   ];
 
+  public isRejectionDialogVisible = false;
+  public rejectionDialogHeader = '';
+  public rejectionReason = '';
+  private userToRejectId = '';
+
   constructor(
     private usersService: UsersService,
     private confirmationService: ConfirmationService,
@@ -67,6 +72,40 @@ export class UnconfirmedUserTableComponent implements OnInit {
     this.messageService.add({ severity: 'success', summary: 'Success!', detail: 'User was successfully confirmed.' });
 
     this.users = this.users.filter(u => u.id !== id);
+  }
+  //#endregion
+
+  //#region User rejection management
+  public openRejectionDialog(user: UserUnconfirmed): void {
+    this.rejectionDialogHeader = `Why do you want to reject ${user.name}?`;
+    this.userToRejectId = user.id;
+
+    this.setRejectionDialogVisibility(true);
+  }
+
+  public rejectUser(): void {
+    this.setRejectionDialogVisibility(false);
+    this.usersService.rejectUser(this.userToRejectId, this.rejectionReason).subscribe(
+      _ => this.handleRejectionSuccess(),
+      err => this.messageService.add({ severity: 'error', summary: 'Could not reject user', detail: err.error })
+    );
+  }
+
+  private handleRejectionSuccess(): void {
+    this.messageService.add({ severity: 'success', summary: 'Success!', detail: 'User was successfully rejected.' });
+
+    this.users = this.users.filter(u => u.id !== this.userToRejectId);
+  }
+
+  public cancelRejection(): void {
+    this.userToRejectId = '';
+    this.rejectionReason = '';
+    this.rejectionDialogHeader = '';
+    this.setRejectionDialogVisibility(false);
+  }
+
+  private setRejectionDialogVisibility(isVisible: boolean): void {
+    this.isRejectionDialogVisible = isVisible;
   }
   //#endregion
 }

@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   public rejectUser(id: string, rejectionReason: string): Observable<any> {
-    return this.httpService.post(this.usersController, `${id}/reject`, rejectionReason);
+    return this.httpService.post(this.usersController, `${id}/reject?rejectionReason=${rejectionReason}`, null);
   }
   //#endregion
 }

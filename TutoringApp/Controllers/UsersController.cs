@@ -62,7 +62,7 @@ namespace TutoringApp.Controllers
 
         [HttpPost("{id}/reject")]
         [Authorize(Roles = AppRoles.Admin)]
-        public async Task<IActionResult> RejectUser(string id, [FromBody] string rejectionReason)
+        public async Task<IActionResult> RejectUser(string id, [FromQuery] string rejectionReason)
         {
             try
             {

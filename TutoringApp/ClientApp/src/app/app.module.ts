@@ -33,6 +33,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { UnconfirmedUserTableComponent } from './components/users/unconfirmed-user-table/unconfirmed-user-table.component';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,8 @@ import { TabViewModule } from 'primeng/tabview';
     DropdownModule,
     TableModule,
     TabViewModule,
+    InputTextareaModule,
+    DialogModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
