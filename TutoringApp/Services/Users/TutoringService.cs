@@ -61,7 +61,7 @@ namespace TutoringApp.Services.Users
                 throw new InvalidOperationException(errorMessage);
             }
 
-            if (user.TutorModules.Any(tm => tm.ModuleId != moduleId))
+            if (user.TutorModules.Any(tm => tm.ModuleId == moduleId))
             {
                 var errorMessage = $"Could not apply for tutoring: user (id='{userId}') is already a tutor in this module.";
                 _logger.LogError(errorMessage);
