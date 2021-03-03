@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TutoringApp.Data;
 using TutoringApp.Data.Dtos.Tutoring;
 using TutoringApp.Data.Models;
+using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Shared;
 using TutoringApp.Services.Tutoring;
@@ -38,7 +39,8 @@ namespace TutoringAppTests.UnitTests.Tutoring
                 setup.UserManager,
                 _currentUserServiceMock.Object,
                 new Mock<ILogger<ITutoringApplicationsService>>().Object,
-                new TimeService()
+                new TimeService(),
+                new TutoringApplicationsRepository(setup.Context)
             );
         }
 
@@ -97,6 +99,29 @@ namespace TutoringAppTests.UnitTests.Tutoring
 
             var moduleTutorRemoved = await _context.ModuleTutors.FirstOrDefaultAsync(mt => mt.ModuleId == moduleId && mt.TutorId == tutor.Id);
             Assert.Null(moduleTutorRemoved);
+        }
+
+        [Fact]
+        public async Task When_GettingTutoringApplications_Expect_CorrectApplications()
+        {
+            var applications = await _tutoringApplicationsService.GetTutoringApplications();
+
+            Assert.Collection(applications,
+                application =>
+                {
+                    Assert.Equal(1, application.Id);
+                    Assert.Equal("First motivational letter", application.MotivationalLetter);
+                    Assert.Equal("Operating Systems", application.ModuleName);
+                    Assert.Equal("matas.zilinskas@ktu.edu", application.Email);
+                },
+                application =>
+                {
+                    Assert.Equal(2, application.Id);
+                    Assert.Equal("Second motivational letter", application.MotivationalLetter);
+                    Assert.Equal("Databases", application.ModuleName);
+                    Assert.Equal("matas.zilinskas@ktu.edu", application.Email);
+                }
+                );
         }
     }
 }
