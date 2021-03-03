@@ -71,21 +71,6 @@ namespace TutoringAppTests.UnitTests.Tutoring
             );
         }
 
-        [Theory]
-        [InlineData(1, "This is a motivational letter.")]
-        public async Task When_ApplyingForTutoringAsAdmin_Expect_Exception(int moduleId, string motivationalLetter)
-        {
-            _currentUserServiceMock
-                .Setup(s => s.GetUserId())
-                .Returns(_userManager.Users.First(u => u.Email == "matas.admin@ktu.edu").Id);
-
-            var application = new TutoringApplicationNewDto { MotivationalLetter = motivationalLetter };
-
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _tutoringApplicationsService.ApplyForTutoring(moduleId, application)
-            );
-        }
-
         [Fact]
         public async Task When_GettingTutoringApplications_Expect_CorrectApplications()
         {

@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Dtos.Tutoring;
 using TutoringApp.Data.Models;
 using TutoringApp.Data.Models.JoiningTables;
@@ -44,7 +43,7 @@ namespace TutoringApp.Services.Tutoring
                 .Include(u => u.TutoringApplications)
                 .FirstOrDefaultAsync(u => u.Id == currentUserId);
 
-            await ValidateTutoringApplication(currentUser, currentUserId, moduleId);
+            ValidateTutoringApplication(currentUser, currentUserId, moduleId);
 
             var tutoringApplication = new TutoringApplication
             {
@@ -112,7 +111,7 @@ namespace TutoringApp.Services.Tutoring
             return student.Email;
         }
 
-        private async Task ValidateTutoringApplication(AppUser user, string userId, int moduleId)
+        private void ValidateTutoringApplication(AppUser user, string userId, int moduleId)
         {
             if (user is null)
             {
@@ -124,14 +123,6 @@ namespace TutoringApp.Services.Tutoring
             if (user.TutorModules.Any(tm => tm.ModuleId == moduleId))
             {
                 var errorMessage = $"Could not apply for tutoring: user (id='{userId}') is already a tutor in this module.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
-            }
-
-            var isStudent = await _userManager.IsInRoleAsync(user, AppRoles.Student);
-            if (!isStudent)
-            {
-                var errorMessage = $"Could not apply for tutoring: user (id='{userId}') is not a student.";
                 _logger.LogError(errorMessage);
                 throw new InvalidOperationException(errorMessage);
             }
