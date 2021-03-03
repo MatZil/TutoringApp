@@ -5,7 +5,6 @@ const constants: AppConstants = {
   EmailConfirmationRoute: 'confirm-email',
   ModuleViewRoute: 'modules/:id',
   StudentRole: 'Student',
-  TutorRole: 'Tutor',
   AdminRole: 'Admin',
   LecturerRole: 'Lecturer',
   RoleClaimType: 'Role',
@@ -23,7 +22,6 @@ interface AppConstants {
   readonly ModuleViewRoute: string;
 
   readonly StudentRole: string;
-  readonly TutorRole: string;
   readonly AdminRole: string;
   readonly LecturerRole: string;
 }

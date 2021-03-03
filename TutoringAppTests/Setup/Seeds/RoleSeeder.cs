@@ -9,7 +9,6 @@ namespace TutoringAppTests.Setup.Seeds
         public static async Task Seed(RoleManager<IdentityRole> roleManager)
         {
             await roleManager.CreateAsync(new IdentityRole { Name = AppRoles.Student });
-            await roleManager.CreateAsync(new IdentityRole { Name = AppRoles.Tutor });
             await roleManager.CreateAsync(new IdentityRole { Name = AppRoles.Admin });
             await roleManager.CreateAsync(new IdentityRole { Name = AppRoles.Lecturer });
         }

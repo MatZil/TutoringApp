@@ -37,7 +37,6 @@ namespace TutoringAppTests.UnitTests.Users
 
         [Theory]
         [InlineData("matas.zilinskas@ktu.edu", AppRoles.Student)]
-        [InlineData("matas.tutorius@ktu.edu", AppRoles.Tutor)]
         [InlineData("matas.admin@ktu.edu", AppRoles.Admin)]
         [InlineData("matas.lecturer@ktu.edu", AppRoles.Lecturer)]
         public async Task When_GettingUserRole_Expect_CorrectRole(string email, string expectedRole)

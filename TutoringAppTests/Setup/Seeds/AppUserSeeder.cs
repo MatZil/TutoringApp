@@ -44,7 +44,7 @@ namespace TutoringAppTests.Setup.Seeds
             };
 
             await userManager.CreateAsync(firstTutor, "Password1");
-            await userManager.AddToRoleAsync(firstTutor, AppRoles.Tutor);
+            await userManager.AddToRoleAsync(firstTutor, AppRoles.Student);
 
             var secondTutor = new AppUser
             {
@@ -62,7 +62,7 @@ namespace TutoringAppTests.Setup.Seeds
             };
 
             await userManager.CreateAsync(secondTutor, "Password1");
-            await userManager.AddToRoleAsync(secondTutor, AppRoles.Tutor);
+            await userManager.AddToRoleAsync(secondTutor, AppRoles.Student);
 
             var thirdTutor = new AppUser
             {
@@ -80,7 +80,7 @@ namespace TutoringAppTests.Setup.Seeds
             };
 
             await userManager.CreateAsync(thirdTutor, "Password1");
-            await userManager.AddToRoleAsync(thirdTutor, AppRoles.Tutor);
+            await userManager.AddToRoleAsync(thirdTutor, AppRoles.Student);
 
             var firstAdmin = new AppUser
             {
