@@ -6,24 +6,24 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Data;
-using TutoringApp.Data.Dtos.Users;
+using TutoringApp.Data.Dtos.Tutoring;
 using TutoringApp.Data.Models;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Shared;
-using TutoringApp.Services.Users;
+using TutoringApp.Services.Tutoring;
 using TutoringAppTests.Setup;
 using Xunit;
 
-namespace TutoringAppTests.UnitTests.Users
+namespace TutoringAppTests.UnitTests.Tutoring
 {
-    public class TutoringServiceTests
+    public class TutoringApplicationsServiceTests
     {
-        private readonly ITutoringService _tutoringService;
+        private readonly ITutoringApplicationsService _tutoringApplicationsService;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly Mock<ICurrentUserService> _currentUserServiceMock;
 
-        public TutoringServiceTests()
+        public TutoringApplicationsServiceTests()
         {
             var setup = new UnitTestSetup();
             _context = setup.Context;
@@ -34,10 +34,10 @@ namespace TutoringAppTests.UnitTests.Users
                 .Setup(s => s.GetUserId())
                 .Returns(setup.UserManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id);
 
-            _tutoringService = new TutoringService(
+            _tutoringApplicationsService = new TutoringApplicationsService(
                 setup.UserManager,
                 _currentUserServiceMock.Object,
-                new Mock<ILogger<ITutoringService>>().Object,
+                new Mock<ILogger<ITutoringApplicationsService>>().Object,
                 new TimeService()
             );
         }
@@ -47,7 +47,7 @@ namespace TutoringAppTests.UnitTests.Users
         public async Task When_ApplyingForTutoring_Expect_ApplicationCreated(int moduleId, string motivationalLetter)
         {
             var application = new TutoringApplicationNewDto { MotivationalLetter = motivationalLetter };
-            await _tutoringService.ApplyForTutoring(moduleId, application);
+            await _tutoringApplicationsService.ApplyForTutoring(moduleId, application);
 
             var applicationCreated = await _context.TutoringApplications.FirstAsync(ta => ta.MotivationalLetter == motivationalLetter);
             Assert.Equal(moduleId, applicationCreated.ModuleId);
@@ -65,7 +65,7 @@ namespace TutoringAppTests.UnitTests.Users
             var application = new TutoringApplicationNewDto { MotivationalLetter = motivationalLetter };
 
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _tutoringService.ApplyForTutoring(moduleId, application)
+                await _tutoringApplicationsService.ApplyForTutoring(moduleId, application)
             );
         }
 
@@ -80,7 +80,7 @@ namespace TutoringAppTests.UnitTests.Users
             var application = new TutoringApplicationNewDto { MotivationalLetter = motivationalLetter };
 
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _tutoringService.ApplyForTutoring(moduleId, application)
+                await _tutoringApplicationsService.ApplyForTutoring(moduleId, application)
             );
         }
 
@@ -93,7 +93,7 @@ namespace TutoringAppTests.UnitTests.Users
                 .Setup(s => s.GetUserId())
                 .Returns(tutor.Id);
 
-            await _tutoringService.ResignFromTutoring(moduleId);
+            await _tutoringApplicationsService.ResignFromTutoring(moduleId);
 
             var moduleTutorRemoved = await _context.ModuleTutors.FirstOrDefaultAsync(mt => mt.ModuleId == moduleId && mt.TutorId == tutor.Id);
             Assert.Null(moduleTutorRemoved);

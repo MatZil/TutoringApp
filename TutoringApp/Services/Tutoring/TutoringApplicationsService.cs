@@ -5,23 +5,23 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Configurations.Auth;
-using TutoringApp.Data.Dtos.Users;
+using TutoringApp.Data.Dtos.Tutoring;
 using TutoringApp.Data.Models;
 using TutoringApp.Services.Interfaces;
 
-namespace TutoringApp.Services.Users
+namespace TutoringApp.Services.Tutoring
 {
-    public class TutoringService : ITutoringService
+    public class TutoringApplicationsService : ITutoringApplicationsService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ICurrentUserService _currentUserService;
-        private readonly ILogger<ITutoringService> _logger;
+        private readonly ILogger<ITutoringApplicationsService> _logger;
         private readonly ITimeService _timeService;
 
-        public TutoringService(
+        public TutoringApplicationsService(
             UserManager<AppUser> userManager,
             ICurrentUserService currentUserService,
-            ILogger<ITutoringService> logger,
+            ILogger<ITutoringApplicationsService> logger,
             ITimeService timeService)
         {
             _userManager = userManager;

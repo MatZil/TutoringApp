@@ -1,4 +1,4 @@
-﻿namespace TutoringApp.Data.Dtos.Users
+﻿namespace TutoringApp.Data.Dtos.Tutoring
 {
     public class TutoringApplicationNewDto
     {
