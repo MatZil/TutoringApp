@@ -6,5 +6,6 @@ namespace TutoringApp.Services.Interfaces
     public interface ITutoringService
     {
         Task ApplyForTutoring(int moduleId, TutoringApplicationNewDto tutoringApplicationNew);
+        Task ResignFromTutoring(int moduleId);
     }
 }
