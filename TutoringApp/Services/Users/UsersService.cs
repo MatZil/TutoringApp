@@ -45,7 +45,6 @@ namespace TutoringApp.Services.Users
             var tutors = await _userManager.Users
                 .Include(u => u.TutorEvaluations)
                 .Include(u => u.TutoredSessions)
-                .Where(u => u.IsTutor)
                 .Where(u => u.TutorModules.Any(tm => tm.ModuleId == moduleId))
                 .Where(u => u.IgnoresToStudents.All(its => its.StudentId != userId))
                 .OrderByDescending(u => u.TutoredSessions.Count)

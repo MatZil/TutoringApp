@@ -27,6 +27,8 @@ namespace TutoringApp.Configurations
                 .AddScoped<IModulesService, ModulesService>()
                 .AddScoped<IUsersService, UsersService>()
                 .AddScoped<ICurrentUserService, CurrentUserService>()
+                .AddScoped<ITimeService, TimeService>()
+                .AddScoped<ITutoringService, TutoringService>()
 
                 // Infrastructure
                 .AddSingleton<IEmailSender, EmailSender>()
@@ -34,7 +36,7 @@ namespace TutoringApp.Configurations
                 .AddScoped<IRepository<ChatMessage>, ChatMessagesRepository>()
                 .AddScoped<IRepository<Module>, ModulesRepository>()
                 .AddScoped<IRepository<TutorEvaluation>, TutorEvaluationsRepository>()
-                .AddScoped<IRepository<TutoringRequest>, TutoringRequestsRepository>()
+                .AddScoped<IRepository<TutoringApplication>, TutoringApplicationsRepository>()
                 .AddScoped<IRepository<TutoringSession>, TutoringSessionsRepository>()
                 ;
         }

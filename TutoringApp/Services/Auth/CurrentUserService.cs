@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using TutoringApp.Configurations.Auth;
@@ -31,7 +32,13 @@ namespace TutoringApp.Services.Auth
 
         private Claim GetUserClaim(string claimType)
         {
-            return _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == claimType);
+            var claim = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == claimType);
+            if (claim is null)
+            {
+                throw new InvalidOperationException("User is not logged in.");
+            }
+
+            return claim;
         }
     }
 }

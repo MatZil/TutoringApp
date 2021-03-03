@@ -10,7 +10,7 @@ namespace TutoringApp.Data
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<TutoringSession> TutoringSessions { get; set; }
-        public DbSet<TutoringRequest> TutoringRequests { get; set; }
+        public DbSet<TutoringApplication> TutoringApplications { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<TutorEvaluation> TutorEvaluations { get; set; }
@@ -34,10 +34,18 @@ namespace TutoringApp.Data
             ConfigureStudentTutors(builder);
             ConfigureModuleTutors(builder);
             ConfigureModules(builder);
+            ConfigureTutoringApplications(builder);
 
             builder.SeedModules();
 
             builder.ApplyConfiguration(new RoleConfiguration());
+        }
+
+        private static void ConfigureTutoringApplications(ModelBuilder builder)
+        {
+            builder.Entity<TutoringApplication>()
+                .HasIndex(ta => new { ta.ModuleId, ta.StudentId })
+                .IsUnique();
         }
 
         private static void ConfigureModules(ModelBuilder builder)

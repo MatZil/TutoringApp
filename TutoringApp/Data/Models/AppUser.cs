@@ -15,11 +15,10 @@ namespace TutoringApp.Data.Models
         public string Faculty { get; set; }
         public string StudyBranch { get; set; }
         public bool IsConfirmed { get; set; }
-        public bool IsTutor { get; set; }
 
         public IList<TutoringSession> TutoredSessions { get; set; }
         public IList<TutoringSession> LearningSessions { get; set; }
-        public IList<TutoringRequest> TutoringRequests { get; set; }
+        public IList<TutoringApplication> TutoringApplications{ get; set; }
         public IList<ChatMessage> SentMessages { get; set; }
         public IList<ChatMessage> ReceivedMessages { get; set; }
         public IList<Assignment> TutorAssignments { get; set; }

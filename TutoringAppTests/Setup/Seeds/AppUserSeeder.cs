@@ -21,8 +21,7 @@ namespace TutoringAppTests.Setup.Seeds
                 Faculty = "Informatics",
                 StudyBranch = "Software Systems",
                 StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear,
-                IsTutor = false
+                StudentYear = StudentYearEnum.FourthYear
             };
 
             await userManager.CreateAsync(firstStudent, "Password1");
@@ -39,8 +38,7 @@ namespace TutoringAppTests.Setup.Seeds
                 Faculty = "Informatics",
                 StudyBranch = "Software Systems",
                 StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear,
-                IsTutor = true
+                StudentYear = StudentYearEnum.FourthYear
             };
 
             await userManager.CreateAsync(firstTutor, "Password1");
@@ -57,8 +55,7 @@ namespace TutoringAppTests.Setup.Seeds
                 Faculty = "Informatics",
                 StudyBranch = "Software Systems",
                 StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear,
-                IsTutor = true
+                StudentYear = StudentYearEnum.FourthYear
             };
 
             await userManager.CreateAsync(secondTutor, "Password1");
@@ -75,8 +72,7 @@ namespace TutoringAppTests.Setup.Seeds
                 Faculty = "Informatics",
                 StudyBranch = "Software Systems",
                 StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear,
-                IsTutor = true
+                StudentYear = StudentYearEnum.FourthYear
             };
 
             await userManager.CreateAsync(thirdTutor, "Password1");
@@ -93,8 +89,7 @@ namespace TutoringAppTests.Setup.Seeds
                 Faculty = "Informatics",
                 StudyBranch = "Software Systems",
                 StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear,
-                IsTutor = false
+                StudentYear = StudentYearEnum.FourthYear
             };
 
             await userManager.CreateAsync(firstAdmin, "Password1");
@@ -111,8 +106,7 @@ namespace TutoringAppTests.Setup.Seeds
                 Faculty = "Informatics",
                 StudyBranch = "Software Systems",
                 StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear,
-                IsTutor = false
+                StudentYear = StudentYearEnum.FourthYear
             };
 
             await userManager.CreateAsync(firstLecturer, "Password1");
@@ -129,8 +123,7 @@ namespace TutoringAppTests.Setup.Seeds
                 Faculty = "Informatics",
                 StudyBranch = "Software Systems",
                 StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear,
-                IsTutor = false
+                StudentYear = StudentYearEnum.FourthYear
             };
 
             await userManager.CreateAsync(emailUnconfirmedStudent, "Password1");
@@ -147,8 +140,7 @@ namespace TutoringAppTests.Setup.Seeds
                 Faculty = "Informatics",
                 StudyBranch = "Software Systems",
                 StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear,
-                IsTutor = false
+                StudentYear = StudentYearEnum.FourthYear
             };
 
             await userManager.CreateAsync(unconfirmedStudent, "Password1");
