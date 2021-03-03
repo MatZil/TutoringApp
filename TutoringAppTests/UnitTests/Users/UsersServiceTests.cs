@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data;
 using TutoringApp.Data.Models;
+using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Users;
 using TutoringAppTests.Setup;
@@ -35,7 +36,8 @@ namespace TutoringAppTests.UnitTests.Users
                 setup.UserManager,
                 _currentUserServiceMock.Object,
                 UnitTestSetup.Mapper,
-                new Mock<ILogger<IUsersService>>().Object
+                new Mock<ILogger<IUsersService>>().Object,
+                new ModuleTutorsRepository(setup.Context)
             );
         }
 

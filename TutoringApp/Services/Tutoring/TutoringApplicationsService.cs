@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Dtos.Tutoring;
 using TutoringApp.Data.Models;
+using TutoringApp.Data.Models.JoiningTables;
 using TutoringApp.Infrastructure.Repositories;
 using TutoringApp.Services.Interfaces;
 
@@ -76,6 +77,39 @@ namespace TutoringApp.Services.Tutoring
             });
 
             return tutoringApplicationDtos;
+        }
+
+        public async Task<string> ConfirmApplication(int applicationId)
+        {
+            var tutor = await _userManager.Users
+                .Include(u => u.TutorModules)
+                .Include(u => u.TutoringApplications)
+                .FirstAsync(u => u.TutoringApplications.Any(ta => ta.Id == applicationId));
+
+            var application = tutor.TutoringApplications.First(ta => ta.Id == applicationId);
+            var tutorModule = new ModuleTutor
+            {
+                ModuleId = application.ModuleId,
+                TutorId = tutor.Id
+            };
+
+            tutor.TutorModules.Add(tutorModule);
+            await _userManager.UpdateAsync(tutor);
+            await _tutoringApplicationsRepository.Delete(application);
+
+            return tutor.Email;
+        }
+
+        public async Task<string> RejectApplication(int applicationId)
+        {
+            var student = await _userManager.Users
+                .Include(u => u.TutoringApplications)
+                .FirstAsync(u => u.TutoringApplications.Any(ta => ta.Id == applicationId));
+
+            var application = student.TutoringApplications.First(ta => ta.Id == applicationId);
+            await _tutoringApplicationsRepository.Delete(application);
+
+            return student.Email;
         }
 
         private async Task ValidateTutoringApplication(AppUser user, string userId, int moduleId)

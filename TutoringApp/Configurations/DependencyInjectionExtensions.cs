@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TutoringApp.Data.Models;
 using TutoringApp.Infrastructure.EmailSender;
 using TutoringApp.Infrastructure.Repositories;
+using TutoringApp.Infrastructure.Repositories.Interfaces;
 using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Auth;
 using TutoringApp.Services.Interfaces;
@@ -39,6 +40,7 @@ namespace TutoringApp.Configurations
                 .AddScoped<IRepository<TutorEvaluation>, TutorEvaluationsRepository>()
                 .AddScoped<IRepository<TutoringApplication>, TutoringApplicationsRepository>()
                 .AddScoped<IRepository<TutoringSession>, TutoringSessionsRepository>()
+                .AddScoped<IModuleTutorsRepository, ModuleTutorsRepository>()
                 ;
         }
     }

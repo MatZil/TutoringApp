@@ -108,5 +108,41 @@ namespace TutoringAppTests.UnitTests.Tutoring
                 }
                 );
         }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task When_ConfirmingApplication_Expect_ApplicationRemoved(int applicationId)
+        {
+            var email = await _tutoringApplicationsService.ConfirmApplication(applicationId);
+
+            var applicationRemoved = await _context.TutoringApplications.FirstOrDefaultAsync(a => a.Id == applicationId);
+
+            Assert.Null(applicationRemoved);
+            Assert.Equal("matas.zilinskas@ktu.edu", email);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task When_ConfirmingApplication_Expect_ModuleTutorAdded(int applicationId)
+        {
+            await _tutoringApplicationsService.ConfirmApplication(applicationId);
+            var tutor = await _userManager.FindByEmailAsync("matas.zilinskas@ktu.edu");
+
+            var moduleTutorExists = await _context.ModuleTutors.AnyAsync(mt => mt.TutorId == tutor.Id && mt.ModuleId == 1);
+
+            Assert.True(moduleTutorExists);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task When_RejectingApplication_Expect_ApplicationRemoved(int applicationId)
+        {
+            var email = await _tutoringApplicationsService.RejectApplication(applicationId);
+
+            var applicationRemoved = await _context.TutoringApplications.FirstOrDefaultAsync(a => a.Id == applicationId);
+
+            Assert.Null(applicationRemoved);
+            Assert.Equal("matas.zilinskas@ktu.edu", email);
+        }
     }
 }

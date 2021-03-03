@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Data.Dtos.Users;
 using TutoringApp.Data.Models;
+using TutoringApp.Infrastructure.Repositories.Interfaces;
 using TutoringApp.Services.Interfaces;
 
 namespace TutoringApp.Services.Users
@@ -18,17 +19,20 @@ namespace TutoringApp.Services.Users
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
         private readonly ILogger<IUsersService> _logger;
+        private readonly IModuleTutorsRepository _moduleTutorsRepository;
 
         public UsersService(
             UserManager<AppUser> userManager,
             ICurrentUserService currentUserService,
             IMapper mapper,
-            ILogger<IUsersService> logger)
+            ILogger<IUsersService> logger,
+            IModuleTutorsRepository moduleTutorsRepository)
         {
             _userManager = userManager;
             _currentUserService = currentUserService;
             _mapper = mapper;
             _logger = logger;
+            _moduleTutorsRepository = moduleTutorsRepository;
         }
 
         public async Task<string> GetRole(string userId)
@@ -103,12 +107,8 @@ namespace TutoringApp.Services.Users
         public async Task ResignFromTutoring(int moduleId)
         {
             var currentUserId = _currentUserService.GetUserId();
-            var currentUser = await _userManager.Users
-                .Include(u => u.TutorModules)
-                .FirstOrDefaultAsync(u => u.Id == currentUserId);
 
-            currentUser.TutorModules = currentUser.TutorModules.Where(tm => tm.ModuleId != moduleId).ToList();
-            await _userManager.UpdateAsync(currentUser);
+            await _moduleTutorsRepository.Delete(moduleId, currentUserId);
         }
 
         private void ValidateUserConfirmation(AppUser user, string id)
