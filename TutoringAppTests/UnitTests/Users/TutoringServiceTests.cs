@@ -51,6 +51,7 @@ namespace TutoringAppTests.UnitTests.Users
 
             var applicationCreated = await _context.TutoringApplications.FirstAsync(ta => ta.MotivationalLetter == motivationalLetter);
             Assert.Equal(moduleId, applicationCreated.ModuleId);
+            Assert.Equal(DateTimeOffset.Now.Date, applicationCreated.RequestDate.Date);
         }
 
         [Theory]

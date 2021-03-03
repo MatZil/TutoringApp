@@ -12,7 +12,7 @@ namespace TutoringApp.Data.Models
         public int ModuleId { get; set; }
         public Module Module { get; set; }
 
-        public DateTimeOffset? RequestDate { get; set; }
+        public DateTimeOffset RequestDate { get; set; }
         
         [Required]
         public string MotivationalLetter { get; set; }
