@@ -1,4 +1,4 @@
-<p-dialog [header]="header" [(visible)]="isVisible" [modal]="true" (onHide)="cancelRejection()">
+<p-dialog [header]="header" [(visible)]="isVisible" [modal]="true" [closable]="false">
   <div>
     <textarea class="rejection-textarea" pInputTextarea [(ngModel)]="rejectionReason"></textarea>
   </div>
