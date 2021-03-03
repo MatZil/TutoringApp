@@ -86,21 +86,6 @@ namespace TutoringAppTests.UnitTests.Tutoring
             );
         }
 
-        [Theory]
-        [InlineData(1)]
-        public async Task When_ResigningFromTutoring_Expect_ModuleTutorRemoved(int moduleId)
-        {
-            var tutor = await _userManager.FindByEmailAsync("matas.tutorius2@ktu.edu");
-            _currentUserServiceMock
-                .Setup(s => s.GetUserId())
-                .Returns(tutor.Id);
-
-            await _tutoringApplicationsService.ResignFromTutoring(moduleId);
-
-            var moduleTutorRemoved = await _context.ModuleTutors.FirstOrDefaultAsync(mt => mt.ModuleId == moduleId && mt.TutorId == tutor.Id);
-            Assert.Null(moduleTutorRemoved);
-        }
-
         [Fact]
         public async Task When_GettingTutoringApplications_Expect_CorrectApplications()
         {

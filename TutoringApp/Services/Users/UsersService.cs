@@ -100,6 +100,17 @@ namespace TutoringApp.Services.Users
             return user.Email;
         }
 
+        public async Task ResignFromTutoring(int moduleId)
+        {
+            var currentUserId = _currentUserService.GetUserId();
+            var currentUser = await _userManager.Users
+                .Include(u => u.TutorModules)
+                .FirstOrDefaultAsync(u => u.Id == currentUserId);
+
+            currentUser.TutorModules = currentUser.TutorModules.Where(tm => tm.ModuleId != moduleId).ToList();
+            await _userManager.UpdateAsync(currentUser);
+        }
+
         private void ValidateUserConfirmation(AppUser user, string id)
         {
             if (user is null)

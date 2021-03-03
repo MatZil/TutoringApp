@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Threading.Tasks;
 using TutoringApp.Configurations.Auth;
+using TutoringApp.Data;
 using TutoringApp.Data.Models;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Users;
@@ -16,11 +18,13 @@ namespace TutoringAppTests.UnitTests.Users
     {
         private readonly IUsersService _usersService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ApplicationDbContext _context;
         private readonly Mock<ICurrentUserService> _currentUserServiceMock;
 
         public UsersServiceTests()
         {
             var setup = new UnitTestSetup();
+            _context = setup.Context;
             _userManager = setup.UserManager;
             _currentUserServiceMock = new Mock<ICurrentUserService>();
             _currentUserServiceMock
@@ -119,6 +123,21 @@ namespace TutoringAppTests.UnitTests.Users
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await _usersService.RejectUser(user?.Id)
             );
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task When_ResigningFromTutoring_Expect_ModuleTutorRemoved(int moduleId)
+        {
+            var tutor = await _userManager.FindByEmailAsync("matas.tutorius2@ktu.edu");
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(tutor.Id);
+
+            await _usersService.ResignFromTutoring(moduleId);
+
+            var moduleTutorRemoved = await _context.ModuleTutors.FirstOrDefaultAsync(mt => mt.ModuleId == moduleId && mt.TutorId == tutor.Id);
+            Assert.Null(moduleTutorRemoved);
         }
     }
 }

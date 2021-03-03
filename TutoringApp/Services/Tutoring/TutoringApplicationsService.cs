@@ -57,17 +57,6 @@ namespace TutoringApp.Services.Tutoring
             await _userManager.UpdateAsync(currentUser);
         }
 
-        public async Task ResignFromTutoring(int moduleId)
-        {
-            var currentUserId = _currentUserService.GetUserId();
-            var currentUser = await _userManager.Users
-                .Include(u => u.TutorModules)
-                .FirstOrDefaultAsync(u => u.Id == currentUserId);
-
-            currentUser.TutorModules = currentUser.TutorModules.Where(tm => tm.ModuleId != moduleId).ToList();
-            await _userManager.UpdateAsync(currentUser);
-        }
-
         public async Task<IEnumerable<TutoringApplicationDto>> GetTutoringApplications()
         {
             var tutoringApplications = await _tutoringApplicationsRepository.GetAll();
