@@ -61,6 +61,15 @@ namespace TutoringApp.Controllers
             return Ok();
         }
 
+        [HttpGet("{moduleId}/metadata")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> GetUserMetadata(int moduleId)
+        {
+            var metadata = await _modulesService.GetUserModuleMetadata(moduleId);
+
+            return Ok(metadata);
+        }
+
         #region Tutoring applications
 
         [HttpPost("{moduleId}/apply")]

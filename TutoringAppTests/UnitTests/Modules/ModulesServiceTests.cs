@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Data;
 using TutoringApp.Data.Dtos.Modules;
+using TutoringApp.Data.Models;
 using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Modules;
@@ -16,13 +19,18 @@ namespace TutoringAppTests.UnitTests.Modules
         private readonly IModulesService _modulesService;
         private readonly Mock<ICurrentUserService> _currentUserServiceMock;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
         public ModulesServiceTests()
         {
             var setup = new UnitTestSetup();
             _context = setup.Context;
+            _userManager = setup.UserManager;
 
             _currentUserServiceMock = new Mock<ICurrentUserService>();
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu").Id);
 
             _modulesService = new ModulesService(
                 new ModulesRepository(setup.Context),
@@ -63,6 +71,42 @@ namespace TutoringAppTests.UnitTests.Modules
 
             var actualModuleDeleted = await _context.Modules.FirstOrDefaultAsync(m => m.Id == id);
             Assert.Null(actualModuleDeleted);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task When_GettingUserModuleMetadataAsTutor_Expect_CorrectMetadata(int moduleId)
+        {
+            var metadata = await _modulesService.GetUserModuleMetadata(moduleId);
+
+            Assert.True(metadata.CanResignFromTutoring);
+            Assert.False(metadata.CanApplyForTutoring);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task When_GettingUserModuleMetadataAsApplicant_Expect_CorrectMetadata(int moduleId)
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id);
+            var metadata = await _modulesService.GetUserModuleMetadata(moduleId);
+
+            Assert.False(metadata.CanResignFromTutoring);
+            Assert.False(metadata.CanApplyForTutoring);
+        }
+
+        [Theory]
+        [InlineData(3)]
+        public async Task When_GettingUserModuleMetadataAsStudent_Expect_CorrectMetadata(int moduleId)
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id);
+            var metadata = await _modulesService.GetUserModuleMetadata(moduleId);
+
+            Assert.False(metadata.CanResignFromTutoring);
+            Assert.True(metadata.CanApplyForTutoring);
         }
     }
 }
