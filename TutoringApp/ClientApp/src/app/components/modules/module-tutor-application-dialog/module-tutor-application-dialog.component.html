@@ -3,7 +3,7 @@
     <textarea class="letter-textarea" pInputTextarea [(ngModel)]="motivationalLetter"></textarea>
   </div>
   <div>
-    <button pButton class="p-button-danger" label="Apply" (click)="apply()"
+    <button pButton class="p-button-success" label="Apply" (click)="apply()"
       [disabled]="motivationalLetter.length <= 0"></button>
     <button [style.float]="'right'" pButton class="p-button-secondary" label="Cancel"
       (click)="cancelApplication()"></button>

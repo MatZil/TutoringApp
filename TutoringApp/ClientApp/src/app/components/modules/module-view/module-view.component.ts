@@ -85,6 +85,7 @@ export class ModuleViewComponent implements OnInit {
   }
 
   public apply(tutoringApplicationNew: TutoringApplicationNew): void {
+    this.closeApplicationDialog();
     this.modulesService.applyForTutoring(this.moduleId, tutoringApplicationNew).subscribe(
       _ => this.handleApplicationSuccess(),
       err => this.messageService.add({ severity: 'error', summary: 'Could not apply for tutoring', detail: err.error })
@@ -108,7 +109,7 @@ export class ModuleViewComponent implements OnInit {
     this.confirmationService.confirm({
       header: 'Confirmation',
       message: 'Are you sure you want to resign from tutoring?',
-      accept: () => this.resignFromTutoring
+      accept: () => this.resignFromTutoring()
     });
   }
 
@@ -121,6 +122,7 @@ export class ModuleViewComponent implements OnInit {
 
   private handleResignationSuccess(): void {
     this.canResignFromTutoring = false;
+    this.canApplyForTutoring = true;
     this.messageService.add({ severity: 'success', summary: 'Success!', detail: 'You have resigned from tutoring successfully. Sorry to see you go...' });
   }
   //#endregion

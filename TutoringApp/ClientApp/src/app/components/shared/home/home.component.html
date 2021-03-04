@@ -7,6 +7,9 @@
     <p-tabPanel *ngIf="isAdmin" header="Unconfirmed users">
       <app-unconfirmed-user-table></app-unconfirmed-user-table>
     </p-tabPanel>
+    <p-tabPanel *ngIf="isAdmin" header="Tutoring applications">
+      <app-tutoring-application-table></app-tutoring-application-table>
+    </p-tabPanel>
   </p-tabView>
 </div>
 <div *ngIf="!messages.length && !(isAuthenticated$ | async)">
@@ -15,7 +18,8 @@
       <span>
         <i class="pi pi-exclamation-circle"></i>
         <span>
-          This website was designed for KTU members only. If you are part of KTU community, you may <a routerLink="register">register</a> / <a routerLink="login">login</a>.
+          This website was designed for KTU members only. If you are part of KTU community, you may <a
+            routerLink="register">register</a> / <a routerLink="login">login</a>.
         </span>
       </span>
     </ng-template>

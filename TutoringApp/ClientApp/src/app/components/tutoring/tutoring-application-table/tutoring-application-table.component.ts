@@ -62,7 +62,7 @@ export class TutoringApplicationTableComponent implements OnInit {
   public confirmTutoringApplication(application: TutoringApplication): void {
     this.confirmationService.confirm({
       header: 'Confirmation',
-      message: `Are you sure you want to promote user ${application.studentName} to ${application.moduleName}'s tutor?`,
+      message: `Are you sure you want to promote user ${application.studentName} to be a tutor of ${application.moduleName}?`,
       accept: () => this.doConfirmTutoringApplication(application.id)
     });
   }
@@ -77,13 +77,13 @@ export class TutoringApplicationTableComponent implements OnInit {
   private handleConfirmationSuccess(id: number): void {
     this.tutoringApplications = this.tutoringApplications.filter(ta => ta.id !== id);
 
-    this.messageService.add({ severity: 'success', summary: 'success', detail: 'You have successfully promoted a user!' });
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'You have successfully promoted a user!' });
   }
 
   public rejectTutoringApplication(application: TutoringApplication): void {
     this.confirmationService.confirm({
       header: 'Confirmation',
-      message: `Are you sure you want to reject user ${application.studentName} to be ${application.moduleName}'s tutor?`,
+      message: `Are you sure you want to reject user ${application.studentName} to be a tutor of ${application.moduleName}?`,
       accept: () => this.doRejectTutoringApplication(application.id)
     });
   }
@@ -98,7 +98,7 @@ export class TutoringApplicationTableComponent implements OnInit {
   private handleRejectionSuccess(id: number): void {
     this.tutoringApplications = this.tutoringApplications.filter(ta => ta.id !== id);
 
-    this.messageService.add({ severity: 'success', summary: 'success', detail: 'You have successfully rejected a user!' });
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'You have successfully rejected a user!' });
   }
   //#endregion
 }
