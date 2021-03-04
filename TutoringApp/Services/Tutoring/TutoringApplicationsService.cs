@@ -78,11 +78,12 @@ namespace TutoringApp.Services.Tutoring
             return tutoringApplicationDtos;
         }
 
-        public async Task<string> ConfirmApplication(int applicationId)
+        public async Task<(string email, string module)> ConfirmApplication(int applicationId)
         {
             var tutor = await _userManager.Users
                 .Include(u => u.TutorModules)
                 .Include(u => u.TutoringApplications)
+                .ThenInclude(a => a.Module)
                 .FirstAsync(u => u.TutoringApplications.Any(ta => ta.Id == applicationId));
 
             var application = tutor.TutoringApplications.First(ta => ta.Id == applicationId);
@@ -96,19 +97,20 @@ namespace TutoringApp.Services.Tutoring
             await _userManager.UpdateAsync(tutor);
             await _tutoringApplicationsRepository.Delete(application);
 
-            return tutor.Email;
+            return (tutor.Email, application.Module.Name);
         }
 
-        public async Task<string> RejectApplication(int applicationId)
+        public async Task<(string email, string module)> RejectApplication(int applicationId)
         {
             var student = await _userManager.Users
                 .Include(u => u.TutoringApplications)
+                .ThenInclude(a => a.Module)
                 .FirstAsync(u => u.TutoringApplications.Any(ta => ta.Id == applicationId));
 
             var application = student.TutoringApplications.First(ta => ta.Id == applicationId);
             await _tutoringApplicationsRepository.Delete(application);
 
-            return student.Email;
+            return (student.Email, application.Module.Name);
         }
 
         private void ValidateTutoringApplication(AppUser user, string userId, int moduleId)

@@ -98,12 +98,13 @@ namespace TutoringAppTests.UnitTests.Tutoring
         [InlineData(1)]
         public async Task When_ConfirmingApplication_Expect_ApplicationRemoved(int applicationId)
         {
-            var email = await _tutoringApplicationsService.ConfirmApplication(applicationId);
+            var (email, module) = await _tutoringApplicationsService.ConfirmApplication(applicationId);
 
             var applicationRemoved = await _context.TutoringApplications.FirstOrDefaultAsync(a => a.Id == applicationId);
 
             Assert.Null(applicationRemoved);
             Assert.Equal("matas.zilinskas@ktu.edu", email);
+            Assert.Equal("Operating Systems", module);
         }
 
         [Theory]
@@ -122,12 +123,13 @@ namespace TutoringAppTests.UnitTests.Tutoring
         [InlineData(1)]
         public async Task When_RejectingApplication_Expect_ApplicationRemoved(int applicationId)
         {
-            var email = await _tutoringApplicationsService.RejectApplication(applicationId);
+            var (email, module) = await _tutoringApplicationsService.RejectApplication(applicationId);
 
             var applicationRemoved = await _context.TutoringApplications.FirstOrDefaultAsync(a => a.Id == applicationId);
 
             Assert.Null(applicationRemoved);
             Assert.Equal("matas.zilinskas@ktu.edu", email);
+            Assert.Equal("Operating Systems", module);
         }
     }
 }

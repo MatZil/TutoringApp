@@ -42,16 +42,16 @@ namespace TutoringApp.Services.Shared
             await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
         }
 
-        public async Task SendTutoringApplicationConfirmedEmail(string receiverEmail)
+        public async Task SendTutoringApplicationConfirmedEmail(string receiverEmail, string moduleName)
         {
-            const string emailBody = "Congratulations! Your application for tutoring has been confirmed. You may now start spreading knowledge!";
+            var emailBody = $"Congratulations! Your application for tutoring in {moduleName} has been confirmed. You may now start spreading knowledge!";
             const string subject = "Tutoring App Tutoring Confirmation";
             await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
         }
 
-        public async Task SendTutoringApplicationRejectedEmail(string receiverEmail)
+        public async Task SendTutoringApplicationRejectedEmail(string receiverEmail, string moduleName)
         {
-            const string emailBody = "Unfortunately, your application for tutoring has been declined. Do not stop learning and try applying in the future!";
+            var emailBody = $"Unfortunately, your application for tutoring in {moduleName} has been declined. Do not stop learning and try applying in the future!";
             const string subject = "Tutoring App Tutoring Rejection";
             await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
         }

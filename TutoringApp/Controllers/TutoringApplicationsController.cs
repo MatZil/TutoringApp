@@ -36,10 +36,10 @@ namespace TutoringApp.Controllers
         {
             try
             {
-                var email = await _tutoringApplicationsService.ConfirmApplication(id);
+                var (email, module) = await _tutoringApplicationsService.ConfirmApplication(id);
 
                 Response.OnCompleted(async () =>
-                    await _emailService.SendTutoringApplicationConfirmedEmail(email)
+                    await _emailService.SendTutoringApplicationConfirmedEmail(email, module)
                 );
 
                 return Ok();
@@ -55,10 +55,10 @@ namespace TutoringApp.Controllers
         {
             try
             {
-                var email = await _tutoringApplicationsService.RejectApplication(id);
+                var (email, module) = await _tutoringApplicationsService.RejectApplication(id);
 
                 Response.OnCompleted(async () =>
-                    await _emailService.SendTutoringApplicationRejectedEmail(email)
+                    await _emailService.SendTutoringApplicationRejectedEmail(email, module)
                 );
 
                 return Ok();

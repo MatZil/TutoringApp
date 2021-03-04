@@ -8,7 +8,7 @@ namespace TutoringApp.Services.Interfaces
     {
         Task ApplyForTutoring(int moduleId, TutoringApplicationNewDto tutoringApplicationNew);
         Task<IEnumerable<TutoringApplicationDto>> GetTutoringApplications();
-        Task<string> ConfirmApplication(int applicationId);
-        Task<string> RejectApplication(int applicationId);
+        Task<(string email, string module)> ConfirmApplication(int applicationId);
+        Task<(string email, string module)> RejectApplication(int applicationId);
     }
 }
