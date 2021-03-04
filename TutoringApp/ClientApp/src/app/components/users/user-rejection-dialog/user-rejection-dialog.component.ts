@@ -13,7 +13,7 @@ export class UserRejectionDialogComponent implements OnChanges {
   private userRejected = new EventEmitter<string>();
 
   @Output()
-  private rejectionCanceled = new EventEmitter<boolean>();
+  private rejectionCancelled = new EventEmitter<boolean>();
 
   public rejectionReason = '';
 
@@ -28,6 +28,6 @@ export class UserRejectionDialogComponent implements OnChanges {
   }
 
   public cancelRejection(): void {
-    this.rejectionCanceled.emit(true);
+    this.rejectionCancelled.emit(true);
   }
 }

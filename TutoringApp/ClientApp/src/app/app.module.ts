@@ -36,6 +36,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DialogModule } from 'primeng/dialog';
 import { UserRejectionDialogComponent } from './components/users/user-rejection-dialog/user-rejection-dialog.component';
+import { ModuleTutorApplicationDialogComponent } from './components/modules/module-tutor-application-dialog/module-tutor-application-dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { UserRejectionDialogComponent } from './components/users/user-rejection-
     ModuleViewComponent,
     ModuleCreateComponent,
     UnconfirmedUserTableComponent,
-    UserRejectionDialogComponent
+    UserRejectionDialogComponent,
+    ModuleTutorApplicationDialogComponent,
   ],
   imports: [
     BrowserModule,
