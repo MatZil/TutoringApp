@@ -103,5 +103,25 @@ export class ModuleViewComponent implements OnInit {
   public setApplicationDialogVisibility(isVisible: boolean) {
     this.isApplicationDialogVisible = isVisible;
   }
+
+  public confirmResignation(): void {
+    this.confirmationService.confirm({
+      header: 'Confirmation',
+      message: 'Are you sure you want to resign from tutoring?',
+      accept: () => this.resignFromTutoring
+    });
+  }
+
+  private resignFromTutoring(): void {
+    this.modulesService.resignFromTutoring(this.moduleId).subscribe(
+      _ => this.handleResignationSuccess(),
+      err => this.messageService.add({ severity: 'error', summary: 'Could not resign from tutoring', detail: err.error })
+    );
+  }
+
+  private handleResignationSuccess(): void {
+    this.canResignFromTutoring = false;
+    this.messageService.add({ severity: 'success', summary: 'Success!', detail: 'You have resigned from tutoring successfully. Sorry to see you go...' });
+  }
   //#endregion
 }
