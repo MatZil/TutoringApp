@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Data;
@@ -35,7 +37,8 @@ namespace TutoringAppTests.UnitTests.Modules
             _modulesService = new ModulesService(
                 new ModulesRepository(setup.Context),
                 UnitTestSetup.Mapper,
-                _currentUserServiceMock.Object
+                _currentUserServiceMock.Object,
+                new Mock<ILogger<IModulesService>>().Object
                 );
         }
 
@@ -64,13 +67,22 @@ namespace TutoringAppTests.UnitTests.Modules
         }
 
         [Theory]
-        [InlineData(2)]
-        public async Task When_DeletingModule_Expect_ModuleDeleted(int id)
+        [InlineData(4)]
+        public async Task When_DeletingModuleWithoutTutors_Expect_ModuleDeleted(int id)
         {
             await _modulesService.Delete(id);
 
             var actualModuleDeleted = await _context.Modules.FirstOrDefaultAsync(m => m.Id == id);
             Assert.Null(actualModuleDeleted);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task When_DeletingModuleWithTutors_Expect_Exception(int id)
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _modulesService.Delete(id)
+            );
         }
 
         [Theory]

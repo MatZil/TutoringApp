@@ -56,9 +56,16 @@ namespace TutoringApp.Controllers
         [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> DeleteModule(int id)
         {
-            await _modulesService.Delete(id);
+            try
+            {
+                await _modulesService.Delete(id);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{moduleId}/metadata")]
