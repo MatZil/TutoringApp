@@ -1,0 +1,43 @@
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
+<p-table #dt [value]="tutoringApplications" [columns]="columns" dataKey="id" [paginator]="true" [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0">
+  <ng-template pTemplate="caption">
+    <div>
+      <span class="table-caption">Tutoring Applications ({{tutoringApplications.length}})</span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{ width: '15%' }">
+        <div>
+          <span>{{col.header}}</span>
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-application>
+    <tr>
+      <td>{{application.moduleName}}</td>
+      <td>{{application.studentName}}</td>
+      <td>{{application.email}}</td>
+      <td>{{application.studentCycleDisplay}}</td>
+      <td>{{application.studentYearDisplay}}</td>
+      <td>{{application.faculty}}</td>
+      <td>{{application.studyBranch}}</td>
+      <td>{{application.requestDate | date: 'yyyy-MM-dd H:mm'}}</td>
+      <td class="action-column">
+        <button pButton icon="pi pi-envelope" (click)="openMotivationalLetter(application.id)"></button>
+        <button pButton class="p-button-success" icon="pi pi-check"
+          (click)="confirmTutoringApplication(application)"></button>
+        <button pButton class="p-button-danger" icon="pi pi-times"
+          (click)="rejectTutoringApplication(application)"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+<p-dialog header="Motivational Letter" [modal]="true" [(visible)]="isMotivationalLetterDialogVisible">
+  <textarea class="letter-textarea" pInputTextarea [(ngModel)]="motivationalLetterToOpen" disabled></textarea>
+</p-dialog>

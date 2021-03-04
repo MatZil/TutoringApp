@@ -12,4 +12,7 @@ export interface TutoringApplication {
   studyBranch: string;
   requestDate: Date;
   motivationalLetter: string;
+
+  studentCycleDisplay: string;
+  studentYearDisplay: string;
 }

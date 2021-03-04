@@ -37,6 +37,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DialogModule } from 'primeng/dialog';
 import { UserRejectionDialogComponent } from './components/users/user-rejection-dialog/user-rejection-dialog.component';
 import { ModuleTutorApplicationDialogComponent } from './components/modules/module-tutor-application-dialog/module-tutor-application-dialog.component';
+import { TutoringApplicationTableComponent } from './components/tutoring/tutoring-application-table/tutoring-application-table.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { ModuleTutorApplicationDialogComponent } from './components/modules/modu
     UnconfirmedUserTableComponent,
     UserRejectionDialogComponent,
     ModuleTutorApplicationDialogComponent,
+    TutoringApplicationTableComponent,
   ],
   imports: [
     BrowserModule,
