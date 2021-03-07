@@ -120,6 +120,10 @@ namespace TutoringApp.Data
                 .HasOne(st => st.Tutor)
                 .WithMany(u => u.TutorStudents)
                 .HasForeignKey(st => st.TutorId);
+
+            builder.Entity<StudentTutor>()
+                .HasIndex(st => new { st.StudentId, st.TutorId })
+                .IsUnique();
         }
 
         private static void ConfigureStudentTutorIgnores(ModelBuilder builder)
@@ -133,6 +137,10 @@ namespace TutoringApp.Data
                 .HasOne(sti => sti.Tutor)
                 .WithMany(u => u.IgnoresToStudents)
                 .HasForeignKey(sti => sti.TutorId);
+
+            builder.Entity<StudentTutorIgnore>()
+                .HasIndex(st => new { st.StudentId, st.TutorId })
+                .IsUnique();
         }
 
         private static void ConfigureModuleTutors(ModelBuilder builder)
