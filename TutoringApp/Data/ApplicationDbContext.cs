@@ -14,6 +14,7 @@ namespace TutoringApp.Data
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<TutorEvaluation> TutorEvaluations { get; set; }
+        public DbSet<StudentTutorIgnore> StudentTutorIgnores { get; set; }
         public DbSet<StudentTutor> StudentTutors { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<ModuleTutor> ModuleTutors { get; set; }
@@ -31,10 +32,11 @@ namespace TutoringApp.Data
             ConfigureChatMessages(builder);
             ConfigureAssignments(builder);
             ConfigureTutorEvaluations(builder);
-            ConfigureStudentTutors(builder);
+            ConfigureStudentTutorIgnores(builder);
             ConfigureModuleTutors(builder);
             ConfigureModules(builder);
             ConfigureTutoringApplications(builder);
+            ConfigureStudentTutors(builder);
 
             builder.SeedModules();
 
@@ -110,11 +112,24 @@ namespace TutoringApp.Data
         private static void ConfigureStudentTutors(ModelBuilder builder)
         {
             builder.Entity<StudentTutor>()
+                .HasOne(st => st.Student)
+                .WithMany(u => u.StudentTutors)
+                .HasForeignKey(st => st.StudentId);
+
+            builder.Entity<StudentTutor>()
+                .HasOne(st => st.Tutor)
+                .WithMany(u => u.TutorStudents)
+                .HasForeignKey(st => st.TutorId);
+        }
+
+        private static void ConfigureStudentTutorIgnores(ModelBuilder builder)
+        {
+            builder.Entity<StudentTutorIgnore>()
                 .HasOne(sti => sti.Student)
                 .WithMany(u => u.IgnoresFromTutors)
                 .HasForeignKey(sti => sti.StudentId);
 
-            builder.Entity<StudentTutor>()
+            builder.Entity<StudentTutorIgnore>()
                 .HasOne(sti => sti.Tutor)
                 .WithMany(u => u.IgnoresToStudents)
                 .HasForeignKey(sti => sti.TutorId);
