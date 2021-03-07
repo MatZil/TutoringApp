@@ -8,13 +8,15 @@ const constants: AppConstants = {
   AdminRole: 'Admin',
   LecturerRole: 'Lecturer',
   RoleClaimType: 'Role',
-  EmailClaimType: 'Email'
+  EmailClaimType: 'Email',
+  UserIdClaimType: 'UserId'
 };
 
 interface AppConstants {
   readonly WebTokenKey: string;
   readonly RoleClaimType: string;
   readonly EmailClaimType: string;
+  readonly UserIdClaimType: string;
 
   readonly LoginRoute: string;
   readonly RegistrationRoute: string;

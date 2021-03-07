@@ -38,6 +38,7 @@ import { DialogModule } from 'primeng/dialog';
 import { UserRejectionDialogComponent } from './components/users/user-rejection-dialog/user-rejection-dialog.component';
 import { ModuleTutorApplicationDialogComponent } from './components/modules/module-tutor-application-dialog/module-tutor-application-dialog.component';
 import { TutoringApplicationTableComponent } from './components/tutoring/tutoring-application-table/tutoring-application-table.component';
+import { TutorTableComponent } from './components/users/tutor-table/tutor-table.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { TutoringApplicationTableComponent } from './components/tutoring/tutorin
     UserRejectionDialogComponent,
     ModuleTutorApplicationDialogComponent,
     TutoringApplicationTableComponent,
+    TutorTableComponent,
   ],
   imports: [
     BrowserModule,

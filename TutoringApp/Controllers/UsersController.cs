@@ -24,7 +24,7 @@ namespace TutoringApp.Controllers
         }
 
         [HttpGet("tutors")]
-        [Authorize(Roles = AppRoles.Student)]
+        [Authorize(Roles = AppRoles.Student + "," + AppRoles.Admin)]
         public async Task<IActionResult> GetTutors([FromQuery] int moduleId)
         {
             var tutors = await _usersService.GetTutors(moduleId);

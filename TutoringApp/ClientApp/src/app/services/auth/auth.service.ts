@@ -51,14 +51,15 @@ export class AuthService {
     return token && !this.jwtHelperService.isTokenExpired();
   }
 
-  public getCurrentUser(): CurrentUser {
+  private getCurrentUser(): CurrentUser {
     const token = TokenGetter();
     if (!token || this.jwtHelperService.isTokenExpired()) { return undefined; }
 
     const decodedToken = this.jwtHelperService.decodeToken();
     return {
       email: decodedToken[AppConstants.EmailClaimType],
-      role: decodedToken[AppConstants.RoleClaimType]
+      role: decodedToken[AppConstants.RoleClaimType],
+      userId: decodedToken[AppConstants.UserIdClaimType]
     };
   }
 
@@ -66,6 +67,12 @@ export class AuthService {
     const currentUser = this.getCurrentUser();
 
     return !!currentUser && currentUser.role === role;
+  }
+
+  public getCurrentUserId(): string {
+    const currentUser = this.getCurrentUser();
+
+    return currentUser.userId;
   }
 
   public changeAuthState(isAuthenticated: boolean): void {

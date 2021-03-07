@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Tutor } from 'src/app/models/users/tutor';
 import { UserUnconfirmed } from 'src/app/models/users/user-unconfirmed';
 import { HttpService } from '../http.service';
 
@@ -12,6 +13,11 @@ export class UsersService {
   constructor(
     private httpService: HttpService
   ) { }
+  //#region Client side
+  public getTutors(moduleId: number): Observable<Tutor[]> {
+    return this.httpService.get(this.usersController, `tutors?moduleId=${moduleId}`);
+  }
+  //#endregion
 
   //#region Admin side
   public getUnconfirmedUsers(): Observable<UserUnconfirmed[]> {
