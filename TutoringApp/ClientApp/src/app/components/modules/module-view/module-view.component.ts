@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppConstants } from 'src/app/app.constants';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ModulesService } from 'src/app/services/modules/modules.service';
+import { TutorTableComponent } from '../../users/tutor-table/tutor-table.component';
 
 @Component({
   selector: 'app-module-view',
@@ -18,6 +19,9 @@ export class ModuleViewComponent implements OnInit {
   private moduleId: number;
   public isAdmin = false;
   public isLecturer = false;
+
+  @ViewChild(TutorTableComponent)
+  public tutorTableComponent: TutorTableComponent;
 
   constructor(
     private modulesService: ModulesService,

@@ -1,6 +1,7 @@
 <p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>
-<button *ngIf="isAdmin" pButton class="p-button-danger" (click)="confirmDelete()" label="Delete Module"></button>
+<button *ngIf="isAdmin" pButton class="p-button-danger" (click)="confirmDelete()" label="Delete Module"
+  [disabled]="tutorTableComponent?.tutors.length > 0"></button>
 <div *ngIf="!isLecturer">
   <app-tutor-table></app-tutor-table>
 </div>
