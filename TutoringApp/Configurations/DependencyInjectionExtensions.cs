@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using TutoringApp.Data.Models;
+using TutoringApp.Data.Models.JoiningTables;
 using TutoringApp.Infrastructure.EmailSender;
 using TutoringApp.Infrastructure.Repositories;
 using TutoringApp.Infrastructure.Repositories.Interfaces;
@@ -31,6 +32,7 @@ namespace TutoringApp.Configurations
                 .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddScoped<ITimeService, TimeService>()
                 .AddScoped<ITutoringApplicationsService, TutoringApplicationsService>()
+                .AddScoped<IStudentTutorsService, StudentTutorsService>()
 
                 // Infrastructure
                 .AddSingleton<IEmailSender, EmailSender>()
@@ -40,7 +42,9 @@ namespace TutoringApp.Configurations
                 .AddScoped<IRepository<TutorEvaluation>, TutorEvaluationsRepository>()
                 .AddScoped<IRepository<TutoringApplication>, TutoringApplicationsRepository>()
                 .AddScoped<IRepository<TutoringSession>, TutoringSessionsRepository>()
+                .AddScoped<IRepository<StudentTutor>, StudentTutorsRepository>()
                 .AddScoped<IModuleTutorsRepository, ModuleTutorsRepository>()
+                .AddScoped<IStudentTutorIgnoresRepository, StudentTutorIgnoresRepository>()
                 ;
         }
     }
