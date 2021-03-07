@@ -32,6 +32,13 @@
       </td>
     </tr>
   </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        No unconfirmed users found
+      </td>
+    </tr>
+  </ng-template>
 </p-table>
 <app-user-rejection-dialog [isVisible]="isRejectionDialogVisible" [header]="rejectionDialogHeader"
   (userRejected)="rejectUser($event)" (rejectionCancelled)="cancelRejection()"></app-user-rejection-dialog>

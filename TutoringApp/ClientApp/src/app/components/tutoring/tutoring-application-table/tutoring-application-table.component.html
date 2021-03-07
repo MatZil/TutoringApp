@@ -37,6 +37,13 @@
       </td>
     </tr>
   </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        No tutoring applications found
+      </td>
+    </tr>
+  </ng-template>
 </p-table>
 <p-dialog header="Motivational Letter" [modal]="true" [(visible)]="isMotivationalLetterDialogVisible">
   <textarea class="letter-textarea" pInputTextarea [(ngModel)]="motivationalLetterToOpen" disabled></textarea>

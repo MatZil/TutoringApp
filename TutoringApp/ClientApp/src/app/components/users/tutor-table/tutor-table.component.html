@@ -3,7 +3,8 @@
 <p-table #dt [value]="tutors" [columns]="columns" dataKey="id" [paginator]="true" [rows]="10"
   [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0">
   <ng-template pTemplate="caption">
-    <div [class]="canApplyForTutoring || canResignFromTutoring ? 'floating-caption-container' : 'alone-caption-container'">
+    <div
+      [class]="canApplyForTutoring || canResignFromTutoring ? 'floating-caption-container' : 'alone-caption-container'">
       <span class="table-caption">Tutors ({{tutors.length}})</span>
     </div>
     <div class="right-action-bar">
@@ -38,6 +39,13 @@
       <td>{{tutor.tutoringSessionCount}}</td>
       <td class="action-column">
         <button pButton class="p-button-success" icon="pi pi-check"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        No tutors found yet - be first to apply!
       </td>
     </tr>
   </ng-template>
