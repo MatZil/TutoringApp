@@ -17,15 +17,18 @@ namespace TutoringApp.Controllers
         private readonly IModulesService _modulesService;
         private readonly ITutoringApplicationsService _tutoringApplicationsService;
         private readonly IUsersService _usersService;
+        private readonly IStudentTutorsService _studentTutorsService;
 
         public ModulesController(
             IModulesService modulesService,
             ITutoringApplicationsService tutoringApplicationsService,
-            IUsersService usersService)
+            IUsersService usersService,
+            IStudentTutorsService studentTutorsService)
         {
             _modulesService = modulesService;
             _tutoringApplicationsService = tutoringApplicationsService;
             _usersService = usersService;
+            _studentTutorsService = studentTutorsService;
         }
 
         [HttpGet]
@@ -112,6 +115,44 @@ namespace TutoringApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
+
+        #region Student Tutors
+
+        [HttpPost("{moduleId}/tutors/{tutorId}")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> AddStudentTutor(int moduleId, string tutorId)
+        {
+            try
+            {
+                await _studentTutorsService.AddStudentTutor(tutorId, moduleId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{moduleId}/tutors/{tutorId}")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> RemoveStudentTutor(int moduleId, string tutorId)
+        {
+            await _studentTutorsService.RemoveStudentTutor(tutorId, moduleId);
+
+            return Ok();
+        }
+
+        [HttpDelete("{moduleId}/students/{studentId}")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> RemoveTutorStudent(int moduleId, string studentId)
+        {
+            await _studentTutorsService.RemoveTutorStudent(studentId, moduleId);
+
+            return Ok();
+        }
+
         #endregion
     }
 }
