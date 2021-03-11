@@ -17,12 +17,8 @@ namespace TutoringAppTests.Setup.Seeds
                 new StudentTutor
                 {
                     Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
-                    Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu")
-                },
-                new StudentTutor
-                {
-                    Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
-                    Tutor = userManager.Users.First(u => u.Email == "matas.tutorius2@ktu.edu")
+                    Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu"),
+                    ModuleId = 1
                 }
             };
 
