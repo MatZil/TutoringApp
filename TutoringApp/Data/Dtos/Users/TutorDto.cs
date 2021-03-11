@@ -12,5 +12,6 @@ namespace TutoringApp.Data.Dtos.Users
         public string StudyBranch { get; set; }
         public double? AverageScore { get; set; }
         public int TutoringSessionCount { get; set; }
+        public bool IsAddable { get; set; }
     }
 }

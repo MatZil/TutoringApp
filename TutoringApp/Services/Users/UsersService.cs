@@ -49,6 +49,7 @@ namespace TutoringApp.Services.Users
             var tutors = await _userManager.Users
                 .Include(u => u.TutorEvaluations)
                 .Include(u => u.TutoredSessions)
+                .Include(u => u.TutorStudents)
                 .Where(u => u.TutorModules.Any(tm => tm.ModuleId == moduleId))
                 .Where(u => u.IgnoresToStudents.All(its => its.StudentId != userId))
                 .OrderByDescending(u => u.TutoredSessions.Count)
@@ -63,6 +64,7 @@ namespace TutoringApp.Services.Users
                 Faculty = t.Faculty,
                 StudyBranch = t.StudyBranch,
                 TutoringSessionCount = t.TutoredSessions.Count,
+                IsAddable = t.TutorStudents.All(u => u.StudentId != userId),
                 AverageScore = t.TutorEvaluations
                     .Select(te => (double)te.Evaluation)
                     .DefaultIfEmpty(0.0)
