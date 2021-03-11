@@ -8,6 +8,8 @@
       <span class="table-caption">Tutors ({{tutors.length}})</span>
     </div>
     <div class="right-action-bar">
+      <p-checkbox class="filter-checkbox" [binary]="true" label="Only my tutors" (onChange)="filterMyTutors($event.checked)">
+      </p-checkbox>
       <button *ngIf="canApplyForTutoring" pButton class="p-button-success" (click)="openApplicationDialog()"
         label="Apply for Tutoring!"></button>
       <button *ngIf="canResignFromTutoring" pButton class="p-button-danger" (click)="confirmResignation()"
@@ -40,8 +42,8 @@
       <td class="action-column">
         <button *ngIf="tutor.isAddable" pButton class="p-button-success" icon="pi pi-plus"
           (click)="addStudentTutor(tutor)"></button>
-        <button *ngIf="!tutor.isAddable && tutor.id !== currentUserId" pButton class="p-button-danger"
-          icon="pi pi-trash" (click)="confirmTutorRemove(tutor)"></button>
+        <button *ngIf="!tutor.isAddable" pButton class="p-button-danger" icon="pi pi-trash"
+          (click)="confirmTutorRemove(tutor)"></button>
       </td>
     </tr>
   </ng-template>

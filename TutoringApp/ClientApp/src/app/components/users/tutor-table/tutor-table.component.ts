@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { AppConstants } from 'src/app/app.constants';
 import { StudentCycleEnum } from 'src/app/models/enums/student-cycle-enum';
 import { TutoringApplicationNew } from 'src/app/models/tutoring/tutoring-application-new';
@@ -39,7 +40,8 @@ export class TutorTableComponent implements OnInit {
   public tutoringApplicationHeader = 'Provide a motivational letter in order to apply for tutoring.';
   public isApplicationDialogVisible = false;
 
-  public currentUserId: string;
+  @ViewChild(Table)
+  private tableComponent: Table;
 
   constructor(
     private usersService: UsersService,
@@ -73,8 +75,6 @@ export class TutorTableComponent implements OnInit {
   }
 
   private initializeMetadata(): void {
-    this.currentUserId = this.authService.getCurrentUserId();
-
     const isStudent = this.authService.currentUserBelongsToRole(AppConstants.StudentRole);
     if (isStudent) {
       this.modulesService.getModuleMetadata(this.moduleId).subscribe(metadata => {
@@ -175,6 +175,16 @@ export class TutorTableComponent implements OnInit {
       summary: 'Success!',
       detail: `You have successfully removed ${tutor.name} from your tutor list!`
     });
+  }
+  //#endregion
+
+  //#region Filtering
+  public filterMyTutors(filter: boolean): void {
+    if (filter) {
+      this.tableComponent.filter(false, 'isAddable', 'equals');
+    } else {
+      this.tableComponent.reset();
+    }
   }
   //#endregion
 }

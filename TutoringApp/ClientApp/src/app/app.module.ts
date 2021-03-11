@@ -39,6 +39,7 @@ import { UserRejectionDialogComponent } from './components/users/user-rejection-
 import { ModuleTutorApplicationDialogComponent } from './components/modules/module-tutor-application-dialog/module-tutor-application-dialog.component';
 import { TutoringApplicationTableComponent } from './components/tutoring/tutoring-application-table/tutoring-application-table.component';
 import { TutorTableComponent } from './components/users/tutor-table/tutor-table.component';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { TutorTableComponent } from './components/users/tutor-table/tutor-table.
     TabViewModule,
     InputTextareaModule,
     DialogModule,
+    CheckboxModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
