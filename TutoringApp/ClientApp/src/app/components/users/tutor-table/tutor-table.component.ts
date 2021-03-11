@@ -39,6 +39,8 @@ export class TutorTableComponent implements OnInit {
   public tutoringApplicationHeader = 'Provide a motivational letter in order to apply for tutoring.';
   public isApplicationDialogVisible = false;
 
+  public currentUserId: string;
+
   constructor(
     private usersService: UsersService,
     private activatedRoute: ActivatedRoute,
@@ -71,6 +73,8 @@ export class TutorTableComponent implements OnInit {
   }
 
   private initializeMetadata(): void {
+    this.currentUserId = this.authService.getCurrentUserId();
+
     const isStudent = this.authService.currentUserBelongsToRole(AppConstants.StudentRole);
     if (isStudent) {
       this.modulesService.getModuleMetadata(this.moduleId).subscribe(metadata => {
@@ -135,7 +139,8 @@ export class TutorTableComponent implements OnInit {
   //#region Student Tutor management
   public addStudentTutor(tutor: Tutor): void {
     this.modulesService.addStudentTutor(this.moduleId, tutor.id).subscribe({
-      next: _ => this.handleAddStudentTutorSuccess(tutor)
+      next: _ => this.handleAddStudentTutorSuccess(tutor),
+      error: err => this.messageService.add({ severity: 'error', summary: 'Could not add tutor', detail: err.error })
     });
   }
 
@@ -145,6 +150,30 @@ export class TutorTableComponent implements OnInit {
       severity: 'success',
       summary: 'Success!',
       detail: `You have successfully added ${tutor.name} as your tutor!`
+    });
+  }
+
+  public confirmTutorRemove(tutor: Tutor): void {
+    this.confirmationService.confirm({
+      header: 'Confirmation',
+      message: `Are you sure you want to remove ${tutor.name} from your tutor list?`,
+      accept: () => this.doTutorRemove(tutor)
+    });
+  }
+
+  private doTutorRemove(tutor: Tutor): void {
+    this.modulesService.removeStudentTutor(this.moduleId, tutor.id).subscribe({
+      next: _ => this.handleTutorRemoveSuccess(tutor),
+      error: err => this.messageService.add({ severity: 'error', summary: 'Could not remove tutor', detail: err.error })
+    });
+  }
+
+  private handleTutorRemoveSuccess(tutor: Tutor): void {
+    tutor.isAddable = true;
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success!',
+      detail: `You have successfully removed ${tutor.name} from your tutor list!`
     });
   }
   //#endregion
