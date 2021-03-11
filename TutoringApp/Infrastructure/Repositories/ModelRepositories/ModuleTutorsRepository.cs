@@ -28,5 +28,11 @@ namespace TutoringApp.Infrastructure.Repositories.ModelRepositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> Exists(int moduleId, string tutorId)
+        {
+            return await _moduleTutorSet
+                .AnyAsync(mt => mt.ModuleId == moduleId && mt.TutorId == tutorId);
+        }
     }
 }

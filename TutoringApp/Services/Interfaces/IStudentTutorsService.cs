@@ -4,8 +4,8 @@ namespace TutoringApp.Services.Interfaces
 {
     public interface IStudentTutorsService
     {
-        Task AddStudentTutor(string tutorId);
-        Task RemoveStudentTutor(string tutorId);
-        Task RemoveTutorStudent(string studentId);
+        Task AddStudentTutor(string tutorId, int moduleId);
+        Task RemoveStudentTutor(string tutorId, int moduleId);
+        Task RemoveTutorStudent(string studentId, int moduleId);
     }
 }

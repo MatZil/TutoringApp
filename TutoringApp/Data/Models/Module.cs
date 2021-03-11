@@ -12,5 +12,6 @@ namespace TutoringApp.Data.Models
 
         public IList<ModuleTutor> ModuleTutors { get; set; }
         public IList<TutoringApplication> TutoringApplications { get; set; }
+        public IList<StudentTutor> StudentTutors { get; set; }
     }
 }

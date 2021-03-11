@@ -122,7 +122,7 @@ namespace TutoringApp.Data
                 .HasForeignKey(st => st.TutorId);
 
             builder.Entity<StudentTutor>()
-                .HasIndex(st => new { st.StudentId, st.TutorId })
+                .HasIndex(st => new { st.StudentId, st.TutorId, st.ModuleId })
                 .IsUnique();
         }
 

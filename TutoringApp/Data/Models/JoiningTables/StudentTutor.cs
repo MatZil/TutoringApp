@@ -9,5 +9,8 @@ namespace TutoringApp.Data.Models.JoiningTables
 
         public AppUser Student { get; set; }
         public string StudentId { get; set; }
+
+        public Module Module { get; set; }
+        public int ModuleId { get; set; }
     }
 }

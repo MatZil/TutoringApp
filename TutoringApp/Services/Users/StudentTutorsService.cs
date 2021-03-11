@@ -15,21 +15,32 @@ namespace TutoringApp.Services.Users
         private readonly IStudentTutorIgnoresRepository _studentTutorIgnoresRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly ILogger<IStudentTutorsService> _logger;
+        private readonly IModuleTutorsRepository _moduleTutorsRepository;
 
         public StudentTutorsService(
             IRepository<StudentTutor> studentTutorsRepository,
             IStudentTutorIgnoresRepository studentTutorIgnoresRepository,
             ICurrentUserService currentUserService,
-            ILogger<IStudentTutorsService> logger)
+            ILogger<IStudentTutorsService> logger,
+            IModuleTutorsRepository moduleTutorsRepository)
         {
             _studentTutorsRepository = studentTutorsRepository;
             _studentTutorIgnoresRepository = studentTutorIgnoresRepository;
             _currentUserService = currentUserService;
             _logger = logger;
+            _moduleTutorsRepository = moduleTutorsRepository;
         }
 
-        public async Task AddStudentTutor(string tutorId)
+        public async Task AddStudentTutor(string tutorId, int moduleId)
         {
+            var tutorExists = await _moduleTutorsRepository.Exists(moduleId, tutorId);
+            if (!tutorExists)
+            {
+                var errorMessage = $"Could not add tutor (id='{tutorId}'): not found.";
+                _logger.LogError(errorMessage);
+                throw new InvalidOperationException(errorMessage);
+            }
+
             var currentUserId = _currentUserService.GetUserId();
             var tutorIgnoresStudent = await _studentTutorIgnoresRepository.TutorIgnoresStudent(tutorId, currentUserId);
             if (tutorIgnoresStudent)
@@ -42,16 +53,21 @@ namespace TutoringApp.Services.Users
             var studentTutor = new StudentTutor
             {
                 StudentId = currentUserId,
-                TutorId = tutorId
+                TutorId = tutorId,
+                ModuleId = moduleId
             };
 
             await _studentTutorsRepository.Create(studentTutor);
         }
 
-        public async Task RemoveStudentTutor(string tutorId)
+        public async Task RemoveStudentTutor(string tutorId, int moduleId)
         {
             var currentUserId = _currentUserService.GetUserId();
-            var studentTutorQuery = await _studentTutorsRepository.GetFiltered(st => st.StudentId == currentUserId && st.TutorId == tutorId);
+            var studentTutorQuery = await _studentTutorsRepository.GetFiltered(st => 
+                st.StudentId == currentUserId
+                && st.TutorId == tutorId
+                && st.ModuleId == moduleId);
+
             var studentTutor = studentTutorQuery.FirstOrDefault();
 
             if (studentTutor != null)
@@ -60,10 +76,14 @@ namespace TutoringApp.Services.Users
             }
         }
 
-        public async Task RemoveTutorStudent(string studentId)
+        public async Task RemoveTutorStudent(string studentId, int moduleId)
         {
             var currentUserId = _currentUserService.GetUserId();
-            var tutorStudentQuery = await _studentTutorsRepository.GetFiltered(st => st.StudentId == studentId && st.TutorId == currentUserId);
+            var tutorStudentQuery = await _studentTutorsRepository.GetFiltered(st =>
+                st.StudentId == studentId
+                && st.TutorId == currentUserId
+                && st.ModuleId == moduleId);
+
             var tutorStudent = tutorStudentQuery.FirstOrDefault();
 
             if (tutorStudent != null)
