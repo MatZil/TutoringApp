@@ -47,6 +47,8 @@ namespace TutoringAppTests.Setup
             ModuleSeeder.Seed(Context.Modules).Wait();
             ModuleTutorSeeder.Seed(Context.ModuleTutors, UserManager).Wait();
             TutoringApplicationSeeder.Seed(UserManager, Context.TutoringApplications).Wait();
+            StudentTutorSeeder.Seed(UserManager, Context.StudentTutors).Wait();
+            StudentTutorIgnoreSeeder.Seed(UserManager, Context.StudentTutorIgnores).Wait();
 
             Context.SaveChanges();
         }
