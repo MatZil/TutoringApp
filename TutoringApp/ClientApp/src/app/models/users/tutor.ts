@@ -10,6 +10,7 @@ export interface Tutor {
   studyBranch: string;
   averageScore: number;
   tutoringSessionCount: number;
+  isAddable: boolean;
 
   studentCycleDisplay: string;
   studentYearDisplay: string;

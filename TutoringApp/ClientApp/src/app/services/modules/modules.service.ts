@@ -39,4 +39,16 @@ export class ModulesService {
   public resignFromTutoring(id: number): Observable<any> {
     return this.httpService.post(this.modulesController, `${id}/resign`, null);
   }
+
+  public addStudentTutor(moduleId: number, tutorId: string): Observable<any> {
+    return this.httpService.post(this.modulesController, `${moduleId}/tutors/${tutorId}`, null);
+  }
+
+  public removeStudentTutor(moduleId: number, tutorId: string): Observable<any> {
+    return this.httpService.delete(this.modulesController, `${moduleId}/tutors/${tutorId}`, null);
+  }
+
+  public removeTutorStudent(moduleId: number, studentId: string): Observable<any> {
+    return this.httpService.delete(this.modulesController, `${moduleId}/students/${studentId}`, null);
+  }
 }

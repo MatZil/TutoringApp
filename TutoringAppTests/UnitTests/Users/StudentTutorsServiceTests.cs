@@ -78,6 +78,21 @@ namespace TutoringAppTests.UnitTests.Users
         }
 
         [Theory]
+        [InlineData("matas.tutorius3@ktu.edu", 2)]
+        public async Task When_AddingSelf_Expect_Exception(string email, int moduleId)
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == email).Id);
+
+            var tutor = await _userManager.FindByEmailAsync(email);
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _studentTutorsService.AddStudentTutor(tutor.Id, moduleId)
+            );
+        }
+
+        [Theory]
         [InlineData("matas.tutorius1@ktu.edu", 1)]
         public async Task When_RemovingTutorAsStudent_Expect_TutorRemoved(string email, int moduleId)
         {

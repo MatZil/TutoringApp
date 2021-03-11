@@ -33,6 +33,14 @@ namespace TutoringApp.Services.Users
 
         public async Task AddStudentTutor(string tutorId, int moduleId)
         {
+            var currentUserId = _currentUserService.GetUserId();
+            if (currentUserId == tutorId)
+            {
+                var errorMessage = $"Could not add tutor (id='{tutorId}'): you can't add yourself.";
+                _logger.LogError(errorMessage);
+                throw new InvalidOperationException(errorMessage);
+            }
+
             var tutorExists = await _moduleTutorsRepository.Exists(moduleId, tutorId);
             if (!tutorExists)
             {
@@ -41,7 +49,6 @@ namespace TutoringApp.Services.Users
                 throw new InvalidOperationException(errorMessage);
             }
 
-            var currentUserId = _currentUserService.GetUserId();
             var tutorIgnoresStudent = await _studentTutorIgnoresRepository.TutorIgnoresStudent(tutorId, currentUserId);
             if (tutorIgnoresStudent)
             {

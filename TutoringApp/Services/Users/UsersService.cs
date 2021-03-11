@@ -64,7 +64,7 @@ namespace TutoringApp.Services.Users
                 Faculty = t.Faculty,
                 StudyBranch = t.StudyBranch,
                 TutoringSessionCount = t.TutoredSessions.Count,
-                IsAddable = t.TutorStudents.All(u => u.StudentId != userId),
+                IsAddable = t.TutorStudents.All(u => u.StudentId != userId) && t.Id != userId,
                 AverageScore = t.TutorEvaluations
                     .Select(te => (double)te.Evaluation)
                     .DefaultIfEmpty(0.0)

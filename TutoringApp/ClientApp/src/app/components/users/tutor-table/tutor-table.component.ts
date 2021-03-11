@@ -131,4 +131,21 @@ export class TutorTableComponent implements OnInit {
     this.tutors = this.tutors.filter(t => t.id !== userId);
   }
   //#endregion
+
+  //#region Student Tutor management
+  public addStudentTutor(tutor: Tutor): void {
+    this.modulesService.addStudentTutor(this.moduleId, tutor.id).subscribe({
+      next: _ => this.handleAddStudentTutorSuccess(tutor)
+    });
+  }
+
+  private handleAddStudentTutorSuccess(tutor: Tutor): void {
+    tutor.isAddable = false;
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success!',
+      detail: `You have successfully added ${tutor.name} as your tutor!`
+    });
+  }
+  //#endregion
 }
