@@ -40,6 +40,10 @@ export class TutorTableComponent implements OnInit {
   public tutoringApplicationHeader = 'Provide a motivational letter in order to apply for tutoring.';
   public isApplicationDialogVisible = false;
 
+  private lastFilterCheckboxValue = false;
+
+  public isStudent = false;
+
   @ViewChild(Table)
   private tableComponent: Table;
 
@@ -75,8 +79,8 @@ export class TutorTableComponent implements OnInit {
   }
 
   private initializeMetadata(): void {
-    const isStudent = this.authService.currentUserBelongsToRole(AppConstants.StudentRole);
-    if (isStudent) {
+    this.isStudent = this.authService.currentUserBelongsToRole(AppConstants.StudentRole);
+    if (this.isStudent) {
       this.modulesService.getModuleMetadata(this.moduleId).subscribe(metadata => {
         this.canApplyForTutoring = metadata.canApplyForTutoring;
         this.canResignFromTutoring = metadata.canResignFromTutoring;
@@ -170,6 +174,7 @@ export class TutorTableComponent implements OnInit {
 
   private handleTutorRemoveSuccess(tutor: Tutor): void {
     tutor.isAddable = true;
+    this.filterMyTutors();
     this.messageService.add({
       severity: 'success',
       summary: 'Success!',
@@ -179,7 +184,9 @@ export class TutorTableComponent implements OnInit {
   //#endregion
 
   //#region Filtering
-  public filterMyTutors(filter: boolean): void {
+  public filterMyTutors(filter = this.lastFilterCheckboxValue): void {
+    this.lastFilterCheckboxValue = filter;
+
     if (filter) {
       this.tableComponent.filter(false, 'isAddable', 'equals');
     } else {
