@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AppConstants } from 'src/app/app.constants';
@@ -53,7 +53,8 @@ export class TutorTableComponent implements OnInit {
     private authService: AuthService,
     private modulesService: ModulesService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -192,6 +193,12 @@ export class TutorTableComponent implements OnInit {
     } else {
       this.tableComponent.reset();
     }
+  }
+  //#endregion
+
+  //#region Event handlers
+  public navigateToTutorView(tutorId: string): void {
+    this.router.navigateByUrl(`tutors/${tutorId}`);
   }
   //#endregion
 }

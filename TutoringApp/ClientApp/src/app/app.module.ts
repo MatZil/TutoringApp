@@ -40,6 +40,8 @@ import { ModuleTutorApplicationDialogComponent } from './components/modules/modu
 import { TutoringApplicationTableComponent } from './components/tutoring/tutoring-application-table/tutoring-application-table.component';
 import { TutorTableComponent } from './components/users/tutor-table/tutor-table.component';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ChatComponent } from './components/chats/chat/chat.component';
+import { TutorViewComponent } from './components/users/tutor-view/tutor-view.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     ModuleTutorApplicationDialogComponent,
     TutoringApplicationTableComponent,
     TutorTableComponent,
+    ChatComponent,
+    TutorViewComponent,
   ],
   imports: [
     BrowserModule,
