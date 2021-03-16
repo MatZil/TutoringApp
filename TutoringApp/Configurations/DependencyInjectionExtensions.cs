@@ -7,6 +7,7 @@ using TutoringApp.Infrastructure.Repositories;
 using TutoringApp.Infrastructure.Repositories.Interfaces;
 using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Auth;
+using TutoringApp.Services.Chats;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Modules;
 using TutoringApp.Services.Shared;
@@ -33,6 +34,7 @@ namespace TutoringApp.Configurations
                 .AddScoped<ITimeService, TimeService>()
                 .AddScoped<ITutoringApplicationsService, TutoringApplicationsService>()
                 .AddScoped<IStudentTutorsService, StudentTutorsService>()
+                .AddScoped<IChatsService, ChatsService>()
 
                 // Infrastructure
                 .AddSingleton<IEmailSender, EmailSender>()
