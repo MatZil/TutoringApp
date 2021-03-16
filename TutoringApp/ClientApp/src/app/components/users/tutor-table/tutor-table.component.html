@@ -41,12 +41,12 @@
       <td>{{tutor.averageScore}}</td>
       <td>{{tutor.tutoringSessionCount}}</td>
       <td class="action-column">
+        <button *ngIf="isStudent && !tutor.isAddable" pButton icon="pi pi-comments"
+          (click)="navigateToTutorView(tutor.id)"></button>
         <button *ngIf="isStudent && tutor.isAddable" pButton class="p-button-success" icon="pi pi-plus"
           (click)="addStudentTutor(tutor)"></button>
         <button *ngIf="isStudent && !tutor.isAddable" pButton class="p-button-danger" icon="pi pi-trash"
           (click)="confirmTutorRemove(tutor)"></button>
-        <button *ngIf="isStudent && !tutor.isAddable" pButton icon="pi pi-comments"
-          (click)="navigateToTutorView(tutor.id)"></button>
       </td>
     </tr>
   </ng-template>
