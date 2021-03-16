@@ -34,6 +34,13 @@ namespace TutoringAppTests.Setup.Seeds
                     Receiver = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
                     Content = "Timing is everything :)",
                     Timestamp = DateTimeOffset.Now.AddMinutes(-9)
+                },
+                new ChatMessage
+                {
+                    Sender = userManager.Users.First(u => u.Email == "matas.tutorius2@ktu.edu"),
+                    Receiver = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
+                    Content = "Tutor Ended",
+                    Timestamp = DateTimeOffset.Now.AddDays(-9)
                 }
             };
 

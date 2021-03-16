@@ -89,13 +89,22 @@ namespace TutoringApp.Services.Chats
 
         public async Task<IEnumerable<ChatMessageDto>> GetChatMessages(string receiverId)
         {
+            var receiver = await _userManager.FindByIdAsync(receiverId);
+            if (receiver is null)
+            {
+                var errorMessage = $"Could not get messages from user (id = '{receiverId}'): he does not exist.";
+                _logger.LogError(errorMessage);
+                throw new InvalidOperationException(errorMessage);
+            }
+
             var senderId = _currentUserService.GetUserId();
             var chatMessages = await _chatMessagesRepository
-                .GetFiltered(cm => cm.SenderId == senderId && cm.ReceiverId == receiverId);
+                .GetFiltered(cm =>
+                    cm.SenderId == senderId && cm.ReceiverId == receiverId
+                    || cm.ReceiverId == senderId && cm.SenderId == receiverId);
             chatMessages = chatMessages.OrderBy(cm => cm.Timestamp);
 
             var sender = await _userManager.FindByIdAsync(senderId);
-            var receiver = await _userManager.FindByIdAsync(receiverId);
 
             return chatMessages.Select(chatMessage => new ChatMessageDto
             {
