@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using TutoringApp.Configurations.Auth;
+using TutoringApp.Data.Dtos.Chats;
 using TutoringApp.Services.Interfaces;
 
 namespace TutoringApp.Controllers
@@ -14,13 +15,16 @@ namespace TutoringApp.Controllers
     {
         private readonly IUsersService _usersService;
         private readonly IEmailService _emailService;
+        private readonly IChatsService _chatsService;
 
         public UsersController(
             IUsersService usersService, 
-            IEmailService emailService)
+            IEmailService emailService, 
+            IChatsService chatsService)
         {
             _usersService = usersService;
             _emailService = emailService;
+            _chatsService = chatsService;
         }
 
         [HttpGet("tutors")]
@@ -78,5 +82,41 @@ namespace TutoringApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        #region Chats
+
+        [HttpPost("{userId}/chat-messages")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> PostMessage(string userId, [FromBody] ChatMessageNewDto chatMessageNew)
+        {
+            try
+            {
+                var chatMessage = await _chatsService.PostChatMessage(userId, chatMessageNew);
+
+                return Ok(chatMessage);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{userId}/chat-messages")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> GetMessages(string userId)
+        {
+            try
+            {
+                var chatMessage = await _chatsService.GetChatMessages(userId);
+
+                return Ok(chatMessage);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
     }
 }
