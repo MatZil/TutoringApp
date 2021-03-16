@@ -90,7 +90,9 @@ namespace TutoringApp.Services.Chats
         public async Task<IEnumerable<ChatMessageDto>> GetChatMessages(string receiverId)
         {
             var senderId = _currentUserService.GetUserId();
-            var chatMessages = await _chatMessagesRepository.GetFiltered(cm => cm.SenderId == senderId && cm.ReceiverId == receiverId);
+            var chatMessages = await _chatMessagesRepository
+                .GetFiltered(cm => cm.SenderId == senderId && cm.ReceiverId == receiverId);
+            chatMessages = chatMessages.OrderBy(cm => cm.Timestamp);
 
             var sender = await _userManager.FindByIdAsync(senderId);
             var receiver = await _userManager.FindByIdAsync(receiverId);
