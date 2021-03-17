@@ -75,6 +75,18 @@ namespace TutoringApp.Services.Users
             return tutorDtos;
         }
 
+        public async Task<IEnumerable<StudentDto>> GetStudents(int moduleId)
+        {
+            var userId = _currentUserService.GetUserId();
+            var students = await _userManager.Users
+                .Where(u => u.StudentTutors.Any(st => st.TutorId == userId && st.ModuleId == moduleId))
+                .ToListAsync();
+
+            var studentDtos = _mapper.Map<IEnumerable<StudentDto>>(students);
+
+            return studentDtos;
+        }
+
         public async Task<IEnumerable<UserUnconfirmedDto>> GetUnconfirmedUsers()
         {
             var users = await _userManager.Users

@@ -30,6 +30,7 @@ namespace TutoringAppTests.Setup
                 {
                     cfg.AddProfile(new AuthMappingProfile());
                     cfg.AddProfile(new ModuleMappingProfile());
+                    cfg.AddProfile(new UserMappingProfile());
                 });
 
                 return config.CreateMapper();

@@ -27,5 +27,16 @@ namespace TutoringAppTests.UnitTests.Shared
 
             configuration.AssertConfigurationIsValid();
         }
+
+        [Fact]
+        public void When_CheckingUserMapping_Expect_ConfigurationValid()
+        {
+            var configuration = new MapperConfiguration(c =>
+            {
+                c.AddProfile(new UserMappingProfile());
+            });
+
+            configuration.AssertConfigurationIsValid();
+        }
     }
 }

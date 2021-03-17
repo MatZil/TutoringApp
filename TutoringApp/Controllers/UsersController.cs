@@ -36,6 +36,15 @@ namespace TutoringApp.Controllers
             return Ok(tutors);
         }
 
+        [HttpGet("students")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> GetStudents([FromQuery] int moduleId)
+        {
+            var students = await _usersService.GetStudents(moduleId);
+
+            return Ok(students);
+        }
+
         [HttpGet("unconfirmed")]
         [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> GetUnconfirmedUsers()

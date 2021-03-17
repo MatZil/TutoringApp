@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data;
 using TutoringApp.Data.Models;
+using TutoringApp.Data.Models.Enums;
 using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Users;
@@ -140,6 +141,27 @@ namespace TutoringAppTests.UnitTests.Users
 
             var moduleTutorRemoved = await _context.ModuleTutors.FirstOrDefaultAsync(mt => mt.ModuleId == moduleId && mt.TutorId == tutor.Id);
             Assert.Null(moduleTutorRemoved);
+        }
+
+        [Theory]
+        [InlineData("matas.tutorius1@ktu.edu", 1)]
+        public async Task When_GettingStudents_Expect_CorrectStudents(string tutorEmail, int moduleId)
+        {
+            var tutor = await _userManager.FindByEmailAsync(tutorEmail);
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(tutor.Id);
+
+            var actualStudents = await _usersService.GetStudents(moduleId);
+
+            Assert.Collection(actualStudents, student =>
+            {
+                Assert.Equal("Matas Zilinskas", student.Name);
+                Assert.Equal("Informatics", student.Faculty);
+                Assert.Equal("Software Systems", student.StudyBranch);
+                Assert.Equal(StudentCycleEnum.Bachelor, student.StudentCycle);
+                Assert.Equal(StudentYearEnum.FourthYear, student.StudentYear);
+            });
         }
     }
 }
