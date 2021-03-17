@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Student } from 'src/app/models/users/student';
 import { Tutor } from 'src/app/models/users/tutor';
 import { UserUnconfirmed } from 'src/app/models/users/user-unconfirmed';
 import { HttpService } from '../http.service';
@@ -16,6 +17,10 @@ export class UsersService {
   //#region Client side
   public getTutors(moduleId: number): Observable<Tutor[]> {
     return this.httpService.get(this.usersController, `tutors?moduleId=${moduleId}`);
+  }
+
+  public getStudents(moduleId: number): Observable<Student[]> {
+    return this.httpService.get(this.usersController, `students?moduleId=${moduleId}`);
   }
   //#endregion
 

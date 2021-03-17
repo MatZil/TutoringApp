@@ -10,7 +10,8 @@ const constants: AppConstants = {
   RoleClaimType: 'Role',
   EmailClaimType: 'Email',
   UserIdClaimType: 'UserId',
-  TutorViewRoute: 'tutors/:id'
+  TutorViewRoute: 'tutors/:id',
+  StudentViewRoute: 'students/:id'
 };
 
 interface AppConstants {
@@ -24,6 +25,7 @@ interface AppConstants {
   readonly EmailConfirmationRoute: string;
   readonly ModuleViewRoute: string;
   readonly TutorViewRoute: string;
+  readonly StudentViewRoute: string;
 
   readonly StudentRole: string;
   readonly AdminRole: string;

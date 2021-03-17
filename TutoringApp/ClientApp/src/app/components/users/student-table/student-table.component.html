@@ -1,0 +1,40 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<p-table #dt [value]="students" [columns]="columns" dataKey="id" [paginator]="true" [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0">
+  <ng-template pTemplate="caption">
+    <div>
+      <span class="table-caption">Students ({{students.length}})</span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{ width: '13.5%' }">
+        <div>
+          <span>{{col.header}}</span>
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-student>
+    <tr>
+      <td>{{student.name}}</td>
+      <td>{{student.faculty}}</td>
+      <td>{{student.studyBranch}}</td>
+      <td>{{student.studentCycleDisplay}}</td>
+      <td>{{student.studentYearDisplay}}</td>
+      <td class="action-column">
+        <button pButton icon="pi pi-comments" (click)="navigateToStudentView(student.id)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        No students found yet - wait for someone to add you!
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

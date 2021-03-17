@@ -42,6 +42,8 @@ import { TutorTableComponent } from './components/users/tutor-table/tutor-table.
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChatComponent } from './components/chats/chat/chat.component';
 import { TutorViewComponent } from './components/users/tutor-view/tutor-view.component';
+import { StudentTableComponent } from './components/users/student-table/student-table.component';
+import { StudentViewComponent } from './components/users/student-view/student-view.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { TutorViewComponent } from './components/users/tutor-view/tutor-view.com
     TutorTableComponent,
     ChatComponent,
     TutorViewComponent,
+    StudentTableComponent,
+    StudentViewComponent,
   ],
   imports: [
     BrowserModule,
