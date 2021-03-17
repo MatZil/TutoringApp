@@ -1,1 +1,22 @@
-<p>chat works!</p>
+<p-virtualScroller [value]="chatMessages" scrollHeight="500px" [itemSize]="150">
+  <ng-template pTemplate="item" let-chatMessage>
+    <div class="chat-message-container">
+      <div [class]="currentUserId == chatMessage.senderId ? 'sent-message' : 'received-message'">
+        <div class="title">
+          {{chatMessage.senderName}} ({{chatMessage.timestamp | date: 'yyyy-MM-dd H:mm'}}):
+        </div>
+        <div class="content">
+          {{chatMessage.content}}
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-virtualScroller>
+<div class="p-grid p-fluid">
+  <div class="p-col-11">
+    <textarea pInputTextarea [(ngModel)]="newMessage"></textarea>
+  </div>
+  <div class="p-col-1">
+    <button pButton label="Send" [disabled]="!newMessage.length" (click)="sendMessage()"></button>
+  </div>
+</div>
