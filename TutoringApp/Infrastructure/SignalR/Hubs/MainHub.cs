@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace TutoringApp.Infrastructure.SignalR.Hubs
 {
@@ -13,9 +13,11 @@ namespace TutoringApp.Infrastructure.SignalR.Hubs
             _logger = logger;
         }
 
-        public override async Task OnConnectedAsync()
+        public override Task OnConnectedAsync()
         {
             _logger.LogInformation("User Connected to Main Hub!");
+
+            return base.OnConnectedAsync();
         }
     }
 }

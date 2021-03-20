@@ -14,7 +14,7 @@ namespace TutoringApp.Infrastructure.SignalR.Services
             _serviceProvider = serviceProvider;
         }
 
-        public string GetUserId(HubConnectionContext a)
+        public string GetUserId(HubConnectionContext _)
         {
             using var scope = _serviceProvider.CreateScope();
             var currentUserService = scope.ServiceProvider.GetRequiredService<ICurrentUserService>();

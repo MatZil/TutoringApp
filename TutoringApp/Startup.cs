@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
@@ -10,7 +9,6 @@ using TutoringApp.Configurations;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Models;
 using TutoringApp.Infrastructure.SignalR.Hubs;
-using WebSocketOptions = Microsoft.AspNetCore.Builder.WebSocketOptions;
 
 namespace TutoringApp
 {
