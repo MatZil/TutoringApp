@@ -2,3 +2,24 @@ textarea {
   max-width: 100%;
   max-height: 200px;
 }
+
+.chat-message-container > .sent-message {
+  margin-right: 30%;
+}
+
+.chat-message-container > * > .title {
+  font-style: italic;
+}
+
+.chat-message-container > .sent-message > .title::after {
+  content: ':'
+}
+
+.chat-message-container > .received-message > .title::before {
+  content: ':'
+}
+
+.chat-message-container > .received-message {
+  margin-left: 30%;
+  text-align: right;
+}

@@ -1,9 +1,9 @@
-<p-virtualScroller [value]="chatMessages" scrollHeight="500px" [itemSize]="150">
+<p-virtualScroller [value]="chatMessages" scrollHeight="700px">
   <ng-template pTemplate="item" let-chatMessage>
     <div class="chat-message-container">
       <div [class]="currentUserId == chatMessage.senderId ? 'sent-message' : 'received-message'">
         <div class="title">
-          {{chatMessage.senderName}} ({{chatMessage.timestamp | date: 'yyyy-MM-dd H:mm'}}):
+          {{chatMessage.senderName}} ({{chatMessage.timestamp | date: 'yyyy-MM-dd H:mm'}})
         </div>
         <div class="content">
           {{chatMessage.content}}

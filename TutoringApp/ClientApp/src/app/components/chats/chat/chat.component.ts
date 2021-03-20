@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { VirtualScroller } from 'primeng/virtualscroller';
 import { tap } from 'rxjs/operators';
 import { ChatMessage } from 'src/app/models/chats/chat-message';
 import { ChatMessageNew } from 'src/app/models/chats/chat-message-new';
@@ -10,13 +11,16 @@ import { ChatsService } from 'src/app/services/chats/chats.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, AfterViewInit {
   public chatMessages: ChatMessage[] = [];
   public currentUserId: string;
 
   public newMessage = '';
 
   @Input() private receiverId: string;
+
+  @ViewChild(VirtualScroller)
+  private virtualScrollerComponent: VirtualScroller;
 
   constructor(
     private chatsService: ChatsService,
@@ -25,6 +29,9 @@ export class ChatComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeCurrentUserId();
+  }
+
+  ngAfterViewInit(): void {
     this.initializeChatMessages();
   }
 
@@ -35,9 +42,14 @@ export class ChatComponent implements OnInit {
 
   private initializeChatMessages(): void {
     this.chatsService.getChatMessages(this.receiverId).pipe(
-      tap(chatMessages => this.chatMessages = chatMessages)
+      tap(chatMessages => this.chatMessages = chatMessages),
+      tap(_ => this.scrollToBottom())
     )
       .subscribe();
+  }
+
+  private scrollToBottom(): void {
+    setTimeout(() => this.virtualScrollerComponent.viewport.scrollTo({ bottom: 0 }));
   }
   //#endregion
 
@@ -48,7 +60,7 @@ export class ChatComponent implements OnInit {
     this.chatsService.postChatMessage(this.receiverId, chatMessageNew).pipe(
       tap(_ => this.newMessage = '')
     )
-    .subscribe();
+      .subscribe();
   }
   //#endregion
 }
