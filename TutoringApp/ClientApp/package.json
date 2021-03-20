@@ -20,7 +20,6 @@
     "@angular/platform-browser": "~11.2.0",
     "@angular/platform-browser-dynamic": "~11.2.0",
     "@angular/router": "~11.2.0",
-    "@aspnet/signalr": "^1.1.4",
     "@auth0/angular-jwt": "^5.0.2",
     "codelyzer": "^6.0.1",
     "primeflex": "^2.0.0",
