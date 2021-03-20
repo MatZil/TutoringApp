@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@aspnet/signalr';
+import * as signalR from '@microsoft/signalr';
 import { filter, tap } from 'rxjs/operators';
 import { ChatMessage } from '../models/chats/chat-message';
 import { AuthService } from './auth/auth.service';
