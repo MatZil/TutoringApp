@@ -3,8 +3,13 @@ textarea {
   max-height: 200px;
 }
 
+.chat-message-container {
+  margin-bottom: 0.5em;
+}
+
 .chat-message-container > .sent-message {
   margin-right: 30%;
+  margin-left: 0.5em;
 }
 
 .chat-message-container > * > .title {
@@ -21,5 +26,6 @@ textarea {
 
 .chat-message-container > .received-message {
   margin-left: 30%;
+  margin-right: 0.8em;
   text-align: right;
 }
