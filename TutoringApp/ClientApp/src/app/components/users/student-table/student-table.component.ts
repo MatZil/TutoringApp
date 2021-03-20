@@ -53,7 +53,7 @@ export class StudentTableComponent implements OnInit {
 
   //#region Event handlers
   public navigateToStudentView(studentId: string): void {
-    this.router.navigateByUrl(`students/${studentId}`);
+    this.router.navigateByUrl(`modules/${this.moduleId}/students/${studentId}`);
   }
   //#endregion
 }

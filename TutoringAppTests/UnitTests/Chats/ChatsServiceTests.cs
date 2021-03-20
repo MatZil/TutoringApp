@@ -50,7 +50,7 @@ namespace TutoringAppTests.UnitTests.Chats
         {
             var receiver = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
 
-            var actualChatMessages = await _chatsService.GetChatMessages(receiver.Id);
+            var actualChatMessages = await _chatsService.GetChatMessages(receiver.Id, 1);
 
             Assert.Collection(actualChatMessages,
                 chatMessage =>
@@ -69,7 +69,16 @@ namespace TutoringAppTests.UnitTests.Chats
         public async Task When_GettingChatMessagesFromNonExistingUser_Expect_Exception(string userId)
         {
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _chatsService.GetChatMessages(userId)
+                await _chatsService.GetChatMessages(userId, 1)
+            );
+        }
+
+        [Theory]
+        [InlineData("Doesn't exist")]
+        public async Task When_GettingChatMessagesFromNonExistingModule_Expect_Exception(string userId)
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _chatsService.GetChatMessages(userId, 99)
             );
         }
 
@@ -79,7 +88,7 @@ namespace TutoringAppTests.UnitTests.Chats
             var receiver = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
             var sender = await _userManager.FindByEmailAsync("matas.zilinskas@ktu.edu");
 
-            var chatMessageNewDto = new ChatMessageNewDto { Content = "Testing..." };
+            var chatMessageNewDto = new ChatMessageNewDto { Content = "Testing...", ModuleId = 1 };
             var chatMessageDto = await _chatsService.PostChatMessage(receiver.Id, chatMessageNewDto);
 
             Assert.Equal("Testing...", chatMessageDto.Content);
@@ -93,7 +102,7 @@ namespace TutoringAppTests.UnitTests.Chats
             var receiver = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
             var sender = await _userManager.FindByEmailAsync("matas.zilinskas@ktu.edu");
 
-            var chatMessageNewDto = new ChatMessageNewDto { Content = "Testing..." };
+            var chatMessageNewDto = new ChatMessageNewDto { Content = "Testing...", ModuleId = 1};
             await _chatsService.PostChatMessage(receiver.Id, chatMessageNewDto);
 
             var chatMessagePosted = await _context.ChatMessages.FirstAsync(cm => cm.Content == "Testing...");
@@ -111,7 +120,7 @@ namespace TutoringAppTests.UnitTests.Chats
             var sender = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
             var receiver = await _userManager.FindByEmailAsync("matas.zilinskas@ktu.edu");
 
-            var chatMessageNewDto = new ChatMessageNewDto { Content = "Testing..." };
+            var chatMessageNewDto = new ChatMessageNewDto { Content = "Testing...", ModuleId = 1};
             await _chatsService.PostChatMessage(receiver.Id, chatMessageNewDto);
 
             var chatMessagePosted = await _context.ChatMessages.FirstAsync(cm => cm.Content == "Testing...");

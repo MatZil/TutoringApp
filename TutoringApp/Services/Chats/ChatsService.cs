@@ -36,7 +36,7 @@ namespace TutoringApp.Services.Chats
 
         public async Task<ChatMessageDto> PostChatMessage(string receiverId, ChatMessageNewDto chatMessageNew)
         {
-            await ValidateMessagePosting(receiverId);
+            await ValidateMessagePosting(receiverId, chatMessageNew);
 
             var senderId = _currentUserService.GetUserId();
 
@@ -45,7 +45,8 @@ namespace TutoringApp.Services.Chats
                 ReceiverId = receiverId,
                 SenderId = senderId,
                 Timestamp = _timeService.GetCurrentTime(),
-                Content = chatMessageNew.Content
+                Content = chatMessageNew.Content,
+                ModuleId = chatMessageNew.ModuleId
             };
 
             await _chatMessagesRepository.Create(chatMessage);
@@ -61,7 +62,7 @@ namespace TutoringApp.Services.Chats
             };
         }
 
-        private async Task ValidateMessagePosting(string receiverId)
+        private async Task ValidateMessagePosting(string receiverId, ChatMessageNewDto chatMessageNew)
         {
             var receiver = await _userManager.Users
                 .Include(u => u.StudentTutors)
@@ -76,8 +77,8 @@ namespace TutoringApp.Services.Chats
             }
 
             var senderId = _currentUserService.GetUserId();
-            var isStudent = receiver.StudentTutors.Any(st => st.TutorId == senderId);
-            var isTutor = receiver.TutorStudents.Any(st => st.StudentId == senderId);
+            var isStudent = receiver.StudentTutors.Any(st => st.TutorId == senderId && st.ModuleId == chatMessageNew.ModuleId);
+            var isTutor = receiver.TutorStudents.Any(st => st.StudentId == senderId && st.ModuleId == chatMessageNew.ModuleId);
 
             if (!isStudent && !isTutor)
             {
@@ -87,7 +88,7 @@ namespace TutoringApp.Services.Chats
             }
         }
 
-        public async Task<IEnumerable<ChatMessageDto>> GetChatMessages(string receiverId)
+        public async Task<IEnumerable<ChatMessageDto>> GetChatMessages(string receiverId, int moduleId)
         {
             var receiver = await _userManager.FindByIdAsync(receiverId);
             if (receiver is null)
@@ -100,8 +101,9 @@ namespace TutoringApp.Services.Chats
             var senderId = _currentUserService.GetUserId();
             var chatMessages = await _chatMessagesRepository
                 .GetFiltered(cm =>
-                    cm.SenderId == senderId && cm.ReceiverId == receiverId
-                    || cm.ReceiverId == senderId && cm.SenderId == receiverId);
+                    cm.ModuleId == moduleId &&
+                    (cm.SenderId == senderId && cm.ReceiverId == receiverId
+                     || cm.ReceiverId == senderId && cm.SenderId == receiverId));
             chatMessages = chatMessages.OrderBy(cm => cm.Timestamp);
 
             var sender = await _userManager.FindByIdAsync(senderId);

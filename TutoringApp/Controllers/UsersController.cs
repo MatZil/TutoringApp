@@ -112,11 +112,11 @@ namespace TutoringApp.Controllers
 
         [HttpGet("{userId}/chat-messages")]
         [Authorize(Roles = AppRoles.Student)]
-        public async Task<IActionResult> GetMessages(string userId)
+        public async Task<IActionResult> GetMessages(string userId, [FromQuery] int moduleId)
         {
             try
             {
-                var chatMessage = await _chatsService.GetChatMessages(userId);
+                var chatMessage = await _chatsService.GetChatMessages(userId, moduleId);
 
                 return Ok(chatMessage);
             }

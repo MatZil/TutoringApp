@@ -198,7 +198,7 @@ export class TutorTableComponent implements OnInit {
 
   //#region Event handlers
   public navigateToTutorView(tutorId: string): void {
-    this.router.navigateByUrl(`tutors/${tutorId}`);
+    this.router.navigateByUrl(`modules/${this.moduleId}/tutors/${tutorId}`);
   }
   //#endregion
 }

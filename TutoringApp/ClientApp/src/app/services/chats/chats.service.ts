@@ -18,7 +18,7 @@ export class ChatsService {
     return this.httpService.post(this.usersController, `${receiverId}/chat-messages`, chatMessage);
   }
 
-  public getChatMessages(receiverId: string): Observable<ChatMessage[]> {
-    return this.httpService.get(this.usersController, `${receiverId}/chat-messages`);
+  public getChatMessages(receiverId: string, moduleId: number): Observable<ChatMessage[]> {
+    return this.httpService.get(this.usersController, `${receiverId}/chat-messages?moduleId=${moduleId}`);
   }
 }

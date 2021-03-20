@@ -8,19 +8,21 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./tutor-view.component.scss']
 })
 export class TutorViewComponent implements OnInit {
-  public tutorId: number;
+  public tutorId: string;
+  public moduleId: number;
 
   constructor(
     private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.initializeTutorId();
+    this.initializeRouteParams();
   }
 
-  private initializeTutorId(): void {
+  private initializeRouteParams(): void {
     this.activatedRoute.params.pipe(
-      tap(params => this.tutorId = params.id)
+      tap(params => this.tutorId = params.id),
+      tap(params => this.moduleId = +params.moduleId)
     )
       .subscribe();
   }

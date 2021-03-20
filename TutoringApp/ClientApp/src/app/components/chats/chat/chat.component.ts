@@ -18,6 +18,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   public newMessage = '';
 
   @Input() private receiverId: string;
+  @Input() private moduleId: number;
 
   @ViewChild(VirtualScroller)
   private virtualScrollerComponent: VirtualScroller;
@@ -41,7 +42,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   private initializeChatMessages(): void {
-    this.chatsService.getChatMessages(this.receiverId).pipe(
+    this.chatsService.getChatMessages(this.receiverId, this.moduleId).pipe(
       tap(chatMessages => this.chatMessages = chatMessages),
       tap(_ => this.scrollToBottom())
     )
@@ -55,7 +56,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   //#region Event handlers
   public sendMessage(): void {
-    const chatMessageNew: ChatMessageNew = { content: this.newMessage };
+    const chatMessageNew: ChatMessageNew = { content: this.newMessage, moduleId: this.moduleId };
 
     this.chatsService.postChatMessage(this.receiverId, chatMessageNew).pipe(
       tap(_ => this.newMessage = '')
