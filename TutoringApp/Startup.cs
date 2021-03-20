@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using TutoringApp.Configurations;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Models;
+using TutoringApp.Infrastructure.SignalR.Hubs;
 
 namespace TutoringApp
 {
@@ -28,6 +30,7 @@ namespace TutoringApp
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.ConfigureDependencyInjections();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +51,10 @@ namespace TutoringApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MainHub>("api/hubs/main", options =>
+                {
+                    options.Transports = HttpTransportType.WebSockets;
+                });
             });
 
             app.StartAngularProject(env);

@@ -6,7 +6,7 @@ namespace TutoringApp.Services.Interfaces
 {
     public interface IChatsService
     {
-        Task<ChatMessageDto> PostChatMessage(string receiverId, ChatMessageNewDto chatMessageNew);
+        Task PostChatMessage(string receiverId, ChatMessageNewDto chatMessageNew);
         Task<IEnumerable<ChatMessageDto>> GetChatMessages(string receiverId, int moduleId);
     }
 }

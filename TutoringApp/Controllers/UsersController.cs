@@ -100,9 +100,9 @@ namespace TutoringApp.Controllers
         {
             try
             {
-                var chatMessage = await _chatsService.PostChatMessage(userId, chatMessageNew);
+                await _chatsService.PostChatMessage(userId, chatMessageNew);
 
-                return Ok(chatMessage);
+                return Ok();
             }
             catch (InvalidOperationException ex)
             {

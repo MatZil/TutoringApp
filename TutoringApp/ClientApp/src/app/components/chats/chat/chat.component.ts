@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { VirtualScroller } from 'primeng/virtualscroller';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { ChatMessage } from 'src/app/models/chats/chat-message';
 import { ChatMessageNew } from 'src/app/models/chats/chat-message-new';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -30,6 +30,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initializeCurrentUserId();
+    this.initializeChatMessageReceivedSubscription();
   }
 
   ngAfterViewInit(): void {
@@ -37,6 +38,22 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   //#region Initialization
+  private initializeChatMessageReceivedSubscription(): void {
+    this.chatsService.resetReceivedChatMessage();
+    this.chatsService.chatMessageReceived().pipe(
+      filter(chatMessage => !!chatMessage),
+      tap(chatMessage => this.appendChatMessage(chatMessage))
+    )
+    .subscribe();
+  }
+
+  private appendChatMessage(chatMessage: ChatMessage): void {
+    this.chatMessages.push(chatMessage);
+    this.chatMessages = [...this.chatMessages];
+
+    this.scrollToBottom();
+  }
+
   private initializeCurrentUserId(): void {
     this.currentUserId = this.authService.getCurrentUserId();
   }

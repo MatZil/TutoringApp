@@ -14,4 +14,10 @@ export class UrlService {
 
     return baseApiUrl + controller + `/${endpoint}`;
   }
+
+  public getApiBaseUrl(): string {
+    const baseApiUrl = this.baseUrl + 'api/';
+
+    return baseApiUrl;
+  }
 }

@@ -19,22 +19,25 @@ namespace TutoringApp.Services.Chats
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<IChatsService> _logger;
         private readonly ITimeService _timeService;
+        private readonly IHubsService _hubsService;
 
         public ChatsService(
             IRepository<ChatMessage> chatMessagesRepository,
             ICurrentUserService currentUserService,
             UserManager<AppUser> userManager,
             ILogger<IChatsService> logger,
-            ITimeService timeService)
+            ITimeService timeService,
+            IHubsService hubsService)
         {
             _chatMessagesRepository = chatMessagesRepository;
             _currentUserService = currentUserService;
             _userManager = userManager;
             _logger = logger;
             _timeService = timeService;
+            _hubsService = hubsService;
         }
 
-        public async Task<ChatMessageDto> PostChatMessage(string receiverId, ChatMessageNewDto chatMessageNew)
+        public async Task PostChatMessage(string receiverId, ChatMessageNewDto chatMessageNew)
         {
             await ValidateMessagePosting(receiverId, chatMessageNew);
 
@@ -50,16 +53,17 @@ namespace TutoringApp.Services.Chats
             };
 
             await _chatMessagesRepository.Create(chatMessage);
-
             var sender = await _userManager.FindByIdAsync(senderId);
-
-            return new ChatMessageDto
+            var chatMessageDto = new ChatMessageDto
             {
                 SenderId = chatMessage.SenderId,
                 Timestamp = chatMessage.Timestamp,
                 SenderName = $"{sender.FirstName} {sender.LastName}",
                 Content = chatMessage.Content
             };
+
+            await _hubsService.SendChatNotificationToUser(senderId, chatMessageDto);
+            await _hubsService.SendChatNotificationToUser(receiverId, chatMessageDto);
         }
 
         private async Task ValidateMessagePosting(string receiverId, ChatMessageNewDto chatMessageNew)

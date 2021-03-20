@@ -41,7 +41,8 @@ namespace TutoringAppTests.UnitTests.Chats
                 _currentUserServiceMock.Object,
                 setup.UserManager,
                 new Mock<ILogger<IChatsService>>().Object,
-                new TimeService()
+                new TimeService(),
+                new Mock<IHubsService>().Object
                 );
         }
 
@@ -80,20 +81,6 @@ namespace TutoringAppTests.UnitTests.Chats
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await _chatsService.GetChatMessages(userId, 99)
             );
-        }
-
-        [Fact]
-        public async Task When_PostingChatMessage_Expect_CorrectResponse()
-        {
-            var receiver = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
-            var sender = await _userManager.FindByEmailAsync("matas.zilinskas@ktu.edu");
-
-            var chatMessageNewDto = new ChatMessageNewDto { Content = "Testing...", ModuleId = 1 };
-            var chatMessageDto = await _chatsService.PostChatMessage(receiver.Id, chatMessageNewDto);
-
-            Assert.Equal("Testing...", chatMessageDto.Content);
-            Assert.Equal(sender.Id, chatMessageDto.SenderId);
-            Assert.Equal("Matas Zilinskas", chatMessageDto.SenderName);
         }
 
         [Fact]
