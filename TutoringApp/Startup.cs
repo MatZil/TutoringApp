@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
@@ -9,6 +10,7 @@ using TutoringApp.Configurations;
 using TutoringApp.Configurations.Auth;
 using TutoringApp.Data.Models;
 using TutoringApp.Infrastructure.SignalR.Hubs;
+using WebSocketOptions = Microsoft.AspNetCore.Builder.WebSocketOptions;
 
 namespace TutoringApp
 {
@@ -24,13 +26,22 @@ namespace TutoringApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
             services.SetupDatabase(Configuration);
             services.AddIdentity();
             services.SetupWebToken(Configuration);
-            services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.ConfigureDependencyInjections();
-            services.AddSignalR();
+            services.AddSignalR(o => o.EnableDetailedErrors = true);
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +55,8 @@ namespace TutoringApp
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

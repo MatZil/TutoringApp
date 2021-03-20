@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
+import { HubsService } from './services/hubs.service';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +9,14 @@ import { AuthService } from './services/auth/auth.service';
 })
 export class AppComponent implements OnInit {
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private hubsService: HubsService
   ) { }
 
   ngOnInit(): void {
     this.preserveAuthenticationState();
+
+    this.hubsService.startConnections();
   }
 
   private preserveAuthenticationState(): void {

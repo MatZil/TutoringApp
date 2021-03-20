@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder, HttpTransportType, HubConnectionState, LogLevel } from '@microsoft/signalr';
 import { filter, tap } from 'rxjs/operators';
 import { ChatMessage } from '../models/chats/chat-message';
+import { TokenGetter } from '../utils/token-getter';
 import { AuthService } from './auth/auth.service';
 import { ChatsService } from './chats/chats.service';
 import { UrlService } from './url.service';
@@ -10,7 +11,7 @@ import { UrlService } from './url.service';
   providedIn: 'root'
 })
 export class HubsService {
-  private hubConnection: signalR.HubConnection;
+  private hubConnection: HubConnection;
 
   constructor(
     private authService: AuthService,
@@ -31,27 +32,18 @@ export class HubsService {
   }
 
   private async initalizeHubConnection() {
-    this.hubConnection = new signalR.HubConnectionBuilder()
+    this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${this.urlService.getApiBaseUrl()}hubs/main`, {
-        transport: signalR.HttpTransportType.WebSockets
+        transport: HttpTransportType.WebSockets,
+        accessTokenFactory: TokenGetter
       })
       .build();
 
-    if (this.hubConnection.state !== signalR.HubConnectionState.Connected) {
-      await this.startHubConnection(this.hubConnection);
-    }
-  }
-
-  private async startHubConnection(connection: signalR.HubConnection) {
-    console.log('Starting SignalR Connection...');
-    try {
-      await connection.start()
-      console.log('SignalR Connected.');
-      this.addChatMessageReceivedListener();
-    } catch (err) {
-      console.assert(connection.state === signalR.HubConnectionState.Disconnected);
-      console.log(err);
-      setTimeout(() => this.startHubConnection(connection), 5000);
+    if (this.hubConnection.state !== HubConnectionState.Connected) {
+      this.hubConnection
+        .start()
+        .then(() => this.addChatMessageReceivedListener())
+        .catch(err => console.log(err));
     }
   }
 
