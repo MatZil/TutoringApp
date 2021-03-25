@@ -23,8 +23,6 @@ namespace TutoringApp.Data.Models
         public IList<ChatMessage> ReceivedMessages { get; set; }
         public IList<Assignment> TutorAssignments { get; set; }
         public IList<Assignment> StudentAssignments { get; set; }
-        public IList<TutorEvaluation> TutorEvaluations { get; set; }
-        public IList<TutorEvaluation> StudentEvaluations { get; set; }
         public IList<StudentTutorIgnore> IgnoresToStudents { get; set; }
         public IList<StudentTutorIgnore> IgnoresFromTutors { get; set; }
         public IList<StudentTutor> StudentTutors { get; set; }

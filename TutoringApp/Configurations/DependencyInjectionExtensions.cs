@@ -46,7 +46,6 @@ namespace TutoringApp.Configurations
                 .AddScoped<IRepository<Assignment>, AssignmentsRepository>()
                 .AddScoped<IRepository<ChatMessage>, ChatMessagesRepository>()
                 .AddScoped<IRepository<Module>, ModulesRepository>()
-                .AddScoped<IRepository<TutorEvaluation>, TutorEvaluationsRepository>()
                 .AddScoped<IRepository<TutoringApplication>, TutoringApplicationsRepository>()
                 .AddScoped<IRepository<TutoringSession>, TutoringSessionsRepository>()
                 .AddScoped<IRepository<StudentTutor>, StudentTutorsRepository>()

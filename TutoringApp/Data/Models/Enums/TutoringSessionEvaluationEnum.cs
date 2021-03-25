@@ -1,6 +1,6 @@
 ﻿namespace TutoringApp.Data.Models.Enums
 {
-    public enum TutorEvaluationEnum
+    public enum TutoringSessionEvaluationEnum
     {
         Undefined = 0,
         Terrible = 1,

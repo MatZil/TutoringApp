@@ -47,7 +47,6 @@ namespace TutoringApp.Services.Users
         {
             var userId = _currentUserService.GetUserId();
             var tutors = await _userManager.Users
-                .Include(u => u.TutorEvaluations)
                 .Include(u => u.TutoredSessions)
                 .Include(u => u.TutorStudents)
                 .Where(u => u.TutorModules.Any(tm => tm.ModuleId == moduleId))
@@ -66,8 +65,8 @@ namespace TutoringApp.Services.Users
                 StudyBranch = t.StudyBranch,
                 TutoringSessionCount = t.TutoredSessions.Count,
                 IsAddable = t.TutorStudents.All(st => st.ModuleId != moduleId || st.StudentId != userId),
-                AverageScore = t.TutorEvaluations
-                    .Select(te => (double)te.Evaluation)
+                AverageScore = t.TutoredSessions
+                    .Select(ts => (double)ts.Evaluation.GetValueOrDefault())
                     .DefaultIfEmpty(0.0)
                     .Average()
             });
