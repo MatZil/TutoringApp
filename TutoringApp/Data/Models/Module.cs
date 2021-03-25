@@ -14,5 +14,6 @@ namespace TutoringApp.Data.Models
         public IList<TutoringApplication> TutoringApplications { get; set; }
         public IList<StudentTutor> StudentTutors { get; set; }
         public IList<ChatMessage> ChatMessages { get; set; }
+        public IList<TutoringSession> TutoringSessions { get; set; }
     }
 }
