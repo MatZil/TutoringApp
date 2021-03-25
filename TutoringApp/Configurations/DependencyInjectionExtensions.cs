@@ -39,6 +39,7 @@ namespace TutoringApp.Configurations
                 .AddScoped<IStudentTutorsService, StudentTutorsService>()
                 .AddScoped<IChatsService, ChatsService>()
                 .AddScoped<IHubsService, HubsService>()
+                .AddScoped<ITutoringSessionsService, TutoringSessionsService>()
 
                 // Infrastructure
                 .AddSingleton<IEmailSender, EmailSender>()
