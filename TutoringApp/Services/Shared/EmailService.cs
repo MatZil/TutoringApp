@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using TutoringApp.Data.Dtos.Tutoring.TutoringSessions;
 using TutoringApp.Services.Interfaces;
 
 namespace TutoringApp.Services.Shared
@@ -52,6 +53,13 @@ namespace TutoringApp.Services.Shared
         public async Task SendTutoringApplicationRejectedEmail(string receiverEmail, string moduleName)
         {
             var emailBody = $"Unfortunately, your application for tutoring in {moduleName} has been declined. Do not stop learning and try applying in the future!";
+            const string subject = "Tutoring App Tutoring Rejection";
+            await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
+        }
+
+        public async Task SendTutoringSessionEvaluatedEmail(string receiverEmail, TutoringSessionEvaluationDto evaluationDto)
+        {
+            var emailBody = $"Your tutoring session has been evaluated";
             const string subject = "Tutoring App Tutoring Rejection";
             await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
         }

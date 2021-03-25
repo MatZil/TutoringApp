@@ -11,6 +11,6 @@ namespace TutoringApp.Services.Interfaces
         Task CreateTutoringSession(TutoringSessionNewDto tutoringSessionNew);
         Task CancelTutoringSession(int id);
         Task InvertTutoringSessionSubscription(int id);
-        Task EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto);
+        Task<string> EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto);
     }
 }

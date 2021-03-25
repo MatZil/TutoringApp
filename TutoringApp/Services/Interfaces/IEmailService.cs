@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using TutoringApp.Data.Dtos.Tutoring.TutoringSessions;
 
 namespace TutoringApp.Services.Interfaces
 {
@@ -9,5 +10,6 @@ namespace TutoringApp.Services.Interfaces
         Task SendUserRejectedEmail(string receiverEmail, string rejectionReason);
         Task SendTutoringApplicationConfirmedEmail(string receiverEmail, string moduleName);
         Task SendTutoringApplicationRejectedEmail(string receiverEmail, string moduleName);
+        Task SendTutoringSessionEvaluatedEmail(string receiverEmail, TutoringSessionEvaluationDto evaluationDto);
     }
 }

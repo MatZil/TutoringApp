@@ -160,7 +160,7 @@ namespace TutoringApp.Services.Tutoring
             await _tutoringSessionsRepository.Update(session);
         }
 
-        public async Task EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto)
+        public async Task<string> EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto)
         {
             var session = await _tutoringSessionsRepository.GetById(id);
 
@@ -170,6 +170,8 @@ namespace TutoringApp.Services.Tutoring
             session.EvaluationComment = evaluationDto.Comment;
 
             await _tutoringSessionsRepository.Update(session);
+
+            return session.Tutor.Email;
         }
 
         private void ValidateSessionEvaluation(TutoringSession session)

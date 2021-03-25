@@ -33,5 +33,14 @@ namespace TutoringApp.Infrastructure.Repositories.ModelRepositories
 
             return items;
         }
+
+        public override async Task<TutoringSession> GetById(int id)
+        {
+            var items = await ItemSet
+                .Include(ts => ts.Tutor)
+                .FirstOrDefaultAsync(obj => obj.Id.Equals(id));
+
+            return items;
+        }
     }
 }
