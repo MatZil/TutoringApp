@@ -11,5 +11,6 @@ namespace TutoringApp.Services.Interfaces
         Task SendTutoringApplicationConfirmedEmail(string receiverEmail, string moduleName);
         Task SendTutoringApplicationRejectedEmail(string receiverEmail, string moduleName);
         Task SendTutoringSessionEvaluatedEmail(SessionEvaluationEmailAggregate evaluationEmailAggregate);
+        Task SendTutoringSessionReminder(string receiverEmail);
     }
 }

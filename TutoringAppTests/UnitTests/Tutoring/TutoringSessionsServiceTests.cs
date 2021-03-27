@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using TutoringApp.Data;
 using TutoringApp.Data.Dtos.Tutoring.TutoringSessions;
 using TutoringApp.Data.Models;
@@ -40,7 +40,9 @@ namespace TutoringAppTests.UnitTests.Tutoring
                 new TutoringSessionsRepository(setup.Context),
                 setup.UserManager,
                 _currentUserServiceMock.Object,
-                new TimeService()
+                new TimeService(),
+                new Mock<IEmailService>().Object,
+                new Mock<IHubsService>().Object
             );
         }
 

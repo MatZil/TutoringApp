@@ -19,17 +19,23 @@ namespace TutoringApp.Services.Tutoring
         private readonly UserManager<AppUser> _userManager;
         private readonly ICurrentUserService _currentUserService;
         private readonly ITimeService _timeService;
+        private readonly IEmailService _emailService;
+        private readonly IHubsService _hubsService;
 
         public TutoringSessionsService(
             IRepository<TutoringSession> tutoringSessionsRepository,
             UserManager<AppUser> userManager,
             ICurrentUserService currentUserService,
-            ITimeService timeService)
+            ITimeService timeService,
+            IEmailService emailService,
+            IHubsService hubsService)
         {
             _tutoringSessionsRepository = tutoringSessionsRepository;
             _userManager = userManager;
             _currentUserService = currentUserService;
             _timeService = timeService;
+            _emailService = emailService;
+            _hubsService = hubsService;
         }
 
         public async Task<IEnumerable<TutoringSessionDto>> GetTutoringSessions()
@@ -99,7 +105,7 @@ namespace TutoringApp.Services.Tutoring
                 .AnyAsync(u =>
                     u.Id == currentUserId
                     &&
-                    u.TutorStudents.Any(ts => 
+                    u.TutorStudents.Any(ts =>
                         ts.StudentId == tutoringSessionNew.StudentId &&
                         ts.ModuleId == tutoringSessionNew.ModuleId)
                     &&
@@ -179,6 +185,35 @@ namespace TutoringApp.Services.Tutoring
                 SessionDate = session.SessionDate,
                 EvaluationDto = evaluationDto
             };
+        }
+
+        public async Task RecheckUpcomingTutoringSessions()
+        {
+            var currentTime = _timeService.GetCurrentTime();
+            var sessions = await _tutoringSessionsRepository.GetFiltered(ts => ts.Status == TutoringSessionStatusEnum.Upcoming);
+
+            foreach (var session in sessions)
+            {
+                var timeDifference = session.SessionDate - currentTime;
+
+                if (timeDifference.TotalMinutes < -30)
+                {
+                    session.Status = TutoringSessionStatusEnum.Finished;
+                    session.StatusChangeDate = currentTime;
+                    await _tutoringSessionsRepository.Update(session);
+
+                    var notification = new TutoringSessionFinishedNotificationDto { SessionId = session.Id };
+                    await _hubsService.SendSessionFinishedNotificationToUser(session.StudentId, notification);
+                }
+                else if (timeDifference.TotalMinutes < 15 && !session.IsReminderSent)
+                {
+                    await _emailService.SendTutoringSessionReminder(session.Tutor.Email);
+                    await _emailService.SendTutoringSessionReminder(session.Student.Email);
+
+                    session.IsReminderSent = true;
+                    await _tutoringSessionsRepository.Update(session);
+                }
+            }
         }
 
         private void ValidateSessionEvaluation(TutoringSession session)

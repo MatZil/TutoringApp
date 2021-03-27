@@ -63,5 +63,12 @@ namespace TutoringApp.Services.Shared
             const string subject = "Tutoring App Tutoring Evaluation";
             await _emailSender.SendEmailAsync(evaluationEmailAggregate.TutorEmail, subject, emailBody);
         }
+
+        public async Task SendTutoringSessionReminder(string receiverEmail)
+        {
+            const string emailBody = "Do not forget - you have upcoming tutoring session in 15 minutes!";
+            const string subject = "Tutoring App Session Reminder";
+            await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
+        }
     }
 }
