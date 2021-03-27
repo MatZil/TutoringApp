@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, HttpTransportType, HubConnectionState, LogLevel } from '@microsoft/signalr';
 import { filter, tap } from 'rxjs/operators';
 import { ChatMessage } from '../models/chats/chat-message';
+import { TutoringSessionFinishedNotification } from '../models/tutoring/tutoring-sessions/tutoring-session-finished-notification';
 import { TokenGetter } from '../utils/token-getter';
 import { AuthService } from './auth/auth.service';
 import { ChatsService } from './chats/chats.service';
+import { TutoringSessionsService } from './tutoring/tutoring-sessions.service';
 import { UrlService } from './url.service';
 
 @Injectable({
@@ -16,7 +18,8 @@ export class HubsService {
   constructor(
     private authService: AuthService,
     private urlService: UrlService,
-    private chatsService: ChatsService
+    private chatsService: ChatsService,
+    private tutoringSessionsService: TutoringSessionsService
   ) { }
 
   public startConnections(): void {
@@ -43,6 +46,7 @@ export class HubsService {
       this.hubConnection
         .start()
         .then(() => this.addChatMessageReceivedListener())
+        .then(() => this.addTutoringSessionFinishedListener())
         .catch(err => console.log(err));
     }
   }
@@ -55,5 +59,15 @@ export class HubsService {
     });
 
     console.log('Chat Listener Opened.');
+  }
+
+  private addTutoringSessionFinishedListener(): void {
+    console.log('Opening Tutoring Session Listener...');
+
+    this.hubConnection.on('tutoring-session-finished', (notification: TutoringSessionFinishedNotification) => {
+      this.tutoringSessionsService.finishTutoringSession(notification);
+    });
+
+    console.log('Tutoring Session Listener Opened.');
   }
 }

@@ -48,6 +48,7 @@ import { TutoringSessionTableComponent } from './components/tutoring/tutoring-se
 import { TutoringSessionsComponent } from './components/tutoring/tutoring-sessions/tutoring-sessions.component';
 import { LearningSessionsComponent } from './components/tutoring/learning-sessions/learning-sessions.component';
 import { CalendarModule } from 'primeng/calendar';
+import { RatingModule } from 'primeng/rating';
 
 @NgModule({
   declarations: [
@@ -108,6 +109,7 @@ import { CalendarModule } from 'primeng/calendar';
     DialogModule,
     CheckboxModule,
     CalendarModule,
+    RatingModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }

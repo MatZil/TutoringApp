@@ -202,7 +202,7 @@ namespace TutoringApp.Services.Tutoring
                     session.StatusChangeDate = currentTime;
                     await _tutoringSessionsRepository.Update(session);
 
-                    var notification = new TutoringSessionFinishedNotificationDto { SessionId = session.Id };
+                    var notification = new TutoringSessionFinishedNotificationDto { SessionId = session.Id, TutorName = session.Tutor.FirstName + " " + session.Tutor.LastName };
                     await _hubsService.SendSessionFinishedNotificationToUser(session.StudentId, notification);
                 }
                 else if (timeDifference.TotalMinutes < 15 && !session.IsReminderSent)

@@ -31,3 +31,11 @@
     </ng-template>
   </p-messages>
 </div>
+
+<p-dialog [header]="evaluationHeader" [modal]="true" [(visible)]="isTutoringEvaluationVisible">
+  <div [style.margin-bottom]="'0.5em'">
+    <p-rating [(ngModel)]="evaluation"></p-rating>
+  </div>
+  <textarea pInputTextarea placeholder="Comments" [(ngModel)]="evaluationComment"></textarea>
+  <button [style.float]="'right'" pButton label="Evaluate" (click)="evaluateTutor()"></button>
+</p-dialog>
