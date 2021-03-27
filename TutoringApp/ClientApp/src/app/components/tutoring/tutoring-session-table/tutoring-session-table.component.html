@@ -1,0 +1,42 @@
+<p-table #dt [value]="tutoringSessions" [columns]="columns" dataKey="id" [paginator]="true" [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0">
+  <ng-template pTemplate="caption">
+    <div>
+      <span class="table-caption">{{title}} ({{tutoringSessions.length}})</span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        <div>
+          <span>{{col.header}}</span>
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-session>
+    <tr>
+      <td>{{session.moduleName}}</td>
+      <td>{{session.participantName}}</td>
+      <td>{{session.creationDate | date: 'yyyy-MM-dd H:mm'}}</td>
+      <td>
+        <p-checkbox [(ngModel)]="session.isSubscribed" [binary]="true" (onChange)="invertTutoringSessions(session.id)"
+          [disabled]="!session.isActive">
+        </p-checkbox>
+      </td>
+      <td>{{session.sessionDate | date: 'yyyy-MM-dd H:mm'}}</td>
+      <td>{{session.statusDisplay}}</td>
+      <td>{{session.statusChangeDate ? (session.statusChangeDate | date: 'yyyy-MM-dd H:mm') : '-'}}</td>
+      <td>{{session.evaluationDisplay}}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        No sessions found.
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

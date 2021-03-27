@@ -11,4 +11,8 @@ export interface TutoringSession {
   status: TutoringSessionStatusEnum;
   statusChangeDate: Date;
   evaluation: TutoringSessionEvaluationEnum;
+
+  statusDisplay: string;
+  evaluationDisplay: string;
+  isActive: boolean;
 }
