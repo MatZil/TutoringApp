@@ -25,7 +25,7 @@ namespace TutoringAppTests.Setup.Seeds
                     IsReminderSent = false,
                     IsSubscribed = false,
                     ModuleId = 1,
-                    SessionDate = DateTimeOffset.Now.AddHours(-1),
+                    SessionDate = DateTimeOffset.Now.AddHours(-2),
                     Status = TutoringSessionStatusEnum.Cancelled,
                     StatusChangeDate = DateTimeOffset.Now.AddDays(-1)
                 },
@@ -34,8 +34,6 @@ namespace TutoringAppTests.Setup.Seeds
                     Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu"),
                     Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
                     CreationDate = DateTimeOffset.Now.AddDays(-1),
-                    Evaluation = TutoringSessionEvaluationEnum.Good,
-                    EvaluationComment = "Lacked charisma.",
                     IsReminderSent = true,
                     IsSubscribed = true,
                     ModuleId = 1,
