@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { ConfirmationService } from 'primeng/api';
 import { TutoringSessionEvaluationEnum } from 'src/app/models/enums/tutoring-session-evaluation-enum';
 import { TutoringSessionStatusEnum } from 'src/app/models/enums/tutoring-session-status-enum';
 import { TutoringSession } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session';
@@ -7,7 +8,10 @@ import { TutoringSessionsService } from 'src/app/services/tutoring/tutoring-sess
 @Component({
   selector: 'app-tutoring-session-table',
   templateUrl: './tutoring-session-table.component.html',
-  styleUrls: ['./tutoring-session-table.component.scss']
+  styleUrls: ['./tutoring-session-table.component.scss'],
+  providers: [
+    ConfirmationService
+  ]
 })
 export class TutoringSessionTableComponent implements OnInit, OnChanges {
   @Input() public tutoringSessions: TutoringSession[] = [];
@@ -25,7 +29,8 @@ export class TutoringSessionTableComponent implements OnInit, OnChanges {
   ];
 
   constructor(
-    private tutoringSessionsService: TutoringSessionsService
+    private tutoringSessionsService: TutoringSessionsService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -49,5 +54,22 @@ export class TutoringSessionTableComponent implements OnInit, OnChanges {
 
   public invertTutoringSessions(sessionId: number): void {
     this.tutoringSessionsService.invertTutoringSession(sessionId).subscribe();
+  }
+
+  public confirmSessionCancelling(session: TutoringSession): void {
+    this.confirmationService.confirm({
+      header: 'Confirmation',
+      message: 'Are you sure you want to cancel this tutoring session?',
+      accept: () => this.cancelSession(session)
+    });
+  }
+
+  private cancelSession(session: TutoringSession): void {
+    this.tutoringSessionsService.cancelTutoringSession(session.id).subscribe(_ => {
+      session.isActive = false;
+      session.status = TutoringSessionStatusEnum.Cancelled,
+      session.statusChangeDate = new Date(),
+      session.statusDisplay = TutoringSessionStatusEnum[TutoringSessionStatusEnum.Cancelled]
+    });
   }
 }

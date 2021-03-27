@@ -1,3 +1,4 @@
+<p-confirmDialog></p-confirmDialog>
 <p-table #dt [value]="tutoringSessions" [columns]="columns" dataKey="id" [paginator]="true" [rows]="10"
   [rowsPerPageOptions]="[10, 25, 50]" [filterDelay]="0">
   <ng-template pTemplate="caption">
@@ -13,6 +14,7 @@
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </div>
       </th>
+      <th></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-session>
@@ -29,6 +31,10 @@
       <td>{{session.statusDisplay}}</td>
       <td>{{session.statusChangeDate ? (session.statusChangeDate | date: 'yyyy-MM-dd H:mm') : '-'}}</td>
       <td>{{session.evaluationDisplay}}</td>
+      <td>
+        <button *ngIf="session.isActive" pButton class="p-button-danger" icon="pi pi-times"
+          (click)="confirmSessionCancelling(session)"></button>
+      </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage" let-columns>
