@@ -47,6 +47,7 @@ import { StudentViewComponent } from './components/users/student-view/student-vi
 import { TutoringSessionTableComponent } from './components/tutoring/tutoring-session-table/tutoring-session-table.component';
 import { TutoringSessionsComponent } from './components/tutoring/tutoring-sessions/tutoring-sessions.component';
 import { LearningSessionsComponent } from './components/tutoring/learning-sessions/learning-sessions.component';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { LearningSessionsComponent } from './components/tutoring/learning-sessio
     InputTextareaModule,
     DialogModule,
     CheckboxModule,
+    CalendarModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }

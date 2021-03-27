@@ -1,0 +1,9 @@
+.action-bar {
+  background-color: gainsboro;
+}
+
+.action-bar > * {
+  margin-left: 0.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
