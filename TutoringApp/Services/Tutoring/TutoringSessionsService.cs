@@ -264,11 +264,6 @@ namespace TutoringApp.Services.Tutoring
                 throw new InvalidOperationException("You can not evaluate this session: It's not finished yet");
             }
 
-            if (_timeService.GetCurrentTime().Subtract(session.SessionDate).TotalHours > 2)
-            {
-                throw new InvalidOperationException("You can not evaluate this session: Time limit has passed already.");
-            }
-
             if (session.Evaluation != null)
             {
                 throw new InvalidOperationException("You can not evaluate this session: It has been evaluated already.");

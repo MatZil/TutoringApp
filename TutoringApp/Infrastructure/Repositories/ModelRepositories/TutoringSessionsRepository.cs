@@ -38,6 +38,7 @@ namespace TutoringApp.Infrastructure.Repositories.ModelRepositories
         {
             var items = await ItemSet
                 .Include(ts => ts.Tutor)
+                .Include(ts => ts.Student)
                 .FirstOrDefaultAsync(obj => obj.Id.Equals(id));
 
             return items;

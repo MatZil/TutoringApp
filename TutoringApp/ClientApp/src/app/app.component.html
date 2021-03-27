@@ -1,2 +1,16 @@
 <app-toolbar></app-toolbar>
 <router-outlet></router-outlet>
+
+<p-dialog [header]="evaluationHeader" [modal]="true" [(visible)]="isTutoringEvaluationVisible">
+  <div [style.text-align]="'center'" class="p-grid">
+    <div class="p-col-12">
+      <p-rating [(ngModel)]="evaluation"></p-rating>
+    </div>
+    <div class="p-col-12">
+      <textarea pInputTextarea placeholder="Comments" [(ngModel)]="evaluationComment"></textarea>
+    </div>
+    <div class="p-col-12">
+      <button pButton label="Evaluate" (click)="evaluateTutor()"></button>
+    </div>
+  </div>
+</p-dialog>
