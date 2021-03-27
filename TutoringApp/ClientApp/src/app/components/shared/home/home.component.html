@@ -10,6 +10,12 @@
     <p-tabPanel *ngIf="isAdmin" header="Tutoring applications">
       <app-tutoring-application-table></app-tutoring-application-table>
     </p-tabPanel>
+    <p-tabPanel *ngIf="isStudent" header="Tutoring sessions">
+      <app-tutoring-sessions></app-tutoring-sessions>
+    </p-tabPanel>
+    <p-tabPanel *ngIf="isStudent" header="Learning sessions">
+      <app-learning-sessions></app-learning-sessions>
+    </p-tabPanel>
   </p-tabView>
 </div>
 <div *ngIf="!messages.length && !(isAuthenticated$ | async)">

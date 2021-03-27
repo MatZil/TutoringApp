@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   public messages: Message[] = [];
   public isAuthenticated$: Observable<boolean>;
   public isAdmin = false;
+  public isStudent = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -26,6 +27,7 @@ export class HomeComponent implements OnInit {
 
     this.isAuthenticated$ = this.authService.isAuthenticated$;
     this.isAdmin = this.authService.currentUserBelongsToRole(AppConstants.AdminRole);
+    this.isStudent = this.authService.currentUserBelongsToRole(AppConstants.StudentRole);
   }
 
   private initializeMessage(): void {
