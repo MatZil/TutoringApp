@@ -16,6 +16,7 @@ import { TutoringSessionsService } from 'src/app/services/tutoring/tutoring-sess
 export class TutoringSessionTableComponent implements OnInit, OnChanges {
   @Input() public tutoringSessions: TutoringSession[] = [];
   @Input() public title: string;
+  @Input() public isTutoringTable = false;
 
   public columns = [
     { field: 'moduleName', header: 'Module' },

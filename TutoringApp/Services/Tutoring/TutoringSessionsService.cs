@@ -146,7 +146,7 @@ namespace TutoringApp.Services.Tutoring
             var session = await _tutoringSessionsRepository.GetById(id);
             var currentUserId = _currentUserService.GetUserId();
 
-            if (session.TutorId != currentUserId && session.StudentId != currentUserId)
+            if (session.TutorId != currentUserId)
             {
                 throw new InvalidOperationException("You can not change subscription status of this session");
             }

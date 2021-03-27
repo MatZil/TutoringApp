@@ -24,7 +24,7 @@
       <td>{{session.creationDate | date: 'yyyy-MM-dd H:mm'}}</td>
       <td>
         <p-checkbox [(ngModel)]="session.isSubscribed" [binary]="true" (onChange)="invertTutoringSessions(session.id)"
-          [disabled]="!session.isActive">
+          [disabled]="!session.isActive || !isTutoringTable">
         </p-checkbox>
       </td>
       <td>{{session.sessionDate | date: 'yyyy-MM-dd H:mm'}}</td>

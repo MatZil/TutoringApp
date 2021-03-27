@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { tap } from 'rxjs/operators';
 import { TutoringSessionNew } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-new';
 import { TutoringSessionsService } from 'src/app/services/tutoring/tutoring-sessions.service';
@@ -7,7 +8,10 @@ import { TutoringSessionsService } from 'src/app/services/tutoring/tutoring-sess
 @Component({
   selector: 'app-student-view',
   templateUrl: './student-view.component.html',
-  styleUrls: ['./student-view.component.scss']
+  styleUrls: ['./student-view.component.scss'],
+  providers: [
+    MessageService
+  ]
 })
 export class StudentViewComponent implements OnInit {
   public studentId: string;
@@ -24,7 +28,8 @@ export class StudentViewComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private tutoringSessionsService: TutoringSessionsService
+    private tutoringSessionsService: TutoringSessionsService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -56,6 +61,8 @@ export class StudentViewComponent implements OnInit {
   public createNewTutoringSession(): void {
     this.tutoringSessionsService.createTutoringSession(this.tutoringSessionNew).subscribe(_ => {
       this.isSessionCreationDialogVisible = false;
+
+      this.messageService.add({ severity: 'success', summary: 'Success!', detail: 'You have successfully registered a tutoring session.' });
     });
   }
 }
