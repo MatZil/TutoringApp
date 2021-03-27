@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { TutoringSessionEvaluationEnum } from 'src/app/models/enums/tutoring-session-evaluation-enum';
 import { TutoringSessionStatusEnum } from 'src/app/models/enums/tutoring-session-status-enum';
@@ -17,6 +17,9 @@ export class TutoringSessionTableComponent implements OnInit, OnChanges {
   @Input() public tutoringSessions: TutoringSession[] = [];
   @Input() public title: string;
   @Input() public isTutoringTable = false;
+
+  @Output()
+  private sessionCancelled = new EventEmitter<boolean>();
 
   public columns = [
     { field: 'moduleName', header: 'Module' },
@@ -67,10 +70,7 @@ export class TutoringSessionTableComponent implements OnInit, OnChanges {
 
   private cancelSession(session: TutoringSession): void {
     this.tutoringSessionsService.cancelTutoringSession(session.id).subscribe(_ => {
-      session.isActive = false;
-      session.status = TutoringSessionStatusEnum.Cancelled,
-      session.statusChangeDate = new Date(),
-      session.statusDisplay = TutoringSessionStatusEnum[TutoringSessionStatusEnum.Cancelled]
+      this.sessionCancelled.emit();
     });
   }
 }

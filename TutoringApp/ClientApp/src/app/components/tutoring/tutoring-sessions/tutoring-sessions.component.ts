@@ -18,7 +18,7 @@ export class TutoringSessionsComponent implements OnInit {
     this.initializeTutoringSessions();
   }
 
-  private initializeTutoringSessions(): void {
+  public initializeTutoringSessions(): void {
     this.tutoringSessionsService.getTutoringSessions().subscribe(sessions => {
       this.tutoringSessions = sessions;
     });

@@ -145,6 +145,19 @@ namespace TutoringApp.Services.Tutoring
             session.StatusChangeDate = _timeService.GetCurrentTime();
 
             await _tutoringSessionsRepository.Update(session);
+
+            var newSession = new TutoringSession
+            {
+                CreationDate = _timeService.GetCurrentTime(),
+                IsSubscribed = true,
+                ModuleId = session.ModuleId,
+                SessionDate = _timeService.GetCurrentTime().AddDays(7),
+                Status = TutoringSessionStatusEnum.Upcoming,
+                StudentId = session.StudentId,
+                TutorId = session.TutorId
+            };
+
+            await _tutoringSessionsRepository.Create(newSession);
         }
 
         public async Task InvertTutoringSessionSubscription(int id)
@@ -204,6 +217,22 @@ namespace TutoringApp.Services.Tutoring
 
                     var notification = new TutoringSessionFinishedNotificationDto { SessionId = session.Id, TutorName = session.Tutor.FirstName + " " + session.Tutor.LastName };
                     await _hubsService.SendSessionFinishedNotificationToUser(session.StudentId, notification);
+
+                    if (session.IsSubscribed)
+                    {
+                        var newSession = new TutoringSession
+                        {
+                            CreationDate = currentTime,
+                            IsSubscribed = true,
+                            ModuleId = session.ModuleId,
+                            SessionDate = currentTime.AddDays(7),
+                            Status = TutoringSessionStatusEnum.Upcoming,
+                            StudentId = session.StudentId,
+                            TutorId = session.TutorId
+                        };
+
+                        await _tutoringSessionsRepository.Create(newSession);
+                    }
                 }
                 else if (timeDifference.TotalMinutes < 15 && !session.IsReminderSent)
                 {

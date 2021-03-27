@@ -1,2 +1,3 @@
-<app-tutoring-session-table [tutoringSessions]="sessions" [title]="'Learning Sessions'">
+<app-tutoring-session-table [tutoringSessions]="sessions" [title]="'Learning Sessions'"
+  (sessionCancelled)="initializeTutoringSessions()">
 </app-tutoring-session-table>
