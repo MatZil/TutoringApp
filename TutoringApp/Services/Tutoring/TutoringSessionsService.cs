@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TutoringApp.Data.Aggregates;
 using TutoringApp.Data.Dtos.Tutoring.TutoringSessions;
 using TutoringApp.Data.Models;
 using TutoringApp.Data.Models.Enums;
@@ -160,7 +161,7 @@ namespace TutoringApp.Services.Tutoring
             await _tutoringSessionsRepository.Update(session);
         }
 
-        public async Task<string> EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto)
+        public async Task<SessionEvaluationEmailAggregate> EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto)
         {
             var session = await _tutoringSessionsRepository.GetById(id);
 
@@ -171,7 +172,13 @@ namespace TutoringApp.Services.Tutoring
 
             await _tutoringSessionsRepository.Update(session);
 
-            return session.Tutor.Email;
+            return new SessionEvaluationEmailAggregate
+            {
+                TutorEmail = session.Tutor.Email,
+                StudentName = session.Student.FirstName + " " + session.Student.LastName,
+                SessionDate = session.SessionDate,
+                EvaluationDto = evaluationDto
+            };
         }
 
         private void ValidateSessionEvaluation(TutoringSession session)

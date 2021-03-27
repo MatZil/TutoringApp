@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using TutoringApp.Data.Dtos.Tutoring.TutoringSessions;
+using TutoringApp.Data.Aggregates;
 using TutoringApp.Services.Interfaces;
 
 namespace TutoringApp.Services.Shared
@@ -57,11 +57,11 @@ namespace TutoringApp.Services.Shared
             await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
         }
 
-        public async Task SendTutoringSessionEvaluatedEmail(string receiverEmail, TutoringSessionEvaluationDto evaluationDto)
+        public async Task SendTutoringSessionEvaluatedEmail(SessionEvaluationEmailAggregate evaluationEmailAggregate)
         {
-            var emailBody = $"Your tutoring session has been evaluated";
-            const string subject = "Tutoring App Tutoring Rejection";
-            await _emailSender.SendEmailAsync(receiverEmail, subject, emailBody);
+            var emailBody = $"Your tutoring session (Student: {evaluationEmailAggregate.StudentName}, date: {evaluationEmailAggregate.SessionDate} has been evaluated. Score: {evaluationEmailAggregate.EvaluationDto.Evaluation}. Comment:\n\n{evaluationEmailAggregate.EvaluationDto.Comment}.";
+            const string subject = "Tutoring App Tutoring Evaluation";
+            await _emailSender.SendEmailAsync(evaluationEmailAggregate.TutorEmail, subject, emailBody);
         }
     }
 }

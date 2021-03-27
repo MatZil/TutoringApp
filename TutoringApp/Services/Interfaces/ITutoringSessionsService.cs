@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TutoringApp.Data.Aggregates;
 using TutoringApp.Data.Dtos.Tutoring.TutoringSessions;
 
 namespace TutoringApp.Services.Interfaces
@@ -11,6 +12,6 @@ namespace TutoringApp.Services.Interfaces
         Task CreateTutoringSession(TutoringSessionNewDto tutoringSessionNew);
         Task CancelTutoringSession(int id);
         Task InvertTutoringSessionSubscription(int id);
-        Task<string> EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto);
+        Task<SessionEvaluationEmailAggregate> EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto);
     }
 }
