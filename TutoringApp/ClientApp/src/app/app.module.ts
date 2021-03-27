@@ -45,6 +45,7 @@ import { TutorViewComponent } from './components/users/tutor-view/tutor-view.com
 import { StudentTableComponent } from './components/users/student-table/student-table.component';
 import { StudentViewComponent } from './components/users/student-view/student-view.component';
 import { TutoringSessionTableComponent } from './components/tutoring/tutoring-session-table/tutoring-session-table.component';
+import { TutoringSessionsComponent } from './components/tutoring/tutoring-sessions/tutoring-sessions.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { TutoringSessionTableComponent } from './components/tutoring/tutoring-se
     StudentTableComponent,
     StudentViewComponent,
     TutoringSessionTableComponent,
+    TutoringSessionsComponent,
   ],
   imports: [
     BrowserModule,
