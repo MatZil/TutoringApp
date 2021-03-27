@@ -151,7 +151,7 @@ namespace TutoringApp.Services.Tutoring
                 CreationDate = _timeService.GetCurrentTime(),
                 IsSubscribed = true,
                 ModuleId = session.ModuleId,
-                SessionDate = _timeService.GetCurrentTime().AddDays(7),
+                SessionDate = session.SessionDate.AddDays(7),
                 Status = TutoringSessionStatusEnum.Upcoming,
                 StudentId = session.StudentId,
                 TutorId = session.TutorId
@@ -225,7 +225,7 @@ namespace TutoringApp.Services.Tutoring
                             CreationDate = currentTime,
                             IsSubscribed = true,
                             ModuleId = session.ModuleId,
-                            SessionDate = currentTime.AddDays(7),
+                            SessionDate = session.SessionDate.AddDays(7),
                             Status = TutoringSessionStatusEnum.Upcoming,
                             StudentId = session.StudentId,
                             TutorId = session.TutorId
