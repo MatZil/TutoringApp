@@ -51,6 +51,7 @@ namespace TutoringAppTests.Setup
             StudentTutorSeeder.Seed(UserManager, Context.StudentTutors).Wait();
             StudentTutorIgnoreSeeder.Seed(UserManager, Context.StudentTutorIgnores).Wait();
             ChatSeeder.Seed(Context.ChatMessages, UserManager).Wait();
+            TutoringSessionsSeeder.Seed(Context.TutoringSessions, UserManager).Wait();
 
             Context.SaveChanges();
         }
