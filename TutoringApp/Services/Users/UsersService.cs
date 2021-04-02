@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Data.Dtos.Users;
 using TutoringApp.Data.Models;
+using TutoringApp.Data.Models.Enums;
 using TutoringApp.Infrastructure.Repositories.Interfaces;
 using TutoringApp.Services.Interfaces;
 
@@ -63,9 +64,10 @@ namespace TutoringApp.Services.Users
                 StudentYear = t.StudentYear,
                 Faculty = t.Faculty,
                 StudyBranch = t.StudyBranch,
-                TutoringSessionCount = t.TutoredSessions.Count,
+                TutoringSessionCount = t.TutoredSessions.Count(ts => ts.Status == TutoringSessionStatusEnum.Finished),
                 IsAddable = t.TutorStudents.All(st => st.ModuleId != moduleId || st.StudentId != userId),
                 AverageScore = t.TutoredSessions
+                    .Where(ts => ts.Evaluation != null)
                     .Select(ts => (double)ts.Evaluation.GetValueOrDefault())
                     .DefaultIfEmpty(0.0)
                     .Average()
