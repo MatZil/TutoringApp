@@ -146,18 +146,21 @@ namespace TutoringApp.Services.Tutoring
 
             await _tutoringSessionsRepository.Update(session);
 
-            var newSession = new TutoringSession
+            if (session.IsSubscribed)
             {
-                CreationDate = _timeService.GetCurrentTime(),
-                IsSubscribed = true,
-                ModuleId = session.ModuleId,
-                SessionDate = session.SessionDate.AddDays(7),
-                Status = TutoringSessionStatusEnum.Upcoming,
-                StudentId = session.StudentId,
-                TutorId = session.TutorId
-            };
+                var newSession = new TutoringSession
+                {
+                    CreationDate = _timeService.GetCurrentTime(),
+                    IsSubscribed = true,
+                    ModuleId = session.ModuleId,
+                    SessionDate = session.SessionDate.AddDays(7),
+                    Status = TutoringSessionStatusEnum.Upcoming,
+                    StudentId = session.StudentId,
+                    TutorId = session.TutorId
+                };
 
-            await _tutoringSessionsRepository.Create(newSession);
+                await _tutoringSessionsRepository.Create(newSession);
+            }
         }
 
         public async Task InvertTutoringSessionSubscription(int id)

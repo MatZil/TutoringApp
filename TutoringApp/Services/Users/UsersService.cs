@@ -66,11 +66,14 @@ namespace TutoringApp.Services.Users
                 StudyBranch = t.StudyBranch,
                 TutoringSessionCount = t.TutoredSessions.Count(ts => ts.Status == TutoringSessionStatusEnum.Finished),
                 IsAddable = t.TutorStudents.All(st => st.ModuleId != moduleId || st.StudentId != userId),
-                AverageScore = t.TutoredSessions
-                    .Where(ts => ts.Evaluation != null)
-                    .Select(ts => (double)ts.Evaluation.GetValueOrDefault())
-                    .DefaultIfEmpty(0.0)
-                    .Average()
+                AverageScore = Math.Round(
+                    t.TutoredSessions
+                        .Where(ts => ts.Evaluation != null)
+                        .Select(ts => (double)ts.Evaluation.GetValueOrDefault())
+                        .DefaultIfEmpty(0.0)
+                        .Average(),
+                    1
+                    )
             });
 
             return tutorDtos;
