@@ -53,7 +53,7 @@
     <input class="letter-textarea" pInputText [(ngModel)]="cancellationReason">
   </div>
   <div>
-    <button pButton class="p-button-success" label="Cancel" (click)="cancelSession()"
+    <button [style.margin-top]="'0.5em'" pButton class="p-button-success" label="Cancel" (click)="cancelSession()"
       [disabled]="cancellationReason.length <= 0"></button>
   </div>
 </p-dialog>
