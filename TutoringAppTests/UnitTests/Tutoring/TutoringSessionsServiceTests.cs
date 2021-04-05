@@ -127,12 +127,14 @@ namespace TutoringAppTests.UnitTests.Tutoring
         [Fact]
         public async Task When_CancellingTutoringSession_Expect_SessionCancelled()
         {
-            await _tutoringSessionsService.CancelTutoringSession(3);
+            var cancelDto = new TutoringSessionCancelDto { Reason = "Test reason" };
+            await _tutoringSessionsService.CancelTutoringSession(3, cancelDto);
 
             var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 3);
 
             Assert.Equal(TutoringSessionStatusEnum.Cancelled, session.Status);
             Assert.Equal(DateTimeOffset.Now.Date, session.StatusChangeDate.GetValueOrDefault().Date);
+            Assert.Equal("Test reason", session.CancellationReason);
         }
 
         [Fact]

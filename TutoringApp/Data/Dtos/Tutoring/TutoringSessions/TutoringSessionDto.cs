@@ -14,5 +14,6 @@ namespace TutoringApp.Data.Dtos.Tutoring.TutoringSessions
         public TutoringSessionStatusEnum Status { get; set; }
         public DateTimeOffset? StatusChangeDate { get; set; }
         public TutoringSessionEvaluationEnum? Evaluation { get; set; }
+        public string CancellationReason { get; set; }
     }
 }

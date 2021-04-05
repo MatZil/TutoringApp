@@ -54,7 +54,8 @@ namespace TutoringApp.Services.Tutoring
                     ParticipantName = ts.Student.FirstName + " " + ts.Student.LastName,
                     SessionDate = ts.SessionDate,
                     Status = ts.Status,
-                    StatusChangeDate = ts.StatusChangeDate
+                    StatusChangeDate = ts.StatusChangeDate,
+                    CancellationReason = ts.CancellationReason
                 })
                 .OrderByDescending(ts => ts.SessionDate);
         }
@@ -75,7 +76,8 @@ namespace TutoringApp.Services.Tutoring
                     ParticipantName = ts.Tutor.FirstName + " " + ts.Tutor.LastName,
                     SessionDate = ts.SessionDate,
                     Status = ts.Status,
-                    StatusChangeDate = ts.StatusChangeDate
+                    StatusChangeDate = ts.StatusChangeDate,
+                    CancellationReason = ts.CancellationReason
                 })
                 .OrderByDescending(ts => ts.SessionDate);
         }
@@ -126,7 +128,7 @@ namespace TutoringApp.Services.Tutoring
             }
         }
 
-        public async Task CancelTutoringSession(int id)
+        public async Task CancelTutoringSession(int id, TutoringSessionCancelDto tutoringSessionCancel)
         {
             var session = await _tutoringSessionsRepository.GetById(id);
             var currentUserId = _currentUserService.GetUserId();
@@ -143,6 +145,7 @@ namespace TutoringApp.Services.Tutoring
 
             session.Status = TutoringSessionStatusEnum.Cancelled;
             session.StatusChangeDate = _timeService.GetCurrentTime();
+            session.CancellationReason = tutoringSessionCancel.Reason;
 
             await _tutoringSessionsRepository.Update(session);
 

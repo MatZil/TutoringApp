@@ -10,6 +10,7 @@ namespace TutoringApp.Data.Models
         public bool IsSubscribed { get; set; }
         public DateTimeOffset SessionDate { get; set; }
         public TutoringSessionStatusEnum Status { get; set; }
+        public string CancellationReason { get; set; }
 
         public DateTimeOffset? StatusChangeDate { get; set; }
         public TutoringSessionEvaluationEnum? Evaluation { get; set; }

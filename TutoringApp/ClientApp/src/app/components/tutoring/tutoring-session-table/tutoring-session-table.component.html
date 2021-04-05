@@ -29,11 +29,12 @@
       </td>
       <td>{{session.sessionDate | date: 'yyyy-MM-dd H:mm'}}</td>
       <td>{{session.statusDisplay}}</td>
+      <td>{{session.cancellationReason ? session.cancellationReason : '-'}}</td>
       <td>{{session.statusChangeDate ? (session.statusChangeDate | date: 'yyyy-MM-dd H:mm') : '-'}}</td>
       <td>{{session.evaluationDisplay}}</td>
       <td>
         <button *ngIf="session.isActive" pButton class="p-button-danger" icon="pi pi-times"
-          (click)="confirmSessionCancelling(session)"></button>
+          (click)="openCancellationDialog(session)"></button>
       </td>
     </tr>
   </ng-template>
@@ -45,3 +46,14 @@
     </tr>
   </ng-template>
 </p-table>
+
+<p-dialog header="Why do you want to cancel?" [(visible)]="isCancelDialogVisible" [modal]="true"
+  [dismissableMask]="true">
+  <div class="p-fluid">
+    <input class="letter-textarea" pInputText [(ngModel)]="cancellationReason">
+  </div>
+  <div>
+    <button pButton class="p-button-success" label="Cancel" (click)="cancelSession()"
+      [disabled]="cancellationReason.length <= 0"></button>
+  </div>
+</p-dialog>

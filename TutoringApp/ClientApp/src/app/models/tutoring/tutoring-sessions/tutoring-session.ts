@@ -11,6 +11,7 @@ export interface TutoringSession {
   status: TutoringSessionStatusEnum;
   statusChangeDate: Date;
   evaluation: TutoringSessionEvaluationEnum;
+  cancellationReason: string;
 
   statusDisplay: string;
   evaluationDisplay: string;

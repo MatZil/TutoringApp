@@ -70,11 +70,11 @@ namespace TutoringApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> CancelTutoringSession(int id)
+        public async Task<IActionResult> CancelTutoringSession(int id, [FromBody] TutoringSessionCancelDto tutoringSessionCancel)
         {
             try
             {
-                await _tutoringSessionsService.CancelTutoringSession(id);
+                await _tutoringSessionsService.CancelTutoringSession(id, tutoringSessionCancel);
 
                 return Ok();
             }

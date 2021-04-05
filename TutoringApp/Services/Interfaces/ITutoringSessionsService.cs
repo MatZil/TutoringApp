@@ -10,7 +10,7 @@ namespace TutoringApp.Services.Interfaces
         Task<IEnumerable<TutoringSessionDto>> GetTutoringSessions();
         Task<IEnumerable<TutoringSessionDto>> GetLearningSessions();
         Task CreateTutoringSession(TutoringSessionNewDto tutoringSessionNew);
-        Task CancelTutoringSession(int id);
+        Task CancelTutoringSession(int id, TutoringSessionCancelDto tutoringSessionCancel);
         Task InvertTutoringSessionSubscription(int id);
         Task<SessionEvaluationEmailAggregate> EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto);
         Task RecheckUpcomingTutoringSessions();

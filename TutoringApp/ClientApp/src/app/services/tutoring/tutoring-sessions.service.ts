@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TutoringSession } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session';
+import { TutoringSessionCancel } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-cancel';
 import { TutoringSessionEvaluation } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-evaluation';
 import { TutoringSessionFinishedNotification } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-finished-notification';
 import { TutoringSessionNew } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-new';
@@ -30,8 +31,8 @@ export class TutoringSessionsService {
     return this.httpService.post(this.sessionsController, '', tutoringSessionNew);
   }
 
-  public cancelTutoringSession(sessionId: number): Observable<any> {
-    return this.httpService.put(this.sessionsController, sessionId.toString(), null);
+  public cancelTutoringSession(sessionId: number, tutoringSessionCancel: TutoringSessionCancel): Observable<any> {
+    return this.httpService.put(this.sessionsController, sessionId.toString(), tutoringSessionCancel);
   }
 
   public invertTutoringSession(sessionId: number): Observable<any> {
