@@ -2,8 +2,11 @@
 <div class="action-bar">
   <button pButton label="Create Session" class="p-button-success" icon="pi pi-plus"
     (click)="initializeTutoringSessionCreation()"></button>
+  <button pButton label="Update Assignments" (click)="isAssignmentUploadDialogVisible = true"></button>
 </div>
+
 <app-chat [receiverId]="studentId" [moduleId]="moduleId"></app-chat>
+
 <p-dialog header="Create a New Session!" [modal]="true" [(visible)]="isSessionCreationDialogVisible">
   <div [style.margin-bottom]="'0.5em'">
     <p-calendar [showTime]="true" [inline]="true" [minDate]="minSessionDate"
@@ -12,4 +15,11 @@
   <p-checkbox [binary]="true" [(ngModel)]="tutoringSessionNew.isSubscribed" label="Is Subscribed"></p-checkbox>
   <button [style.float]="'right'" pButton class="p-button-success" label="Create"
     (click)="createNewTutoringSession()"></button>
+</p-dialog>
+
+
+<p-dialog header="Update student's assignments" [modal]="true" [(visible)]="isAssignmentUploadDialogVisible">
+  <p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" (uploadHandler)="updateAssignments($event)"
+    accept=".pdf" label="Upload Assignments">
+  </p-fileUpload>
 </p-dialog>

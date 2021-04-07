@@ -18,17 +18,20 @@ namespace TutoringApp.Controllers
         private readonly ITutoringApplicationsService _tutoringApplicationsService;
         private readonly IUsersService _usersService;
         private readonly IStudentTutorsService _studentTutorsService;
+        private readonly IAssignmentsService _assignmentsService;
 
         public ModulesController(
             IModulesService modulesService,
             ITutoringApplicationsService tutoringApplicationsService,
             IUsersService usersService,
-            IStudentTutorsService studentTutorsService)
+            IStudentTutorsService studentTutorsService, 
+            IAssignmentsService assignmentsService)
         {
             _modulesService = modulesService;
             _tutoringApplicationsService = tutoringApplicationsService;
             _usersService = usersService;
             _studentTutorsService = studentTutorsService;
+            _assignmentsService = assignmentsService;
         }
 
         [HttpGet]
@@ -153,6 +156,27 @@ namespace TutoringApp.Controllers
             return Ok();
         }
 
+        #endregion
+
+        #region Assignments
+
+        [HttpPatch("{moduleId}/students/{studentId}/assignments")]
+        public async Task<IActionResult> UpdateAssignments(
+            int moduleId,
+            string studentId)
+        {
+            try
+            {
+                var files = Request.Form.Files;
+                await _assignmentsService.UpdateAssignments(moduleId, studentId, files);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         #endregion
     }
 }

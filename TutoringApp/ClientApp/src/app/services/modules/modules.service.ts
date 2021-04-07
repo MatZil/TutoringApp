@@ -51,4 +51,8 @@ export class ModulesService {
   public removeTutorStudent(moduleId: number, studentId: string): Observable<any> {
     return this.httpService.delete(this.modulesController, `${moduleId}/students/${studentId}`, null);
   }
+
+  public updateAssignments(moduleId: number, studentId: string, fileFormData: FormData): Observable<any> {
+    return this.httpService.patch(this.modulesController, `${moduleId}/students/${studentId}/assignments`, fileFormData);
+  }
 }

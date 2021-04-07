@@ -49,6 +49,7 @@ import { TutoringSessionsComponent } from './components/tutoring/tutoring-sessio
 import { LearningSessionsComponent } from './components/tutoring/learning-sessions/learning-sessions.component';
 import { CalendarModule } from 'primeng/calendar';
 import { RatingModule } from 'primeng/rating';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -110,6 +111,7 @@ import { RatingModule } from 'primeng/rating';
     CheckboxModule,
     CalendarModule,
     RatingModule,
+    FileUploadModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
