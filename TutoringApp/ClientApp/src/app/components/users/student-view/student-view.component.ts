@@ -79,8 +79,9 @@ export class StudentViewComponent implements OnInit {
       formData.append('file', file, file.name);
     }
 
-    this.modulesService.updateAssignments(this.moduleId, this.studentId, formData).subscribe(_ => {
-      this.isAssignmentUploadDialogVisible = false;
-    });
+    this.modulesService.updateAssignments(this.moduleId, this.studentId, formData).subscribe(
+      _ => this.isAssignmentUploadDialogVisible = false,
+      err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error })
+      );
   }
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Data.Models;
 using TutoringApp.Infrastructure.Repositories;
@@ -30,13 +32,26 @@ namespace TutoringApp.Services.Tutoring
         {
             var tutorId = _currentUserService.GetUserId();
 
-            Directory.CreateDirectory($"{AssignmentsRoot}{tutorId}");
-            Directory.CreateDirectory($"{AssignmentsRoot}{tutorId}/{studentId}");
+            var existingAssignments = await _assignmentsRepository.GetFiltered(a =>
+                a.ModuleId == moduleId
+                && a.TutorId == tutorId
+                && a.StudentId == studentId
+                && assignments.Select(formFile => formFile.FileName).Contains(a.AssignmentFileName)
+            );
+
+            if (existingAssignments.Any())
+            {
+                throw new InvalidOperationException("Could not update assignments: one of the files already exist!");
+            }
+
+            Directory.CreateDirectory($"{AssignmentsRoot}{moduleId}");
+            Directory.CreateDirectory($"{AssignmentsRoot}{moduleId}/{tutorId}");
+            Directory.CreateDirectory($"{AssignmentsRoot}{moduleId}/{tutorId}/{studentId}");
 
             var assignmentEntities = new List<Assignment>();
             foreach (var assignment in assignments)
             {
-                await using var stream = new FileStream($"{AssignmentsRoot}{tutorId}/{studentId}/{assignment.FileName}", FileMode.Create);
+                await using var stream = new FileStream($"{AssignmentsRoot}{moduleId}/{tutorId}/{studentId}/{assignment.FileName}", FileMode.Create);
 
                 await assignment.CopyToAsync(stream);
 
@@ -45,7 +60,8 @@ namespace TutoringApp.Services.Tutoring
                     AssignmentFileName = assignment.FileName,
                     CreationDate = _timeService.GetCurrentTime(),
                     StudentId = studentId,
-                    TutorId = tutorId
+                    TutorId = tutorId,
+                    ModuleId = moduleId
                 });
             }
 
