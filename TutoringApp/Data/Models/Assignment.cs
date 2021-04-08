@@ -11,15 +11,10 @@ namespace TutoringApp.Data.Models
         public AppUser Student { get; set; }
         public string StudentId { get; set; }
 
+        public Module Module { get; set; }
+        public int ModuleId { get; set; }
+
         public DateTimeOffset CreationDate { get; set; }
-
-        // Tutor side
-        public string Title { get; set; }
-        public string Content { get; set; }
         public string AssignmentFileName { get; set; }
-
-        // Student side
-        public string Comment { get; set; }
-        public string SubmissionFileName { get; set; }
     }
 }

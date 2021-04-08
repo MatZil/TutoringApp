@@ -70,5 +70,12 @@ namespace TutoringApp.Infrastructure.Repositories
 
             return changes > 0;
         }
+
+        public virtual async Task CreateMany(IEnumerable<TEntity> entities)
+        {
+            await ItemSet.AddRangeAsync(entities);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
