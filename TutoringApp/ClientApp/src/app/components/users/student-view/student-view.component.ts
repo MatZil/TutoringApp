@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { tap } from 'rxjs/operators';
+import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
 import { TutoringSessionNew } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-new';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { ModulesService } from 'src/app/services/modules/modules.service';
 import { TutoringSessionsService } from 'src/app/services/tutoring/tutoring-sessions.service';
 
@@ -28,21 +30,32 @@ export class StudentViewComponent implements OnInit {
     sessionDate: undefined
   };
 
+  public assignments: Assignment[] = [];
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private tutoringSessionsService: TutoringSessionsService,
     private messageService: MessageService,
-    private modulesService: ModulesService
+    private modulesService: ModulesService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.initializeRouteParams();
+    this.initializeAssignments();
   }
 
   private initializeRouteParams(): void {
     this.activatedRoute.params.pipe(
       tap(params => this.studentId = params.id),
       tap(params => this.moduleId = +params.moduleId)
+    )
+      .subscribe();
+  }
+
+  private initializeAssignments(): void {
+    this.modulesService.getAssignments(this.moduleId, this.authService.getCurrentUserId(), this.studentId).pipe(
+      tap(assignments => this.assignments = assignments)
     )
       .subscribe();
   }
@@ -80,8 +93,11 @@ export class StudentViewComponent implements OnInit {
     }
 
     this.modulesService.updateAssignments(this.moduleId, this.studentId, formData).subscribe(
-      _ => this.isAssignmentUploadDialogVisible = false,
+      _ => {
+        this.isAssignmentUploadDialogVisible = false;
+        this.initializeAssignments();
+      },
       err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error })
-      );
+    );
   }
 }

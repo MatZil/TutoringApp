@@ -1,4 +1,14 @@
 <p-toast></p-toast>
+
+<div *ngIf="assignments.length">
+  <h1>Assignments:</h1>
+  <ol>
+    <li *ngFor="let assignment of assignments">
+      {{assignment.fileName}}
+    </li>
+  </ol>
+</div>
+
 <div class="action-bar">
   <button pButton label="Create Session" class="p-button-success" icon="pi pi-plus"
     (click)="initializeTutoringSessionCreation()"></button>

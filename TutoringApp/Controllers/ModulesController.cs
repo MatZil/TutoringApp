@@ -159,7 +159,6 @@ namespace TutoringApp.Controllers
         #endregion
 
         #region Assignments
-
         [HttpPatch("{moduleId}/students/{studentId}/assignments")]
         public async Task<IActionResult> UpdateAssignments(
             int moduleId,
@@ -171,6 +170,24 @@ namespace TutoringApp.Controllers
                 await _assignmentsService.UpdateAssignments(moduleId, studentId, files);
 
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{moduleId}/tutors/{tutorId}/students/{studentId}/assignments")]
+        public async Task<IActionResult> GetAssignments(
+            int moduleId,
+            string tutorId,
+            string studentId)
+        {
+            try
+            {
+                var assignments = await _assignmentsService.GetAssignments(moduleId, tutorId, studentId);
+
+                return Ok(assignments);
             }
             catch (Exception ex)
             {

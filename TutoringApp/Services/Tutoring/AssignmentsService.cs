@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TutoringApp.Data.Dtos.Tutoring.Assignments;
 using TutoringApp.Data.Models;
 using TutoringApp.Infrastructure.Repositories;
 using TutoringApp.Services.Interfaces;
@@ -66,6 +67,21 @@ namespace TutoringApp.Services.Tutoring
             }
 
             await _assignmentsRepository.CreateMany(assignmentEntities);
+        }
+
+        public async Task<IEnumerable<AssignmentDto>> GetAssignments(int moduleId, string tutorId, string studentId)
+        {
+            var existingAssignments = await _assignmentsRepository.GetFiltered(a =>
+                a.ModuleId == moduleId
+                && a.TutorId == tutorId
+                && a.StudentId == studentId
+            );
+
+            return existingAssignments.Select(a => new AssignmentDto
+            {
+                Id = a.Id,
+                FileName = a.AssignmentFileName
+            });
         }
     }
 }

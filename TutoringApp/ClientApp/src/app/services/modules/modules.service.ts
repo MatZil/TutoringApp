@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ModuleNew } from 'src/app/models/modules/module-new';
 import { NamedEntity } from 'src/app/models/shared/named-entity';
+import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
 import { TutoringApplicationNew } from 'src/app/models/tutoring/tutoring-application-new';
 import { UserModuleMetadata } from 'src/app/models/users/user-module-metadata';
 import { HttpService } from '../http.service';
@@ -54,5 +55,9 @@ export class ModulesService {
 
   public updateAssignments(moduleId: number, studentId: string, fileFormData: FormData): Observable<any> {
     return this.httpService.patch(this.modulesController, `${moduleId}/students/${studentId}/assignments`, fileFormData);
+  }
+
+  public getAssignments(moduleId: number, tutorId: string, studentId: string): Observable<Assignment[]> {
+    return this.httpService.get(this.modulesController, `${moduleId}/tutors/${tutorId}/students/${studentId}/assignments`);
   }
 }
