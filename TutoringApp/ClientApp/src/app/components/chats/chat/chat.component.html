@@ -1,4 +1,4 @@
-<p-virtualScroller [value]="chatMessages" scrollHeight="700px">
+<p-virtualScroller [value]="chatMessages" scrollHeight="500px">
   <ng-template pTemplate="item" let-chatMessage>
     <div class="chat-message-container">
       <div [class]="currentUserId == chatMessage.senderId ? 'sent-message' : 'received-message'">

@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 
-<div *ngIf="assignments.length">
+<div *ngIf="assignments.length" class="assignments">
   <h1>Assignments:</h1>
   <ol>
     <li *ngFor="let assignment of assignments">
@@ -9,13 +9,15 @@
   </ol>
 </div>
 
-<div class="action-bar">
-  <button pButton label="Create Session" class="p-button-success" icon="pi pi-plus"
-    (click)="initializeTutoringSessionCreation()"></button>
-  <button pButton label="Update Assignments" (click)="isAssignmentUploadDialogVisible = true"></button>
+<div class="chat">
+  <div class="action-bar">
+    <button pButton label="Create Session" class="p-button-success" icon="pi pi-plus"
+      (click)="initializeTutoringSessionCreation()"></button>
+    <button pButton label="Update Assignments" (click)="isAssignmentUploadDialogVisible = true"></button>
+  </div>
+  
+  <app-chat [receiverId]="studentId" [moduleId]="moduleId"></app-chat>
 </div>
-
-<app-chat [receiverId]="studentId" [moduleId]="moduleId"></app-chat>
 
 <p-dialog header="Create a New Session!" [modal]="true" [(visible)]="isSessionCreationDialogVisible">
   <div [style.margin-bottom]="'0.5em'">
