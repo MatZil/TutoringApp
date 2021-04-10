@@ -19,6 +19,11 @@ namespace TutoringApp.Infrastructure.Repositories
             _context = context;
         }
 
+        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> filter)
+        {
+            return await ItemSet.AnyAsync(filter);
+        }
+
         public virtual async Task<IEnumerable<TEntity>> GetFiltered(Expression<Func<TEntity, bool>> filter = null)
         {
             IQueryable<TEntity> query = ItemSet;

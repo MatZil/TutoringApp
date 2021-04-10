@@ -7,7 +7,10 @@ namespace TutoringApp.Services.Interfaces
 {
     public interface IAssignmentsService
     {
-        Task UpdateAssignments(int moduleId, string studentId, IFormFileCollection assignments);
+        Task UploadAssignments(int moduleId, string studentId, IFormFileCollection formFiles);
         Task<IEnumerable<AssignmentDto>> GetAssignments(int moduleId, string tutorId, string studentId);
+        Task UploadSubmission(int assignmentId, IFormFileCollection formFiles);
+        Task EvaluateSubmission(int assignmentId, int evaluation);
+        Task DeleteAssignment(int assignmentId);
     }
 }

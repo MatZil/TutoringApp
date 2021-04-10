@@ -160,14 +160,12 @@ namespace TutoringApp.Controllers
 
         #region Assignments
         [HttpPatch("{moduleId}/students/{studentId}/assignments")]
-        public async Task<IActionResult> UpdateAssignments(
-            int moduleId,
-            string studentId)
+        public async Task<IActionResult> UploadAssignments(int moduleId, string studentId)
         {
             try
             {
-                var files = Request.Form.Files;
-                await _assignmentsService.UpdateAssignments(moduleId, studentId, files);
+                var formFiles = Request.Form.Files;
+                await _assignmentsService.UploadAssignments(moduleId, studentId, formFiles);
 
                 return Ok();
             }
@@ -178,16 +176,59 @@ namespace TutoringApp.Controllers
         }
 
         [HttpGet("{moduleId}/tutors/{tutorId}/students/{studentId}/assignments")]
-        public async Task<IActionResult> GetAssignments(
-            int moduleId,
-            string tutorId,
-            string studentId)
+        public async Task<IActionResult> GetAssignments(int moduleId, string tutorId, string studentId)
         {
             try
             {
                 var assignments = await _assignmentsService.GetAssignments(moduleId, tutorId, studentId);
 
                 return Ok(assignments);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("assignments/{assignmentId}/submit")]
+        public async Task<IActionResult> UploadSubmission(int assignmentId)
+        {
+            try
+            {
+                var formFiles = Request.Form.Files;
+                await _assignmentsService.UploadSubmission(assignmentId, formFiles);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("assignments/{assignmentId}/evaluate")]
+        public async Task<IActionResult> EvaluateSubmission(int assignmentId, [FromQuery] int evaluation)
+        {
+            try
+            {
+                await _assignmentsService.EvaluateSubmission(assignmentId, evaluation);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("assignments/{assignmentId}")]
+        public async Task<IActionResult> DeleteAssignment(int assignmentId)
+        {
+            try
+            {
+                await _assignmentsService.DeleteAssignment(assignmentId);
+
+                return Ok();
             }
             catch (Exception ex)
             {

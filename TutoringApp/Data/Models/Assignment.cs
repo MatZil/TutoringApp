@@ -17,6 +17,6 @@ namespace TutoringApp.Data.Models
         [Required]
         public string AssignmentFileName { get; set; }
         public string SubmissionFileName { get; set; }
-        public int SubmissionEvaluation { get; set; }
+        public int? SubmissionEvaluation { get; set; }
     }
 }

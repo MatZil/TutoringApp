@@ -15,5 +15,6 @@ namespace TutoringApp.Infrastructure.Repositories
         Task<bool> Update(TEntity entity);
         Task<bool> Delete(TEntity entity);
         Task CreateMany(IEnumerable<TEntity> entities);
+        Task<bool> Exists(Expression<Func<TEntity, bool>> filter);
     }
 }

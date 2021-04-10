@@ -4,5 +4,7 @@
     {
         public int Id { get; set; }
         public string FileName { get; set; }
+        public string SubmissionFileName { get; set; }
+        public int? SubmissionEvaluation { get; set; }
     }
 }
