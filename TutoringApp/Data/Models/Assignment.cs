@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 using TutoringApp.Data.Models.Base;
 
 namespace TutoringApp.Data.Models
@@ -14,7 +14,9 @@ namespace TutoringApp.Data.Models
         public Module Module { get; set; }
         public int ModuleId { get; set; }
 
-        public DateTimeOffset CreationDate { get; set; }
+        [Required]
         public string AssignmentFileName { get; set; }
+        public string SubmissionFileName { get; set; }
+        public int SubmissionEvaluation { get; set; }
     }
 }
