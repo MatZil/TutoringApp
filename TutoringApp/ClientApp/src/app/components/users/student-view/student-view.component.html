@@ -8,6 +8,13 @@
       <span>{{assignment.fileName}}</span>
       <span *ngIf="assignment.submissionFileName">
         <span [style.font-weight]="'bold'"> - {{assignment.submissionFileName}}</span>
+        <span *ngIf="!assignment.submissionEvaluation">
+          <button pButton class="p-button-text" icon="pi pi-pencil"
+            (click)="openEvaluationDialog(assignment.id)"></button>
+        </span>
+        <span *ngIf="assignment.submissionEvaluation">
+          ({{assignment.submissionEvaluation}})
+        </span>
       </span>
       <span class="assignment-delete-button">
         <button pButton class="p-button-danger p-button-text" icon="pi pi-trash"
@@ -37,6 +44,12 @@
     (click)="createNewTutoringSession()"></button>
 </p-dialog>
 
+
+<p-dialog header="Evaluate this submission (1 - 10)" [modal]="true" [(visible)]="isEvaluationDialogVisible">
+  <input pInputText type="number" [(ngModel)]="evaluation" [style.width]="'60px'">
+  <button pButton label="Evaluate" (click)="evaluateSubmission()"
+    [disabled]="evaluation < 1 || evaluation > 10"></button>
+</p-dialog>
 
 <p-dialog header="Update student's assignments" [modal]="true" [(visible)]="isAssignmentUploadDialogVisible">
   <p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" (uploadHandler)="updateAssignments($event)"

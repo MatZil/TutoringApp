@@ -7,6 +7,9 @@
       <span>{{assignment.fileName}}</span>
       <span *ngIf="assignment.submissionFileName">
         <span [style.font-weight]="'bold'"> - {{assignment.submissionFileName}}</span>
+        <span *ngIf="assignment.submissionEvaluation">
+          ({{assignment.submissionEvaluation}})
+        </span>
       </span>
       <span *ngIf="!assignment.submissionFileName" class="submission-upload-button">
         <p-fileUpload chooseLabel="Submit" chooseIcon="pi pi-plus" [auto]="true" [customUpload]="true"

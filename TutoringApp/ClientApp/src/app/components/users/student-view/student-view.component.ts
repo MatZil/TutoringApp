@@ -31,6 +31,10 @@ export class StudentViewComponent implements OnInit {
     sessionDate: undefined
   };
 
+  public evaluation: number;
+  public isEvaluationDialogVisible = false;
+  public assignmentToEvaluateId: number;
+
   public assignments: Assignment[] = [];
 
   constructor(
@@ -114,6 +118,20 @@ export class StudentViewComponent implements OnInit {
   private deleteAssignment(id: number): void {
     this.modulesService.deleteAssignment(id).pipe(
       tap(_ => this.assignments = this.assignments.filter(a => a.id !== id))
+    )
+      .subscribe();
+  }
+
+  public openEvaluationDialog(assignmentId: number): void {
+    this.assignmentToEvaluateId = assignmentId;
+    this.evaluation = null;
+    this.isEvaluationDialogVisible = true;
+  }
+
+  public evaluateSubmission(): void {
+    this.modulesService.evaluateSubmission(this.assignmentToEvaluateId, Math.floor(this.evaluation)).pipe(
+      tap(_ => this.initializeAssignments()),
+      tap(_ => this.isEvaluationDialogVisible = false)
     )
       .subscribe();
   }
