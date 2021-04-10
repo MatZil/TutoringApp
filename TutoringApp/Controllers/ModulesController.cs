@@ -235,6 +235,21 @@ namespace TutoringApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("assignments/{assignmentId}/download")]
+        public async Task<IActionResult> DownloadAssignment(int assignmentId, [FromQuery] string fileName)
+        {
+            try
+            {
+                var stream = await _assignmentsService.DownloadAssignmentFile(assignmentId, fileName);
+
+                return Ok(stream);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         #endregion
     }
 }

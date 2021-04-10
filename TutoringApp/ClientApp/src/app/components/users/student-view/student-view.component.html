@@ -5,9 +5,12 @@
   <h1>Assignments:</h1>
   <ol>
     <li *ngFor="let assignment of assignments">
-      <span>{{assignment.fileName}}</span>
+      <a [routerLink]="currentRoute"
+        (click)="downloadFile(assignment.id, assignment.fileName)">{{assignment.fileName}}</a>
       <span *ngIf="assignment.submissionFileName">
-        <span [style.font-weight]="'bold'"> - {{assignment.submissionFileName}}</span>
+        <span> - </span>
+        <a [routerLink]="currentRoute" (click)="downloadFile(assignment.id, assignment.submissionFileName)"
+          [style.font-weight]="'bold'">{{assignment.submissionFileName}}</a>
         <span *ngIf="!assignment.submissionEvaluation">
           <button pButton class="p-button-text" icon="pi pi-pencil"
             (click)="openEvaluationDialog(assignment.id)"></button>

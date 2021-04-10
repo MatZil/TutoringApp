@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using TutoringApp.Data.Dtos.Tutoring.Assignments;
 
@@ -12,5 +13,6 @@ namespace TutoringApp.Services.Interfaces
         Task UploadSubmission(int assignmentId, IFormFileCollection formFiles);
         Task EvaluateSubmission(int assignmentId, int evaluation);
         Task DeleteAssignment(int assignmentId);
+        Task<Stream> DownloadAssignmentFile(int assignmentId, string fileName);
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { tap } from 'rxjs/operators';
 import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
@@ -22,16 +22,21 @@ export class TutorViewComponent implements OnInit {
 
   public isSubmissionUploadDialogVisible = false;
 
+  public currentRoute: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private modulesService: ModulesService,
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.initializeRouteParams();
     this.initializeAssignments();
+
+    this.currentRoute = this.router.url;
   }
 
   private initializeRouteParams(): void {
@@ -62,5 +67,12 @@ export class TutorViewComponent implements OnInit {
       },
       err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error })
     );
+  }
+
+  public downloadFile(assignmentId: number, fileName: string): void {
+    this.modulesService.downloadAssignmentFile(assignmentId, fileName).pipe(
+
+    )
+      .subscribe();
   }
 }

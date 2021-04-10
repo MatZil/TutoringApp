@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHandler, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UrlService } from './url.service';
 import { Observable } from 'rxjs';
 
@@ -13,10 +13,12 @@ export class HttpService {
     private urlService: UrlService
   ) { }
 
-  public get(controller: string, endpoint: string, queryParams?: HttpParams): Observable<any> {
+  public get(controller: string, endpoint: string, queryParams?: HttpParams, isResponseTypeBlob = false): Observable<any> {
     const url = this.urlService.getApiEndpointUrl(controller, endpoint);
 
-    return this.httpClient.get<any>(url, { params: queryParams });
+    return !isResponseTypeBlob
+      ? this.httpClient.get<any>(url, { params: queryParams })
+      : this.httpClient.get(url, { params: queryParams, responseType: 'blob' });
   }
 
   public post(controller: string, endpoint: string, body: any, queryParams?: HttpParams): Observable<any> {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { tap } from 'rxjs/operators';
 import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
@@ -37,18 +37,23 @@ export class StudentViewComponent implements OnInit {
 
   public assignments: Assignment[] = [];
 
+  public currentRoute: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private tutoringSessionsService: TutoringSessionsService,
     private messageService: MessageService,
     private modulesService: ModulesService,
     private authService: AuthService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.initializeRouteParams();
     this.initializeAssignments();
+
+    this.currentRoute = this.router.url;
   }
 
   private initializeRouteParams(): void {
@@ -132,6 +137,13 @@ export class StudentViewComponent implements OnInit {
     this.modulesService.evaluateSubmission(this.assignmentToEvaluateId, Math.floor(this.evaluation)).pipe(
       tap(_ => this.initializeAssignments()),
       tap(_ => this.isEvaluationDialogVisible = false)
+    )
+      .subscribe();
+  }
+
+  public downloadFile(assignmentId: number, fileName: string): void {
+    this.modulesService.downloadAssignmentFile(assignmentId, fileName).pipe(
+
     )
       .subscribe();
   }

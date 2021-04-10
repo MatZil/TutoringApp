@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { ModuleNew } from 'src/app/models/modules/module-new';
 import { NamedEntity } from 'src/app/models/shared/named-entity';
 import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
 import { TutoringApplicationNew } from 'src/app/models/tutoring/tutoring-application-new';
 import { UserModuleMetadata } from 'src/app/models/users/user-module-metadata';
 import { HttpService } from '../http.service';
+import { saveAs } from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -71,5 +73,11 @@ export class ModulesService {
 
   public deleteAssignment(assignmentId: number): Observable<any> {
     return this.httpService.delete(this.modulesController, `assignments/${assignmentId}`);
+  }
+
+  public downloadAssignmentFile(assignmentId: number, fileName: string): Observable<any> {
+    return this.httpService.get(this.modulesController, `assignments/${assignmentId}/download?fileName=${fileName}`, null, true).pipe(
+      tap(stream => saveAs(stream, fileName))
+    );
   }
 }

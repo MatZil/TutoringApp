@@ -198,5 +198,31 @@ namespace TutoringApp.Services.Tutoring
 
             await _assignmentsRepository.Delete(assignment);
         }
+
+        public async Task<Stream> DownloadAssignmentFile(int assignmentId, string fileName)
+        {
+            var assignment = await _assignmentsRepository.GetById(assignmentId);
+            if (assignment is null)
+            {
+                throw new InvalidOperationException("Could not download file: assignment does not exist.");
+            }
+
+            var currentUserId = _currentUserService.GetUserId();
+            if (assignment.TutorId != currentUserId && assignment.StudentId != currentUserId)
+            {
+                throw new InvalidOperationException("Could not download file: you do not belong to this assignment.");
+            }
+
+            if (assignment.AssignmentFileName != fileName && assignment.SubmissionFileName != fileName)
+            {
+                throw new InvalidOperationException("Could not download file: it does not exist.");
+            }
+
+            var name = assignment.AssignmentFileName == fileName
+                ? fileName
+                : $"Submissions/{fileName}";
+
+            return File.OpenRead($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/{name}");
+        }
     }
 }
