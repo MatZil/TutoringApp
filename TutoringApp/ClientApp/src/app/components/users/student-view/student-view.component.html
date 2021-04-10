@@ -6,6 +6,9 @@
   <ol>
     <li *ngFor="let assignment of assignments">
       <span>{{assignment.fileName}}</span>
+      <span *ngIf="assignment.submissionFileName">
+        <span [style.font-weight]="'bold'"> - {{assignment.submissionFileName}}</span>
+      </span>
       <span class="assignment-delete-button">
         <button pButton class="p-button-danger p-button-text" icon="pi pi-trash"
           (click)="confirmAssignmentDelete(assignment.id)"></button>

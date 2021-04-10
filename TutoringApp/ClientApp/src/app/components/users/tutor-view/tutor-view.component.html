@@ -1,1 +1,19 @@
+<p-toast></p-toast>
+
+<div *ngIf="assignments.length" class="assignments">
+  <h1>Assignments:</h1>
+  <ol>
+    <li *ngFor="let assignment of assignments">
+      <span>{{assignment.fileName}}</span>
+      <span *ngIf="assignment.submissionFileName">
+        <span [style.font-weight]="'bold'"> - {{assignment.submissionFileName}}</span>
+      </span>
+      <span *ngIf="!assignment.submissionFileName" class="submission-upload-button">
+        <p-fileUpload chooseLabel="Submit" chooseIcon="pi pi-plus" [auto]="true" [customUpload]="true"
+          (uploadHandler)="uploadSubmission($event, assignment.id)" mode="basic"></p-fileUpload>
+      </span>
+    </li>
+  </ol>
+</div>
+
 <app-chat [receiverId]="tutorId" [moduleId]="moduleId"></app-chat>

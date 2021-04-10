@@ -191,7 +191,10 @@ namespace TutoringApp.Services.Tutoring
             }
 
             File.Delete($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/{assignment.AssignmentFileName}");
-            File.Delete($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions/{assignment.SubmissionFileName}");
+            if (!assignment.SubmissionFileName.IsNullOrEmpty())
+            {
+                File.Delete($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions/{assignment.SubmissionFileName}");
+            }
 
             await _assignmentsRepository.Delete(assignment);
         }
