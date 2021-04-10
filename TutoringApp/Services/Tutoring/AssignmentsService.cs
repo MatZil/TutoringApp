@@ -15,18 +15,15 @@ namespace TutoringApp.Services.Tutoring
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IRepository<Assignment> _assignmentsRepository;
-        private readonly ITimeService _timeService;
 
         private const string AssignmentsRoot = "Assignments/";
 
         public AssignmentsService(
             ICurrentUserService currentUserService,
-            IRepository<Assignment> assignmentsRepository,
-            ITimeService timeService)
+            IRepository<Assignment> assignmentsRepository)
         {
             _currentUserService = currentUserService;
             _assignmentsRepository = assignmentsRepository;
-            _timeService = timeService;
         }
 
         public async Task UpdateAssignments(int moduleId, string studentId, IFormFileCollection assignments)
@@ -59,7 +56,6 @@ namespace TutoringApp.Services.Tutoring
                 assignmentEntities.Add(new Assignment
                 {
                     AssignmentFileName = assignment.FileName,
-                    CreationDate = _timeService.GetCurrentTime(),
                     StudentId = studentId,
                     TutorId = tutorId,
                     ModuleId = moduleId
