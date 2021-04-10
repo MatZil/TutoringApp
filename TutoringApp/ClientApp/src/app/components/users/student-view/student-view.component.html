@@ -1,10 +1,15 @@
 <p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
 
 <div *ngIf="assignments.length" class="assignments">
   <h1>Assignments:</h1>
   <ol>
     <li *ngFor="let assignment of assignments">
-      {{assignment.fileName}}
+      <span>{{assignment.fileName}}</span>
+      <span class="assignment-delete-button">
+        <button pButton class="p-button-danger p-button-text" icon="pi pi-trash"
+          (click)="confirmAssignmentDelete(assignment.id)"></button>
+      </span>
     </li>
   </ol>
 </div>
@@ -15,7 +20,7 @@
       (click)="initializeTutoringSessionCreation()"></button>
     <button pButton label="Update Assignments" (click)="isAssignmentUploadDialogVisible = true"></button>
   </div>
-  
+
   <app-chat [receiverId]="studentId" [moduleId]="moduleId"></app-chat>
 </div>
 

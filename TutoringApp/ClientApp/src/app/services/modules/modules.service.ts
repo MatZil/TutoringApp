@@ -53,11 +53,23 @@ export class ModulesService {
     return this.httpService.delete(this.modulesController, `${moduleId}/students/${studentId}`, null);
   }
 
-  public updateAssignments(moduleId: number, studentId: string, fileFormData: FormData): Observable<any> {
+  public uploadAssignments(moduleId: number, studentId: string, fileFormData: FormData): Observable<any> {
     return this.httpService.patch(this.modulesController, `${moduleId}/students/${studentId}/assignments`, fileFormData);
   }
 
   public getAssignments(moduleId: number, tutorId: string, studentId: string): Observable<Assignment[]> {
     return this.httpService.get(this.modulesController, `${moduleId}/tutors/${tutorId}/students/${studentId}/assignments`);
+  }
+
+  public uploadSubmission(assignmentId: number, fileFormData: FormData): Observable<any> {
+    return this.httpService.post(this.modulesController, `assignments/${assignmentId}/submit`, fileFormData);
+  }
+
+  public evaluateSubmission(assignmentId: number, evaluation: number): Observable<any> {
+    return this.httpService.put(this.modulesController, `assignments/${assignmentId}/evaluate?evaluation=${evaluation}`, null);
+  }
+
+  public deleteAssignment(assignmentId: number): Observable<any> {
+    return this.httpService.delete(this.modulesController, `assignments/${assignmentId}`);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { tap } from 'rxjs/operators';
 import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
 import { TutoringSessionNew } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-new';
@@ -13,7 +13,8 @@ import { TutoringSessionsService } from 'src/app/services/tutoring/tutoring-sess
   templateUrl: './student-view.component.html',
   styleUrls: ['./student-view.component.scss'],
   providers: [
-    MessageService
+    MessageService,
+    ConfirmationService
   ]
 })
 export class StudentViewComponent implements OnInit {
@@ -37,7 +38,8 @@ export class StudentViewComponent implements OnInit {
     private tutoringSessionsService: TutoringSessionsService,
     private messageService: MessageService,
     private modulesService: ModulesService,
-    private authService: AuthService
+    private authService: AuthService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -92,12 +94,27 @@ export class StudentViewComponent implements OnInit {
       formData.append('file', file, file.name);
     }
 
-    this.modulesService.updateAssignments(this.moduleId, this.studentId, formData).subscribe(
+    this.modulesService.uploadAssignments(this.moduleId, this.studentId, formData).subscribe(
       _ => {
         this.isAssignmentUploadDialogVisible = false;
         this.initializeAssignments();
       },
       err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error })
     );
+  }
+
+  public confirmAssignmentDelete(id: number): void {
+    this.confirmationService.confirm({
+      header: 'Confirmation',
+      message: 'Are you sure you want to delete this assignment?',
+      accept: () => this.deleteAssignment(id)
+    });
+  }
+
+  private deleteAssignment(id: number): void {
+    this.modulesService.deleteAssignment(id).pipe(
+      tap(_ => this.assignments = this.assignments.filter(a => a.id !== id))
+    )
+      .subscribe();
   }
 }
