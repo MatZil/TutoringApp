@@ -9,7 +9,7 @@
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{ width: '19%' }">
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{ width: '18%' }">
         <div>
           <span>{{col.header}}</span>
           <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -27,6 +27,7 @@
       <td>{{student.studentYearDisplay}}</td>
       <td class="action-column">
         <button pButton icon="pi pi-comments" (click)="navigateToStudentView(student.id)"></button>
+        <button pButton icon="pi pi-times" class="p-button-danger" (click)="confirmStudentRemoval(student.id)"></button>
       </td>
     </tr>
   </ng-template>

@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+import { tap } from 'rxjs/operators';
 import { StudentCycleEnum } from 'src/app/models/enums/student-cycle-enum';
 import { Student } from 'src/app/models/users/student';
+import { ModulesService } from 'src/app/services/modules/modules.service';
 import { UsersService } from 'src/app/services/users/users.service';
 import { mapStudentYearToNumber } from 'src/app/utils/map-student-year-to-number';
 
 @Component({
   selector: 'app-student-table',
   templateUrl: './student-table.component.html',
-  styleUrls: ['./student-table.component.scss']
+  styleUrls: ['./student-table.component.scss'],
+  providers: [
+    ConfirmationService
+  ]
 })
 export class StudentTableComponent implements OnInit {
   public students: Student[] = [];
@@ -25,7 +31,9 @@ export class StudentTableComponent implements OnInit {
   constructor(
     private usersService: UsersService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modulesService: ModulesService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +62,21 @@ export class StudentTableComponent implements OnInit {
   //#region Event handlers
   public navigateToStudentView(studentId: string): void {
     this.router.navigateByUrl(`modules/${this.moduleId}/students/${studentId}`);
+  }
+
+  public confirmStudentRemoval(studentId: string): void {
+    this.confirmationService.confirm({
+      header: 'Confirmation',
+      message: 'Are you sure you want to remove this student?',
+      accept: () => this.removeStudent(studentId)
+    });
+  }
+
+  private removeStudent(studentId: string): void {
+    this.modulesService.removeTutorStudent(this.moduleId, studentId).pipe(
+      tap(_ => this.initializeStudents())
+    )
+      .subscribe();
   }
   //#endregion
 }
