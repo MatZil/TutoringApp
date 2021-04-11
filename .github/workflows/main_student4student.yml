@@ -23,8 +23,8 @@ jobs:
       with:
         dotnet-version: '5.0'
         
-    - name: Setup nugets
-      run: dotnet clean ./TutoringApp.sln --configuration Release && dotnet nuget locals all --clear
+    - name: Clean
+      run: dotnet clean && dotnet nuget locals all --clear
       
     - name: Build with dotnet
       run: dotnet build --configuration Release
