@@ -87,7 +87,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     JwtModule.forRoot({
       config: {
         tokenGetter: TokenGetter,
-        allowedDomains: ['https://localhost:5001']
+        allowedDomains: ['https://localhost:5001', 'https://www.student4student.azurewebsites.net']
       }
     }),
 
