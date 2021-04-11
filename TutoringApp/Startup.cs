@@ -48,6 +48,7 @@ namespace TutoringApp
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
