@@ -24,7 +24,7 @@ namespace TutoringApp.Controllers
             {
                 var userId = await _authService.Register(userRegistration);
 
-                Response.OnCompleted(async () => await _authService.SendConfirmationEmail(userId));
+                await _authService.SendConfirmationEmail(userId);
 
                 return Ok();
             }
