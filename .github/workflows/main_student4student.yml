@@ -22,7 +22,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0'
-
+        
+    - name: Setup nugets
+      run: dotnet clean ./TutoringApp.sln --configuration Release && dotnet nuget locals all --clear
+      
     - name: Build with dotnet
       run: dotnet build --configuration Release
 
