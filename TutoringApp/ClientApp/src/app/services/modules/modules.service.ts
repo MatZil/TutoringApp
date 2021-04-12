@@ -8,6 +8,7 @@ import { TutoringApplicationNew } from 'src/app/models/tutoring/tutoring-applica
 import { UserModuleMetadata } from 'src/app/models/users/user-module-metadata';
 import { HttpService } from '../http.service';
 import { saveAs } from 'file-saver';
+import { Module } from 'src/app/models/modules/module';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class ModulesService {
 
   public getModules(): Observable<NamedEntity[]> {
     return this.httpService.get(this.modulesController, '');
+  }
+
+  public getModule(moduleId: number): Observable<Module> {
+    return this.httpService.get(this.modulesController, moduleId.toString());
   }
 
   public createModule(moduleNew: ModuleNew): Observable<number> {

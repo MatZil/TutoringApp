@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { AppConstants } from 'src/app/app.constants';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { ModulesService } from 'src/app/services/modules/modules.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -12,13 +14,18 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class ToolbarComponent implements OnInit {
   public userMenuItems: MenuItem[];
 
+  public moduleName = '';
+  public moduleId: number;
+
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private modulesService: ModulesService
   ) { }
 
   ngOnInit(): void {
     this.initializeIsAuthenticatedSubscription();
+    this.initializeRouteChangeSubscription();
   }
 
   //#region Initialization
@@ -30,6 +37,29 @@ export class ToolbarComponent implements OnInit {
         this.initializeUnauthenticatedItems();
       }
     });
+  }
+
+  private initializeRouteChangeSubscription(): void {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(event => (event as NavigationEnd).url),
+      map(url => url.split('/').slice(1, 3)),
+      tap(urlSegments => this.resetModuleName(urlSegments[0])),
+      filter(urlSegments => urlSegments[0] === 'modules'),
+      map(urlSegments => +urlSegments[1]),
+      filter(moduleId => moduleId !== this.moduleId),
+      tap(moduleId => this.moduleId = moduleId),
+      switchMap(moduleId => this.modulesService.getModule(moduleId)),
+      tap(module => this.moduleName = module.name)
+    )
+      .subscribe();
+  }
+
+  private resetModuleName(urlStart: string): void {
+    if (urlStart !== 'modules') {
+      this.moduleName = '';
+      this.moduleId = null;
+    }
   }
 
   private initializeAuthenticatedItems(): void {

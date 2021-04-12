@@ -83,6 +83,21 @@ namespace TutoringApp.Controllers
             return Ok(metadata);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetModule(int id)
+        {
+            try
+            {
+                var module = await _modulesService.GetModule(id);
+
+                return Ok(module);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         #region Tutoring applications
 
         [HttpPost("{moduleId}/apply")]

@@ -120,5 +120,23 @@ namespace TutoringAppTests.UnitTests.Modules
             Assert.False(metadata.CanResignFromTutoring);
             Assert.True(metadata.CanApplyForTutoring);
         }
+
+        [Theory]
+        [InlineData(3)]
+        public async Task When_GettingModule_Expect_CorrectModule(int moduleId)
+        {
+            var module = await _modulesService.GetModule(moduleId);
+
+            Assert.Equal("Analysis of Algorithms", module.Name);
+        }
+
+        [Theory]
+        [InlineData(99)]
+        public async Task When_GettingNonExistingModule_Expect_Exception(int moduleId)
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+                await _modulesService.GetModule(moduleId)
+            );
+        }
     }
 }

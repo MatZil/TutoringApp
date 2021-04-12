@@ -12,5 +12,6 @@ namespace TutoringApp.Services.Interfaces
         Task<int> Create(ModuleNewDto moduleNew);
         Task Delete(int id);
         Task<UserModuleMetadataDto> GetUserModuleMetadata(int moduleId);
+        Task<ModuleDto> GetModule(int moduleId);
     }
 }

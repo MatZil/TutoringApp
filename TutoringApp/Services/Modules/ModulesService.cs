@@ -80,5 +80,20 @@ namespace TutoringApp.Services.Modules
 
             return metadata;
         }
+
+        public async Task<ModuleDto> GetModule(int moduleId)
+        {
+            var module = await _modulesRepository.GetById(moduleId);
+
+            if (module is null)
+            {
+                throw new InvalidOperationException($"Could not fetch module (id='{moduleId}')): it does not exist.");
+            }
+
+            return new ModuleDto
+            {
+                Name = module.Name
+            };
+        }
     }
 }
