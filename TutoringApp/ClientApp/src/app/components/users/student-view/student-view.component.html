@@ -32,6 +32,7 @@
     <button pButton label="Create Session" class="p-button-success" icon="pi pi-plus"
       (click)="initializeTutoringSessionCreation()"></button>
     <button pButton label="Update Assignments" (click)="isAssignmentUploadDialogVisible = true"></button>
+    <button pButton label="Ignore" (click)="confirmStudentIgnore()" class="p-button-danger"></button>
   </div>
 
   <app-chat [receiverId]="studentId" [moduleId]="moduleId"></app-chat>

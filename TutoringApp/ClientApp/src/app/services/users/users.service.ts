@@ -22,6 +22,10 @@ export class UsersService {
   public getStudents(moduleId: number): Observable<Student[]> {
     return this.httpService.get(this.usersController, `students?moduleId=${moduleId}`);
   }
+
+  public ignoreStudent(studentId: string): Observable<any> {
+    return this.httpService.post(this.usersController, `${studentId}/ignore`, null);
+  }
   //#endregion
 
   //#region Admin side

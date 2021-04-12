@@ -1,3 +1,4 @@
+import { LocationStrategy } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -7,6 +8,7 @@ import { TutoringSessionNew } from 'src/app/models/tutoring/tutoring-sessions/tu
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ModulesService } from 'src/app/services/modules/modules.service';
 import { TutoringSessionsService } from 'src/app/services/tutoring/tutoring-sessions.service';
+import { UsersService } from 'src/app/services/users/users.service';
 
 @Component({
   selector: 'app-student-view',
@@ -46,7 +48,9 @@ export class StudentViewComponent implements OnInit {
     private modulesService: ModulesService,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private usersService: UsersService,
+    private locationStrategy: LocationStrategy
   ) { }
 
   ngOnInit(): void {
@@ -144,6 +148,21 @@ export class StudentViewComponent implements OnInit {
   public downloadFile(assignmentId: number, fileName: string): void {
     this.modulesService.downloadAssignmentFile(assignmentId, fileName).pipe(
 
+    )
+      .subscribe();
+  }
+
+  public confirmStudentIgnore(): void {
+    this.confirmationService.confirm({
+      header: 'Confirmation',
+      message: 'Do you really want to ignore this student? This applies to all modules.',
+      accept: () => this.ignoreStudent()
+    });
+  }
+
+  private ignoreStudent(): void {
+    this.usersService.ignoreStudent(this.studentId).pipe(
+      tap(_ => this.locationStrategy.back())
     )
       .subscribe();
   }
