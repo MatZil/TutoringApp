@@ -31,7 +31,11 @@
   <div class="action-bar">
     <button pButton label="Create Session" class="p-button-success" icon="pi pi-plus"
       (click)="initializeTutoringSessionCreation()"></button>
-    <button pButton label="Update Assignments" (click)="isAssignmentUploadDialogVisible = true"></button>
+    <span class="assignments-upload-button">
+      <p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" (uploadHandler)="updateAssignments($event)"
+        accept=".pdf" chooseLabel="Upload Assignments" mode="basic">
+      </p-fileUpload>
+    </span>
     <button pButton label="Ignore" (click)="confirmStudentIgnore()" class="p-button-danger"></button>
   </div>
 
@@ -53,10 +57,4 @@
   <input pInputText type="number" [(ngModel)]="evaluation" [style.width]="'60px'">
   <button pButton label="Evaluate" (click)="evaluateSubmission()"
     [disabled]="evaluation < 1 || evaluation > 10"></button>
-</p-dialog>
-
-<p-dialog header="Update student's assignments" [modal]="true" [(visible)]="isAssignmentUploadDialogVisible">
-  <p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" (uploadHandler)="updateAssignments($event)"
-    accept=".pdf" label="Upload Assignments">
-  </p-fileUpload>
 </p-dialog>

@@ -24,7 +24,6 @@ export class StudentViewComponent implements OnInit {
   public moduleId: number;
 
   public isSessionCreationDialogVisible = false;
-  public isAssignmentUploadDialogVisible = false;
   public minSessionDate = new Date();
   public tutoringSessionNew: TutoringSessionNew = {
     studentId: undefined,
@@ -108,10 +107,7 @@ export class StudentViewComponent implements OnInit {
     }
 
     this.modulesService.uploadAssignments(this.moduleId, this.studentId, formData).subscribe(
-      _ => {
-        this.isAssignmentUploadDialogVisible = false;
-        this.initializeAssignments();
-      },
+      _ => this.initializeAssignments(),
       err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error })
     );
   }
