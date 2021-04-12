@@ -82,5 +82,12 @@ namespace TutoringApp.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public virtual async Task DeleteMany(IEnumerable<TEntity> entities)
+        {
+            ItemSet.RemoveRange(entities);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

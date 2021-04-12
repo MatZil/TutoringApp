@@ -52,7 +52,6 @@ namespace TutoringApp.Configurations
                 .AddScoped<IRepository<TutoringSession>, TutoringSessionsRepository>()
                 .AddScoped<IRepository<StudentTutor>, StudentTutorsRepository>()
                 .AddScoped<IModuleTutorsRepository, ModuleTutorsRepository>()
-                .AddScoped<IStudentTutorIgnoresRepository, StudentTutorIgnoresRepository>()
                 ;
         }
     }

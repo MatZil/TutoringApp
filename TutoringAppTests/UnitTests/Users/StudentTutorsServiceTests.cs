@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TutoringApp.Data;
 using TutoringApp.Data.Models;
+using TutoringApp.Data.Models.Enums;
 using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Users;
@@ -36,10 +37,11 @@ namespace TutoringAppTests.UnitTests.Users
 
             _studentTutorsService = new StudentTutorsService(
                 new StudentTutorsRepository(setup.Context),
-                new StudentTutorIgnoresRepository(setup.Context),
                 _currentUserServiceMock.Object,
                 new Mock<ILogger<IStudentTutorsService>>().Object,
-                new ModuleTutorsRepository(setup.Context)
+                new ModuleTutorsRepository(setup.Context),
+                new TutoringSessionsRepository(setup.Context),
+                new StudentTutorIgnoresRepository(setup.Context)
             );
         }
 
@@ -119,6 +121,57 @@ namespace TutoringAppTests.UnitTests.Users
             var studentExists = await _context.StudentTutors.AnyAsync(st => st.StudentId == student.Id && st.Tutor.Email == "matas.tutorius1@ktu.edu");
 
             Assert.False(studentExists);
+        }
+
+        [Theory]
+        [InlineData("matas.zilinskas@ktu.edu")]
+        public async Task When_IgnoringStudent_Expect_StudentIgnored(string studentEmail)
+        {
+            var tutor = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(tutor.Id);
+
+            var student = await _userManager.FindByEmailAsync(studentEmail);
+            await _studentTutorsService.IgnoreTutorStudent(student.Id);
+
+            var exists = await _context.StudentTutorIgnores.AnyAsync(sti => sti.TutorId == tutor.Id && sti.StudentId == student.Id);
+
+            Assert.True(exists);
+        }
+
+        [Theory]
+        [InlineData("matas.zilinskas@ktu.edu")]
+        public async Task When_IgnoringStudent_Expect_UpcomingSessionsDeleted(string studentEmail)
+        {
+            var tutor = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(tutor.Id);
+
+            var student = await _userManager.FindByEmailAsync(studentEmail);
+            await _studentTutorsService.IgnoreTutorStudent(student.Id);
+
+            var exists = await _context.TutoringSessions.AnyAsync(ts => ts.TutorId == tutor.Id && ts.StudentId == student.Id && ts.Status == TutoringSessionStatusEnum.Upcoming);
+
+            Assert.False(exists);
+        }
+
+        [Theory]
+        [InlineData("matas.zilinskas@ktu.edu")]
+        public async Task When_IgnoringStudent_Expect_StudentTutorDeleted(string studentEmail)
+        {
+            var tutor = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(tutor.Id);
+
+            var student = await _userManager.FindByEmailAsync(studentEmail);
+            await _studentTutorsService.IgnoreTutorStudent(student.Id);
+
+            var exists = await _context.StudentTutors.AnyAsync(ts => ts.TutorId == tutor.Id && ts.StudentId == student.Id);
+
+            Assert.False(exists);
         }
     }
 }

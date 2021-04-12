@@ -7,5 +7,6 @@ namespace TutoringApp.Services.Interfaces
         Task AddStudentTutor(string tutorId, int moduleId);
         Task RemoveStudentTutor(string tutorId, int moduleId);
         Task RemoveTutorStudent(string studentId, int moduleId);
+        Task IgnoreTutorStudent(string studentId);
     }
 }

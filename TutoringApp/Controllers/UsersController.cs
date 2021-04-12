@@ -16,15 +16,18 @@ namespace TutoringApp.Controllers
         private readonly IUsersService _usersService;
         private readonly IEmailService _emailService;
         private readonly IChatsService _chatsService;
+        private readonly IStudentTutorsService _studentTutorsService;
 
         public UsersController(
             IUsersService usersService, 
             IEmailService emailService, 
-            IChatsService chatsService)
+            IChatsService chatsService,
+            IStudentTutorsService studentTutorsService)
         {
             _usersService = usersService;
             _emailService = emailService;
             _chatsService = chatsService;
+            _studentTutorsService = studentTutorsService;
         }
 
         [HttpGet("tutors")]
@@ -87,6 +90,22 @@ namespace TutoringApp.Controllers
                 return Ok();
             }
             catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{studentId}/ignore")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> IgnoreStudent(string studentId)
+        {
+            try
+            {
+                await _studentTutorsService.IgnoreTutorStudent(studentId);
+
+                return Ok();
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
