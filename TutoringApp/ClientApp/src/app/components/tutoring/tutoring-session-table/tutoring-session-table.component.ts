@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { TutoringSessionEvaluationEnum } from 'src/app/models/enums/tutoring-session-evaluation-enum';
 import { TutoringSessionStatusEnum } from 'src/app/models/enums/tutoring-session-status-enum';
 import { TutoringSession } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session';
@@ -11,7 +11,7 @@ import { TutoringSessionsService } from 'src/app/services/tutoring/tutoring-sess
   templateUrl: './tutoring-session-table.component.html',
   styleUrls: ['./tutoring-session-table.component.scss'],
   providers: [
-    ConfirmationService
+    MessageService
   ]
 })
 export class TutoringSessionTableComponent implements OnInit, OnChanges {
@@ -40,7 +40,7 @@ export class TutoringSessionTableComponent implements OnInit, OnChanges {
 
   constructor(
     private tutoringSessionsService: TutoringSessionsService,
-    private confirmationService: ConfirmationService
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -76,11 +76,14 @@ export class TutoringSessionTableComponent implements OnInit, OnChanges {
       reason: this.cancellationReason
     };
 
-    this.tutoringSessionsService.cancelTutoringSession(this.sessionToCancelId, tutoringSessionCancel).subscribe(_ => {
-      this.isCancelDialogVisible = false;
-      this.sessionToCancelId = null;
-      this.cancellationReason = '';
-      this.sessionCancelled.emit();
-    });
+    this.tutoringSessionsService.cancelTutoringSession(this.sessionToCancelId, tutoringSessionCancel).subscribe(
+      _ => {
+        this.isCancelDialogVisible = false;
+        this.sessionToCancelId = null;
+        this.cancellationReason = '';
+        this.sessionCancelled.emit();
+      },
+      err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error })
+    );
   }
 }

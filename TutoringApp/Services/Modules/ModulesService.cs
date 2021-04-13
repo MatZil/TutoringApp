@@ -34,11 +34,10 @@ namespace TutoringApp.Services.Modules
 
         public async Task<IEnumerable<NamedEntityDto>> GetAll()
         { 
-            // TODO: filter for lecturers.
             var modules = await _modulesRepository.GetAll();
-            var dtos = _mapper.Map<IEnumerable<NamedEntityDto>>(modules);
+            var moduleDtos = _mapper.Map<IEnumerable<NamedEntityDto>>(modules);
 
-            return dtos;
+            return moduleDtos;
         }
 
         public async Task<int> Create(ModuleNewDto moduleNew)

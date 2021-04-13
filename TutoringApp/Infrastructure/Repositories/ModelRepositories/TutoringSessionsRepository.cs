@@ -36,12 +36,12 @@ namespace TutoringApp.Infrastructure.Repositories.ModelRepositories
 
         public override async Task<TutoringSession> GetById(int id)
         {
-            var items = await ItemSet
+            var session = await ItemSet
                 .Include(ts => ts.Tutor)
                 .Include(ts => ts.Student)
                 .FirstOrDefaultAsync(obj => obj.Id.Equals(id));
 
-            return items;
+            return session;
         }
     }
 }

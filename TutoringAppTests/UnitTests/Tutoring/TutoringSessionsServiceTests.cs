@@ -138,6 +138,41 @@ namespace TutoringAppTests.UnitTests.Tutoring
         }
 
         [Fact]
+        public async Task When_CancellingSubscribedTutoringSession_Expect_NewSessionCreated()
+        {
+            var cancelDto = new TutoringSessionCancelDto { Reason = "Test reason" };
+            await _tutoringSessionsService.CancelTutoringSession(3, cancelDto);
+
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 4);
+
+            Assert.Equal(TutoringSessionStatusEnum.Upcoming, session.Status);
+            Assert.Equal(DateTimeOffset.Now.AddDays(14).Date, session.SessionDate.Date);
+        }
+
+        [Fact]
+        public async Task When_CancellingTutoringSessionAsForeignUser_Expect_Exception()
+        {
+
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.tutorius2@ktu.edu").Id);
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _tutoringSessionsService.CancelTutoringSession(3, new TutoringSessionCancelDto { Reason = "any" })
+            );
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task When_CancellingNotUpcomingTutoringSession_Expect_Exception(int sessionId)
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _tutoringSessionsService.CancelTutoringSession(sessionId, new TutoringSessionCancelDto { Reason = "any" })
+            );
+        }
+
+        [Fact]
         public async Task When_InvertingSessionSubscription_Expect_SubscriptionInverted()
         {
             await _tutoringSessionsService.InvertTutoringSessionSubscription(3);

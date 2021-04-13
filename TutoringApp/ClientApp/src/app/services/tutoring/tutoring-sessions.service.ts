@@ -32,7 +32,7 @@ export class TutoringSessionsService {
   }
 
   public cancelTutoringSession(sessionId: number, tutoringSessionCancel: TutoringSessionCancel): Observable<any> {
-    return this.httpService.put(this.sessionsController, sessionId.toString(), tutoringSessionCancel);
+    return this.httpService.post(this.sessionsController, `${sessionId}/cancel`, tutoringSessionCancel);
   }
 
   public invertTutoringSession(sessionId: number): Observable<any> {
