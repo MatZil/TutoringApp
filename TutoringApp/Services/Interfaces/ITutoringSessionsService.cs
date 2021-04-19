@@ -14,5 +14,6 @@ namespace TutoringApp.Services.Interfaces
         Task InvertTutoringSessionSubscription(int id);
         Task<SessionEvaluationEmailAggregate> EvaluateTutoringSession(int id, TutoringSessionEvaluationDto evaluationDto);
         Task RecheckUpcomingTutoringSessions();
+        Task<TutoringSessionOnGoingDto> GetOnGoingSession();
     }
 }

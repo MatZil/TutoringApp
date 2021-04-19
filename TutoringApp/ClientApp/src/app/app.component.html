@@ -1,3 +1,12 @@
+<p-toast>
+  <ng-template let-message pTemplate="message">
+    <span>
+      You have ongoing tutoring session. Click
+      <a [routerLink]="message.detail">here</a>
+      to join.
+    </span>
+  </ng-template>
+</p-toast>
 <app-toolbar></app-toolbar>
 <router-outlet></router-outlet>
 

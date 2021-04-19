@@ -45,6 +45,17 @@ namespace TutoringAppTests.Setup.Seeds
                 {
                     Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu"),
                     Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
+                    CreationDate = DateTimeOffset.Now.AddHours(-5),
+                    IsReminderSent = true,
+                    IsSubscribed = false,
+                    ModuleId = 1,
+                    SessionDate = DateTimeOffset.Now.AddMinutes(-3),
+                    Status = TutoringSessionStatusEnum.Upcoming
+                },
+                new TutoringSession
+                {
+                    Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu"),
+                    Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
                     CreationDate = DateTimeOffset.Now.AddHours(-1),
                     IsReminderSent = false,
                     IsSubscribed = true,

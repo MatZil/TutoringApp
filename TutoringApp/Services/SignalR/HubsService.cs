@@ -29,5 +29,12 @@ namespace TutoringApp.Services.SignalR
                 .User(userId)
                 .SendAsync("tutoring-session-finished", sessionNotification);
         }
+
+        public async Task SendSessionOnGoingNotificationToUser(string userId, TutoringSessionOnGoingDto sessionNotification)
+        {
+            await _hubContext.Clients
+                .User(userId)
+                .SendAsync("tutoring-session-on-going", sessionNotification);
+        }
     }
 }

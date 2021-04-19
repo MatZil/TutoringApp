@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TutoringSession } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session';
 import { TutoringSessionCancel } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-cancel';
 import { TutoringSessionEvaluation } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-evaluation';
 import { TutoringSessionFinishedNotification } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-finished-notification';
 import { TutoringSessionNew } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-new';
+import { TutoringSessionOnGoing } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-on-going';
 import { HttpService } from '../http.service';
 
 @Injectable({
@@ -14,6 +15,9 @@ export class TutoringSessionsService {
   private sessionsController = 'TutoringSessions';
 
   private tutoringSessionFinishedSubject = new BehaviorSubject<TutoringSessionFinishedNotification>(null);
+
+  private onGoingTutoringSessionSubject = new Subject<TutoringSessionOnGoing>();
+  public onGoingTutoringSession$ = this.onGoingTutoringSessionSubject.asObservable();
 
   constructor(
     private httpService: HttpService
@@ -49,5 +53,13 @@ export class TutoringSessionsService {
 
   public tutoringSessionFinished(): Observable<TutoringSessionFinishedNotification> {
     return this.tutoringSessionFinishedSubject.asObservable();
+  }
+
+  public getOnGoingSession(): Observable<TutoringSessionOnGoing> {
+    return this.httpService.get(this.sessionsController, 'on-going');
+  }
+
+  public setOngoingSession(session: TutoringSessionOnGoing): void {
+    this.onGoingTutoringSessionSubject.next(session);
   }
 }

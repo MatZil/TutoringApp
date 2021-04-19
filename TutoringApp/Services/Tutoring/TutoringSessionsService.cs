@@ -221,8 +221,10 @@ namespace TutoringApp.Services.Tutoring
                     session.StatusChangeDate = currentTime;
                     await _tutoringSessionsRepository.Update(session);
 
-                    var notification = new TutoringSessionFinishedNotificationDto { SessionId = session.Id, TutorName = session.Tutor.FirstName + " " + session.Tutor.LastName };
+                    var notification = new TutoringSessionFinishedNotificationDto { SessionId = session.Id, TutorName = session.Tutor.FirstName + " " + session.Tutor.LastName, IsStudent = true };
+                    var notification2 = new TutoringSessionFinishedNotificationDto { IsStudent = false };
                     await _hubsService.SendSessionFinishedNotificationToUser(session.StudentId, notification);
+                    await _hubsService.SendSessionFinishedNotificationToUser(session.TutorId, notification2);
 
                     if (session.IsSubscribed)
                     {
@@ -248,7 +250,46 @@ namespace TutoringApp.Services.Tutoring
                     session.IsReminderSent = true;
                     await _tutoringSessionsRepository.Update(session);
                 }
+                else if (timeDifference.TotalMinutes < 0 && timeDifference.TotalMinutes > -30)
+                {
+                    var onGoing = new TutoringSessionOnGoingDto
+                    {
+                        ModuleId = session.ModuleId,
+                        ParticipantId = session.TutorId
+                    };
+                    await _hubsService.SendSessionOnGoingNotificationToUser(session.StudentId, onGoing);
+                    var onGoing2 = new TutoringSessionOnGoingDto
+                    {
+                        ModuleId = session.ModuleId,
+                        ParticipantId = session.StudentId
+                    };
+                    await _hubsService.SendSessionOnGoingNotificationToUser(session.TutorId, onGoing2);
+                }
             }
+        }
+
+        public async Task<TutoringSessionOnGoingDto> GetOnGoingSession()
+        {
+            var userId = _currentUserService.GetUserId();
+            var currentTime = _timeService.GetCurrentTime();
+
+            var sessions = await _tutoringSessionsRepository.GetFiltered(ts =>
+                ts.Status == TutoringSessionStatusEnum.Upcoming
+                && (ts.TutorId == userId || ts.StudentId == userId)
+            );
+
+            var session = sessions.FirstOrDefault(s => (s.SessionDate - currentTime).TotalMinutes < 0);
+
+            return session != null
+                ? new TutoringSessionOnGoingDto
+                {
+                    ModuleId = session.ModuleId,
+                    IsStudent = session.TutorId != userId,
+                    ParticipantId = session.TutorId != userId
+                        ? session.TutorId
+                        : session.StudentId
+                }
+                : null;
         }
 
         private void ValidateSessionEvaluation(TutoringSession session)

@@ -117,5 +117,20 @@ namespace TutoringApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("on-going")]
+        public async Task<IActionResult> GetOnGoingTutoringSession()
+        {
+            try
+            {
+                var session = await _tutoringSessionsService.GetOnGoingSession();
+
+                return Ok(session);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

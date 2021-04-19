@@ -8,5 +8,6 @@ namespace TutoringApp.Services.Interfaces
     {
         Task SendChatNotificationToUser(string userId, ChatMessageDto chatMessage);
         Task SendSessionFinishedNotificationToUser(string userId, TutoringSessionFinishedNotificationDto sessionNotification);
+        Task SendSessionOnGoingNotificationToUser(string userId, TutoringSessionOnGoingDto tutoringSessionOnGoing);
     }
 }

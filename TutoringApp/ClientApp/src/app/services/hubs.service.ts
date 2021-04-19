@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HubConnection, HubConnectionBuilder, HttpTransportType, HubConnectionState, LogLevel } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder, HttpTransportType, HubConnectionState } from '@microsoft/signalr';
 import { filter, tap } from 'rxjs/operators';
 import { ChatMessage } from '../models/chats/chat-message';
 import { TutoringSessionFinishedNotification } from '../models/tutoring/tutoring-sessions/tutoring-session-finished-notification';
+import { TutoringSessionOnGoing } from '../models/tutoring/tutoring-sessions/tutoring-session-on-going';
 import { TokenGetter } from '../utils/token-getter';
 import { AuthService } from './auth/auth.service';
 import { ChatsService } from './chats/chats.service';
@@ -29,7 +30,6 @@ export class HubsService {
   private startMainHubConnection(): void {
     this.authService.isAuthenticated$.pipe(
       filter(isAuth => isAuth),
-      tap(_ => console.log('User Authenticated: Initializing SignalR...')),
       tap(_ => this.initalizeHubConnection())
     ).subscribe();
   }
@@ -47,27 +47,26 @@ export class HubsService {
         .start()
         .then(() => this.addChatMessageReceivedListener())
         .then(() => this.addTutoringSessionFinishedListener())
+        .then(() => this.addOnGoingSessionListener())
         .catch(err => console.log(err));
     }
   }
 
   private addChatMessageReceivedListener(): void {
-    console.log('Opening Chat Listener...');
-
     this.hubConnection.on('chat-message-received', (chatMessage: ChatMessage) => {
       this.chatsService.updateReceivedChatMessage(chatMessage);
     });
-
-    console.log('Chat Listener Opened.');
   }
 
   private addTutoringSessionFinishedListener(): void {
-    console.log('Opening Tutoring Session Listener...');
-
     this.hubConnection.on('tutoring-session-finished', (notification: TutoringSessionFinishedNotification) => {
       this.tutoringSessionsService.finishTutoringSession(notification);
     });
+  }
 
-    console.log('Tutoring Session Listener Opened.');
+  private addOnGoingSessionListener(): void {
+    this.hubConnection.on('tutoring-session-on-going', (notification: TutoringSessionOnGoing) => {
+      this.tutoringSessionsService.setOngoingSession(notification);
+    });
   }
 }

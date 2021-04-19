@@ -53,6 +53,7 @@ namespace TutoringAppTests.UnitTests.Tutoring
 
             Assert.Collection(sessions,
                 s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
+                s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Finished, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Cancelled, s.Status)
                 );
@@ -68,6 +69,7 @@ namespace TutoringAppTests.UnitTests.Tutoring
             var sessions = await _tutoringSessionsService.GetLearningSessions();
 
             Assert.Collection(sessions,
+                s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Finished, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Cancelled, s.Status)
@@ -141,9 +143,9 @@ namespace TutoringAppTests.UnitTests.Tutoring
         public async Task When_CancellingSubscribedTutoringSession_Expect_NewSessionCreated()
         {
             var cancelDto = new TutoringSessionCancelDto { Reason = "Test reason" };
-            await _tutoringSessionsService.CancelTutoringSession(3, cancelDto);
+            await _tutoringSessionsService.CancelTutoringSession(4, cancelDto);
 
-            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 4);
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 5);
 
             Assert.Equal(TutoringSessionStatusEnum.Upcoming, session.Status);
             Assert.Equal(DateTimeOffset.Now.AddDays(14).Date, session.SessionDate.Date);
@@ -175,9 +177,9 @@ namespace TutoringAppTests.UnitTests.Tutoring
         [Fact]
         public async Task When_InvertingSessionSubscription_Expect_SubscriptionInverted()
         {
-            await _tutoringSessionsService.InvertTutoringSessionSubscription(3);
+            await _tutoringSessionsService.InvertTutoringSessionSubscription(4);
 
-            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 3);
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 4);
 
             Assert.False(session.IsSubscribed);
         }
@@ -201,6 +203,15 @@ namespace TutoringAppTests.UnitTests.Tutoring
 
             Assert.Equal(TutoringSessionEvaluationEnum.Good, session.Evaluation);
             Assert.Equal("Lacked charisma", session.EvaluationComment);
+        }
+
+        [Fact]
+        public async Task When_GettingOnGoingSession_Expect_CorrectSession()
+        {
+            var session = await _tutoringSessionsService.GetOnGoingSession();
+
+            Assert.Equal(1, session.ModuleId);
+            Assert.Equal(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id, session.ParticipantId);
         }
     }
 }

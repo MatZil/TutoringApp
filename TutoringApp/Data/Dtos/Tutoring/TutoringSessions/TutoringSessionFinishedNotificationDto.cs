@@ -4,5 +4,6 @@
     {
         public int SessionId { get; set; }
         public string TutorName { get; set; }
+        public bool IsStudent { get; set; }
     }
 }
