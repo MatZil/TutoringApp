@@ -173,5 +173,33 @@ namespace TutoringAppTests.UnitTests.Users
 
             Assert.False(exists);
         }
+
+        [Fact]
+        public async Task When_GettingIgnoredStudents_Expect_CorrectStudents()
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.tutorius3@ktu.edu").Id);
+
+            var ignores = await _studentTutorsService.GetIgnoredStudents();
+
+            Assert.Collection(ignores,
+                i => Assert.Equal("Matas Zilinskas", i.Name)
+                );
+        }
+
+        [Fact]
+        public async Task When_UnignoringStudent_Expect_IgnoreRemoved()
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.tutorius3@ktu.edu").Id);
+
+            await _studentTutorsService.UnignoreStudent(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id);
+
+            var exists = await _context.StudentTutorIgnores.AnyAsync();
+
+            Assert.False(exists);
+        }
     }
 }

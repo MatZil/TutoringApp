@@ -126,6 +126,38 @@ namespace TutoringApp.Controllers
             }
         }
 
+        [HttpPost("{studentId}/unignore")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> UnignoreStudent(string studentId)
+        {
+            try
+            {
+                await _studentTutorsService.UnignoreStudent(studentId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("ignored")]
+        [Authorize(Roles = AppRoles.Student)]
+        public async Task<IActionResult> GetIgnoredStudents()
+        {
+            try
+            {
+                var students = await _studentTutorsService.GetIgnoredStudents();
+
+                return Ok(students);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         #region Chats
 
         [HttpPost("{userId}/chat-messages")]

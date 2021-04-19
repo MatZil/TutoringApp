@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TutoringApp.Data.Dtos.Users;
 using TutoringApp.Data.Models;
 using TutoringApp.Data.Models.Enums;
 using TutoringApp.Data.Models.JoiningTables;
@@ -123,6 +125,32 @@ namespace TutoringApp.Services.Users
 
             var studentTutorEntities = await _studentTutorsRepository.GetFiltered(st => st.TutorId == currentUserId && st.StudentId == studentId);
             await _studentTutorsRepository.DeleteMany(studentTutorEntities);
+        }
+
+        public async Task<IEnumerable<IgnoredStudentDto>> GetIgnoredStudents()
+        {
+            var currentUserId = _currentUserService.GetUserId();
+            var ignores = await _studentTutorIgnoresRepository.GetFiltered(i => i.TutorId == currentUserId);
+
+            return ignores.Select(i => new IgnoredStudentDto
+            {
+                Id = i.StudentId,
+                Name = $"{i.Student.FirstName} {i.Student.LastName}"
+            });
+        }
+
+        public async Task UnignoreStudent(string studentId)
+        {
+            var ignoreQuery = await _studentTutorIgnoresRepository.GetFiltered(i => 
+                i.TutorId == _currentUserService.GetUserId()
+                && i.StudentId == studentId
+                );
+
+            var ignore = ignoreQuery.FirstOrDefault();
+            if (ignore != null)
+            {
+                await _studentTutorIgnoresRepository.Delete(ignore);
+            }
         }
 
         private async Task RemoveUpcomingTutoringSessions(string studentId, string tutorId, int? moduleId = null)

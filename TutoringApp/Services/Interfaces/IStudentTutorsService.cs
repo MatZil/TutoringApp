@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using TutoringApp.Data.Dtos.Users;
 
 namespace TutoringApp.Services.Interfaces
 {
@@ -8,5 +10,7 @@ namespace TutoringApp.Services.Interfaces
         Task RemoveStudentTutor(string tutorId, int moduleId);
         Task RemoveTutorStudent(string studentId, int moduleId);
         Task IgnoreTutorStudent(string studentId);
+        Task<IEnumerable<IgnoredStudentDto>> GetIgnoredStudents();
+        Task UnignoreStudent(string studentId);
     }
 }
