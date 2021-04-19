@@ -1,0 +1,19 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<p-sidebar [(visible)]="isVisible" position="right" [baseZIndex]="11000">
+  <div *ngIf="!ignoredStudents.length">
+    <h2>Your ignore list is empty.</h2>
+  </div>
+  <div *ngIf="ignoredStudents.length">
+    <h2>Ignored Students</h2>
+    <ol>
+      <li *ngFor="let student of ignoredStudents">
+        <span>{{student.name}}</span>
+        <span>
+          <button pButton class="p-button-danger p-button-text" icon="pi pi-trash"
+            (click)="confirmStudentUnignore(student.id)"></button>
+        </span>
+      </li>
+    </ol>
+  </div>
+</p-sidebar>

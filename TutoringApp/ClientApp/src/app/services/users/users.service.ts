@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IgnoredStudent } from 'src/app/models/users/ignored-student';
 import { Student } from 'src/app/models/users/student';
 import { Tutor } from 'src/app/models/users/tutor';
 import { UserDto } from 'src/app/models/users/user-dto';
@@ -26,6 +27,14 @@ export class UsersService {
 
   public ignoreStudent(studentId: string): Observable<any> {
     return this.httpService.post(this.usersController, `${studentId}/ignore`, null);
+  }
+
+  public unignoreStudent(studentId: string): Observable<any> {
+    return this.httpService.post(this.usersController, `${studentId}/unignore`, null);
+  }
+
+  public getIgnoredStudents(): Observable<IgnoredStudent[]> {
+    return this.httpService.get(this.usersController, 'ignored');
   }
 
   public getUser(userId: string): Observable<UserDto> {

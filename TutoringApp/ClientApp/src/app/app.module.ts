@@ -50,6 +50,8 @@ import { LearningSessionsComponent } from './components/tutoring/learning-sessio
 import { CalendarModule } from 'primeng/calendar';
 import { RatingModule } from 'primeng/rating';
 import { FileUploadModule } from 'primeng/fileupload';
+import { UserIgnoresSidebarComponent } from './components/users/user-ignores-sidebar/user-ignores-sidebar.component';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -74,6 +76,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     TutoringSessionTableComponent,
     TutoringSessionsComponent,
     LearningSessionsComponent,
+    UserIgnoresSidebarComponent,
   ],
   imports: [
     BrowserModule,
@@ -112,6 +115,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     CalendarModule,
     RatingModule,
     FileUploadModule,
+    SidebarModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy }
