@@ -25,10 +25,10 @@ export class UserIgnoresSidebarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.initializeIgnoredStudents();
   }
 
   public openSidebar(): void {
+    this.initializeIgnoredStudents();
     this.isVisible = true;
   }
 
