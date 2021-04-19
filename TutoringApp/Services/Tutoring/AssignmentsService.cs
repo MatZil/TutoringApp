@@ -88,17 +88,6 @@ namespace TutoringApp.Services.Tutoring
 
         public async Task<IEnumerable<AssignmentDto>> GetAssignments(int moduleId, string tutorId, string studentId)
         {
-            var userId = _currentUserService.GetUserId();
-            var currentUserIsStudentTutor = await _studentTutorsRepository.Exists(st =>
-                st.ModuleId == moduleId
-                && (st.TutorId == userId || st.StudentId == userId)
-            );
-
-            if (!currentUserIsStudentTutor)
-            {
-                throw new InvalidOperationException("Could not fetch assignments: you are neither the tutor nor the student.");
-            }
-
             var existingAssignments = await _assignmentsRepository.GetFiltered(a =>
                 a.ModuleId == moduleId
                 && a.TutorId == tutorId
@@ -127,20 +116,19 @@ namespace TutoringApp.Services.Tutoring
         }
         private async Task<Assignment> ValidateSubmissionUpload(int assignmentId, IFormFileCollection formFiles)
         {
+            var assignment = await _assignmentsRepository.GetById(assignmentId);
+
             if (formFiles.Count != 1)
             {
                 throw new InvalidOperationException("Could not upload submission: you may only upload a single file.");
             }
-
-            var currentUserId = _currentUserService.GetUserId();
-
-            var assignment = await _assignmentsRepository.GetById(assignmentId);
 
             if (assignment is null)
             {
                 throw new InvalidOperationException("Could not upload submission: assignment does not exist.");
             }
 
+            var currentUserId = _currentUserService.GetUserId();
             if (assignment.StudentId != currentUserId)
             {
                 throw new InvalidOperationException("Could not upload submission: you are not the student of this assignment.");

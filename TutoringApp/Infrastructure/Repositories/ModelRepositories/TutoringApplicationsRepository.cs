@@ -20,5 +20,13 @@ namespace TutoringApp.Infrastructure.Repositories.ModelRepositories
                 .Include(ta => ta.Student)
                 .ToListAsync();
         }
+
+        public override async Task<TutoringApplication> GetById(int id)
+        {
+            return await ItemSet
+                .Include(ta => ta.Module)
+                .Include(ta => ta.Student)
+                .FirstOrDefaultAsync(ta => ta.Id == id);
+        }
     }
 }

@@ -62,7 +62,7 @@ export class TutoringSessionTableComponent implements OnInit, OnChanges {
     });
   }
 
-  public invertTutoringSessions(sessionId: number): void {
+  public invertTutoringSession(sessionId: number): void {
     this.tutoringSessionsService.invertTutoringSession(sessionId).subscribe();
   }
 

@@ -102,15 +102,10 @@ namespace TutoringApp.Services.Tutoring
 
         public async Task<(string email, string module)> RejectApplication(int applicationId)
         {
-            var student = await _userManager.Users
-                .Include(u => u.TutoringApplications)
-                .ThenInclude(a => a.Module)
-                .FirstAsync(u => u.TutoringApplications.Any(ta => ta.Id == applicationId));
-
-            var application = student.TutoringApplications.First(ta => ta.Id == applicationId);
+            var application = await _tutoringApplicationsRepository.GetById(applicationId);
             await _tutoringApplicationsRepository.Delete(application);
 
-            return (student.Email, application.Module.Name);
+            return (application.Student.Email, application.Module.Name);
         }
 
         private void ValidateTutoringApplication(AppUser user, string userId, int moduleId)
