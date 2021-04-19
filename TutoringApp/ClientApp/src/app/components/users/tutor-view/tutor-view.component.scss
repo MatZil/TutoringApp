@@ -4,3 +4,16 @@
   vertical-align: middle;
   margin-left: -1em;
 }
+
+.chat-header {
+  background-color: gainsboro;
+  height: 55px;
+}
+
+.participant-name {
+  font-size: xx-large;
+  font-weight: bold;
+  position: absolute;
+  left: 20px;
+  margin-top: 0.3em;
+}

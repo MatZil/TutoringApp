@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Student } from 'src/app/models/users/student';
 import { Tutor } from 'src/app/models/users/tutor';
+import { UserDto } from 'src/app/models/users/user-dto';
 import { UserUnconfirmed } from 'src/app/models/users/user-unconfirmed';
 import { HttpService } from '../http.service';
 
@@ -25,6 +26,10 @@ export class UsersService {
 
   public ignoreStudent(studentId: string): Observable<any> {
     return this.httpService.post(this.usersController, `${studentId}/ignore`, null);
+  }
+
+  public getUser(userId: string): Observable<UserDto> {
+    return this.httpService.get(this.usersController, userId);
   }
   //#endregion
 

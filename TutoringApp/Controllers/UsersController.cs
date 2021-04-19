@@ -39,6 +39,21 @@ namespace TutoringApp.Controllers
             return Ok(tutors);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(string id)
+        {
+            try
+            {
+                var user = await _usersService.GetUser(id);
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("students")]
         [Authorize(Roles = AppRoles.Student)]
         public async Task<IActionResult> GetStudents([FromQuery] int moduleId)

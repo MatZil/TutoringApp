@@ -163,5 +163,23 @@ namespace TutoringAppTests.UnitTests.Users
                 Assert.Equal(StudentYearEnum.FourthYear, student.StudentYear);
             });
         }
+
+        [Fact]
+        public async Task When_GettingUser_Expect_CorrectUser()
+        {
+            var user = await _userManager.FindByEmailAsync("matas.tutorius1@ktu.edu");
+
+            var actualUser = await _usersService.GetUser(user.Id);
+            Assert.Equal("Matas FirstTutor", actualUser.Name);
+        }
+
+
+        [Fact]
+        public async Task When_GettingIncorrectUser_Expect_Exception()
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () =>
+                await _usersService.GetUser("don't exist")
+            );
+        }
     }
 }

@@ -1,13 +1,3 @@
-.action-bar {
-  background-color: gainsboro;
-}
-
-.action-bar > * {
-  margin-left: 0.5em;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-
 .assignments {
   max-height: 175px;
   overflow-y: scroll;
@@ -18,4 +8,27 @@
 }
 .assignments-upload-button {
   display: inline-block;
+}
+
+.chat-header {
+  background-color: gainsboro;
+  height: 55px;
+}
+
+.action-bar {
+  position: absolute;
+  right: 25px;
+}
+
+.action-bar > * {
+  margin-left: 0.5em;
+  margin-top: 0.5em;
+}
+
+.participant-name {
+  font-size: xx-large;
+  font-weight: bold;
+  position: absolute;
+  left: 20px;
+  margin-top: 0.3em;
 }

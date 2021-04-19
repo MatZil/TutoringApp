@@ -27,20 +27,24 @@
   </ol>
 </div>
 
-<div class="chat">
-  <div class="action-bar">
-    <button pButton label="Create Session" class="p-button-success" icon="pi pi-plus"
-      (click)="initializeTutoringSessionCreation()"></button>
-    <span class="assignments-upload-button">
-      <p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" (uploadHandler)="updateAssignments($event)"
-        accept=".pdf" chooseLabel="Upload Assignments" mode="basic">
-      </p-fileUpload>
+<div class="chat-header">
+  <div>
+    <span class="participant-name">
+      {{studentName}}
     </span>
-    <button pButton label="Ignore" (click)="confirmStudentIgnore()" class="p-button-danger"></button>
+    <span class="action-bar">
+      <button pButton label="Create Session" class="p-button-success" icon="pi pi-plus"
+        (click)="initializeTutoringSessionCreation()"></button>
+      <span class="assignments-upload-button">
+        <p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" (uploadHandler)="updateAssignments($event)"
+          accept=".pdf" chooseLabel="Upload Assignments" mode="basic">
+        </p-fileUpload>
+      </span>
+      <button pButton label="Ignore" (click)="confirmStudentIgnore()" class="p-button-danger"></button>
+    </span>
   </div>
-
-  <app-chat [receiverId]="studentId" [moduleId]="moduleId"></app-chat>
 </div>
+<app-chat [receiverId]="studentId" [moduleId]="moduleId"></app-chat>
 
 <p-dialog header="Create a New Session!" [modal]="true" [(visible)]="isSessionCreationDialogVisible">
   <div [style.margin-bottom]="'0.5em'">

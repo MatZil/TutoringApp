@@ -40,6 +40,8 @@ export class StudentViewComponent implements OnInit {
 
   public currentRoute: string;
 
+  public studentName: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private tutoringSessionsService: TutoringSessionsService,
@@ -55,6 +57,7 @@ export class StudentViewComponent implements OnInit {
   ngOnInit(): void {
     this.initializeRouteParams();
     this.initializeAssignments();
+    this.initializeStudent();
 
     this.currentRoute = this.router.url;
   }
@@ -63,6 +66,13 @@ export class StudentViewComponent implements OnInit {
     this.activatedRoute.params.pipe(
       tap(params => this.studentId = params.id),
       tap(params => this.moduleId = +params.moduleId)
+    )
+      .subscribe();
+  }
+
+  private initializeStudent(): void {
+    this.usersService.getUser(this.studentId).pipe(
+      tap(u => this.studentName = u.name)
     )
       .subscribe();
   }

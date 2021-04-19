@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ModulesService } from 'src/app/services/modules/modules.service';
+import { UsersService } from 'src/app/services/users/users.service';
 
 @Component({
   selector: 'app-tutor-view',
@@ -24,19 +25,30 @@ export class TutorViewComponent implements OnInit {
 
   public currentRoute: string;
 
+  public tutorName: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private modulesService: ModulesService,
     private authService: AuthService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private usersService: UsersService
   ) { }
 
   ngOnInit(): void {
     this.initializeRouteParams();
     this.initializeAssignments();
+    this.initializeTutor();
 
     this.currentRoute = this.router.url;
+  }
+
+  private initializeTutor(): void {
+    this.usersService.getUser(this.tutorId).pipe(
+      tap(u => this.tutorName = u.name)
+    )
+      .subscribe();
   }
 
   private initializeRouteParams(): void {

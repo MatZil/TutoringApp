@@ -130,6 +130,16 @@ namespace TutoringApp.Services.Users
             await _moduleTutorsRepository.Delete(moduleId, currentUserId);
         }
 
+        public async Task<UserDto> GetUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            return new UserDto
+            {
+                Name = $"{user.FirstName} {user.LastName}"
+            };
+        }
+
         private void ValidateUserConfirmation(AppUser user, string id)
         {
             if (user is null)

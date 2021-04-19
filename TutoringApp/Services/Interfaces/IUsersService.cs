@@ -13,5 +13,6 @@ namespace TutoringApp.Services.Interfaces
         Task<string> ConfirmUser(string id);
         Task<string> RejectUser(string id);
         Task ResignFromTutoring(int moduleId);
+        Task<UserDto> GetUser(string userId);
     }
 }
