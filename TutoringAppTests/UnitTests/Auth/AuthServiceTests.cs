@@ -98,26 +98,6 @@ namespace TutoringAppTests.UnitTests.Auth
         }
 
         [Fact]
-        public async Task When_RegisteringWithExistingEmail_Expect_Exception()
-        {
-            var userRegistration = new UserRegistrationDto
-            {
-                FirstName = "Matas",
-                LastName = "Zilinskas",
-                Email = "matas.zilinskas@ktu.edu",
-                Password = "Password1",
-                Faculty = "Informatics",
-                StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.SecondYear,
-                StudyBranch = "Software Systems"
-            };
-
-            await Assert.ThrowsAsync<ArgumentException>(async () =>
-                await _authService.Register(userRegistration)
-            );
-        }
-
-        [Fact]
         public async Task When_RegisteringWithoutKtuEmail_Expect_Exception()
         {
             var userRegistration = new UserRegistrationDto

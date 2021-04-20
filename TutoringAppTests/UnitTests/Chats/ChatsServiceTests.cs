@@ -113,18 +113,20 @@ namespace TutoringAppTests.UnitTests.Chats
             Assert.Equal(receiver.Id, chatMessagePosted.ReceiverId);
         }
 
-        [Fact]
-        public async Task When_PostingChatMessageToRandomUser_Expect_Exception()
+        [Theory]
+        [InlineData("matas.zilinskas@ktu.edu")]
+        [InlineData("any")]
+        public async Task When_PostingChatMessageToRandomUser_Expect_Exception(string receiverEmail)
         {
             _currentUserServiceMock
                 .Setup(s => s.GetUserId())
                 .Returns(_userManager.Users.First(u => u.Email == "matas.tutorius2@ktu.edu").Id);
 
-            var receiver = await _userManager.FindByEmailAsync("matas.zilinskas@ktu.edu");
+            var receiver = await _userManager.FindByEmailAsync(receiverEmail);
             var chatMessageNewDto = new ChatMessageNewDto { Content = "Testing..." };
 
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                    await _chatsService.PostChatMessage(receiver.Id, chatMessageNewDto)
+                    await _chatsService.PostChatMessage(receiver?.Id, chatMessageNewDto)
             );
         }
     }
