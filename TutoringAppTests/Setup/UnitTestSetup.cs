@@ -77,7 +77,7 @@ namespace TutoringAppTests.Setup
 
             var userManager = new UserManager<AppUser>(
                 userStore,
-                Options.Create(new IdentityOptions()),
+                Options.Create(new IdentityOptions { User = new UserOptions { RequireUniqueEmail = true } }),
                 new PasswordHasher<AppUser>(),
                 Array.Empty<IUserValidator<AppUser>>(),
                 Array.Empty<IPasswordValidator<AppUser>>(),

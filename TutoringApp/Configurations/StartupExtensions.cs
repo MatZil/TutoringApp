@@ -50,9 +50,7 @@ namespace TutoringApp.Configurations
             services
                 .AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme
-                        
-                        = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(options =>

@@ -11,6 +11,7 @@ using TutoringApp.Data.Models;
 using TutoringApp.Data.Models.Enums;
 using TutoringApp.Services.Auth;
 using TutoringApp.Services.Interfaces;
+using TutoringApp.Services.Shared;
 using TutoringAppTests.Setup;
 using Xunit;
 
@@ -20,6 +21,7 @@ namespace TutoringAppTests.UnitTests.Auth
     {
         private readonly IAuthService _authService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IEncodingService _encodingService;
 
         private readonly Mock<IEmailService> _emailServiceMock;
 
@@ -32,6 +34,8 @@ namespace TutoringAppTests.UnitTests.Auth
 
             _emailServiceMock = new Mock<IEmailService>();
 
+            _encodingService = new EncodingService();
+
             var setup = new UnitTestSetup();
             _userManager = setup.UserManager;
 
@@ -40,13 +44,14 @@ namespace TutoringAppTests.UnitTests.Auth
                 UnitTestSetup.Mapper,
                 webTokenServiceMock.Object,
                 new Mock<IUrlService>().Object,
-                new Mock<IEncodingService>().Object,
+                _encodingService,
                 _emailServiceMock.Object
                 );
         }
 
         [Theory]
         [InlineData("matas.pavardenis@ktu.edu")]
+        [InlineData("matas.emailunconfirmed@ktu.edu")]
         public async Task When_Registering_Expect_UserRegistered(string email)
         {
             var userRegistration = new UserRegistrationDto
@@ -93,6 +98,26 @@ namespace TutoringAppTests.UnitTests.Auth
         }
 
         [Fact]
+        public async Task When_RegisteringWithExistingEmail_Expect_Exception()
+        {
+            var userRegistration = new UserRegistrationDto
+            {
+                FirstName = "Matas",
+                LastName = "Zilinskas",
+                Email = "matas.zilinskas@ktu.edu",
+                Password = "Password1",
+                Faculty = "Informatics",
+                StudentCycle = StudentCycleEnum.Bachelor,
+                StudentYear = StudentYearEnum.SecondYear,
+                StudyBranch = "Software Systems"
+            };
+
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
+                await _authService.Register(userRegistration)
+            );
+        }
+
+        [Fact]
         public async Task When_RegisteringWithoutKtuEmail_Expect_Exception()
         {
             var userRegistration = new UserRegistrationDto
@@ -110,6 +135,33 @@ namespace TutoringAppTests.UnitTests.Auth
             await Assert.ThrowsAsync<ArgumentException>(async () =>
                 await _authService.Register(userRegistration)
             );
+        }
+
+        [Fact]
+        public async Task When_ConfirmingEmailOfNonExistingUser_ExpectException()
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+                await _authService.ConfirmEmail("non existing", "a")
+            );
+        }
+
+        [Fact]
+        public async Task When_ConfirmingEmailWithInvalidToken_ExpectException()
+        {
+            var encodedMalformedToken = _encodingService.GetWebEncodedString("a");
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _authService.ConfirmEmail("matas.zilinskas@ktu.edu", encodedMalformedToken)
+            );
+        }
+
+        [Fact]
+        public async Task When_ConfirmingEmailWithValidToken_Expect_NoException()
+        {
+            var user = await _userManager.FindByEmailAsync("matas.zilinskas@ktu.edu");
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var encodedToken = _encodingService.GetWebEncodedString(token);
+
+            await _authService.ConfirmEmail("matas.zilinskas@ktu.edu", encodedToken);
         }
 
         [Fact]
