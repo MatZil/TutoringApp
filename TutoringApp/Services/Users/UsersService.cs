@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,20 +18,17 @@ namespace TutoringApp.Services.Users
         private readonly UserManager<AppUser> _userManager;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
-        private readonly ILogger<IUsersService> _logger;
         private readonly IModuleTutorsRepository _moduleTutorsRepository;
 
         public UsersService(
             UserManager<AppUser> userManager,
             ICurrentUserService currentUserService,
             IMapper mapper,
-            ILogger<IUsersService> logger,
             IModuleTutorsRepository moduleTutorsRepository)
         {
             _userManager = userManager;
             _currentUserService = currentUserService;
             _mapper = mapper;
-            _logger = logger;
             _moduleTutorsRepository = moduleTutorsRepository;
         }
 
@@ -144,23 +140,17 @@ namespace TutoringApp.Services.Users
         {
             if (user is null)
             {
-                var errorMessage = $"Could not confirm user (id='{id}'): User does not exist.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(id);
+                throw new InvalidOperationException($"Could not confirm user (id='{id}'): User does not exist.");
             }
 
             if (!user.EmailConfirmed)
             {
-                var errorMessage = $"Could not confirm user (id='{id}'): User hasn't confirmed his email yet.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(id);
+                throw new InvalidOperationException($"Could not confirm user (id='{id}'): User hasn't confirmed his email yet.");
             }
 
             if (user.IsConfirmed)
             {
-                var errorMessage = $"Could not confirm user (id='{id}'): User is already confirmed.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(id);
+                throw new InvalidOperationException($"Could not confirm user (id='{id}'): User is already confirmed.");
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
 using System;
@@ -38,7 +37,6 @@ namespace TutoringAppTests.UnitTests.Auth
 
             _authService = new AuthService(
                 setup.UserManager,
-                new Mock<ILogger<IAuthService>>().Object,
                 UnitTestSetup.Mapper,
                 webTokenServiceMock.Object,
                 new Mock<IUrlService>().Object,

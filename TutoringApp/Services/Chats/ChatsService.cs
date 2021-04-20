@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +16,6 @@ namespace TutoringApp.Services.Chats
         private readonly IRepository<ChatMessage> _chatMessagesRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly UserManager<AppUser> _userManager;
-        private readonly ILogger<IChatsService> _logger;
         private readonly ITimeService _timeService;
         private readonly IHubsService _hubsService;
 
@@ -25,14 +23,12 @@ namespace TutoringApp.Services.Chats
             IRepository<ChatMessage> chatMessagesRepository,
             ICurrentUserService currentUserService,
             UserManager<AppUser> userManager,
-            ILogger<IChatsService> logger,
             ITimeService timeService,
             IHubsService hubsService)
         {
             _chatMessagesRepository = chatMessagesRepository;
             _currentUserService = currentUserService;
             _userManager = userManager;
-            _logger = logger;
             _timeService = timeService;
             _hubsService = hubsService;
         }
@@ -75,9 +71,7 @@ namespace TutoringApp.Services.Chats
 
             if (receiver is null)
             {
-                var errorMessage = $"Could not send message to user (id = '{receiverId}'): user does not exist";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not send message to user (id = '{receiverId}'): user does not exist");
             }
 
             var senderId = _currentUserService.GetUserId();
@@ -86,9 +80,7 @@ namespace TutoringApp.Services.Chats
 
             if (!isStudent && !isTutor)
             {
-                var errorMessage = $"Could not send message to user (id = '{receiverId}'): he is neither your student nor tutor.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not send message to user (id = '{receiverId}'): user does not exist");
             }
         }
 
@@ -97,9 +89,7 @@ namespace TutoringApp.Services.Chats
             var receiver = await _userManager.FindByIdAsync(receiverId);
             if (receiver is null)
             {
-                var errorMessage = $"Could not get messages from user (id = '{receiverId}'): he does not exist.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not get messages from user (id = '{receiverId}'): he does not exist.");
             }
 
             var senderId = _currentUserService.GetUserId();

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Linq;
@@ -38,7 +37,6 @@ namespace TutoringAppTests.UnitTests.Users
             _studentTutorsService = new StudentTutorsService(
                 new StudentTutorsRepository(setup.Context),
                 _currentUserServiceMock.Object,
-                new Mock<ILogger<IStudentTutorsService>>().Object,
                 new ModuleTutorsRepository(setup.Context),
                 new TutoringSessionsRepository(setup.Context),
                 new StudentTutorIgnoresRepository(setup.Context),

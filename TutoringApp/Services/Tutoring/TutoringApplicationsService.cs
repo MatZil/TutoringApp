@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,20 +16,17 @@ namespace TutoringApp.Services.Tutoring
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ICurrentUserService _currentUserService;
-        private readonly ILogger<ITutoringApplicationsService> _logger;
         private readonly ITimeService _timeService;
         private readonly IRepository<TutoringApplication> _tutoringApplicationsRepository;
 
         public TutoringApplicationsService(
             UserManager<AppUser> userManager,
             ICurrentUserService currentUserService,
-            ILogger<ITutoringApplicationsService> logger,
             ITimeService timeService,
             IRepository<TutoringApplication> tutoringApplicationsRepository)
         {
             _userManager = userManager;
             _currentUserService = currentUserService;
-            _logger = logger;
             _timeService = timeService;
             _tutoringApplicationsRepository = tutoringApplicationsRepository;
         }
@@ -112,16 +108,12 @@ namespace TutoringApp.Services.Tutoring
         {
             if (user is null)
             {
-                var errorMessage = $"Could not apply for tutoring: user (id='{userId}') was not found.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not apply for tutoring: user (id='{userId}') was not found.");
             }
 
             if (user.TutorModules.Any(tm => tm.ModuleId == moduleId))
             {
-                var errorMessage = $"Could not apply for tutoring: user (id='{userId}') is already a tutor in this module.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not apply for tutoring: user (id='{userId}') is already a tutor in this module.");
             }
         }
     }

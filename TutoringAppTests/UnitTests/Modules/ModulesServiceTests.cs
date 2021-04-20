@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Linq;
@@ -37,8 +36,7 @@ namespace TutoringAppTests.UnitTests.Modules
             _modulesService = new ModulesService(
                 new ModulesRepository(setup.Context),
                 UnitTestSetup.Mapper,
-                _currentUserServiceMock.Object,
-                new Mock<ILogger<IModulesService>>().Object
+                _currentUserServiceMock.Object
                 );
         }
 

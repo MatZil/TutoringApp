@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,18 +17,15 @@ namespace TutoringApp.Services.Modules
         private readonly IRepository<Module> _modulesRepository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
-        private readonly ILogger<IModulesService> _logger;
 
         public ModulesService(
             IRepository<Module> modulesRepository,
             IMapper mapper,
-            ICurrentUserService currentUserService,
-            ILogger<IModulesService> logger)
+            ICurrentUserService currentUserService)
         {
             _modulesRepository = modulesRepository;
             _mapper = mapper;
             _currentUserService = currentUserService;
-            _logger = logger;
         }
 
         public async Task<IEnumerable<NamedEntityDto>> GetAll()
@@ -56,9 +52,7 @@ namespace TutoringApp.Services.Modules
             {
                 if (module.ModuleTutors.Any())
                 {
-                    var errorMessage = $"Could not delete module (id='{id}'): it contains some tutors.";
-                    _logger.LogError(errorMessage);
-                    throw new InvalidOperationException(errorMessage);
+                    throw new InvalidOperationException($"Could not delete module (id='{id}'): it contains some tutors.");
                 }
 
                 await _modulesRepository.Delete(module);

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -18,7 +17,6 @@ namespace TutoringApp.Services.Auth
     public class AuthService : IAuthService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly ILogger<IAuthService> _logger;
         private readonly IMapper _mapper;
         private readonly IWebTokenService _webTokenService;
         private readonly IUrlService _urlService;
@@ -27,7 +25,6 @@ namespace TutoringApp.Services.Auth
 
         public AuthService(
             UserManager<AppUser> userManager,
-            ILogger<IAuthService> logger,
             IMapper mapper,
             IWebTokenService webTokenService, 
             IUrlService urlService,
@@ -35,7 +32,6 @@ namespace TutoringApp.Services.Auth
             IEmailService emailService)
         {
             _userManager = userManager;
-            _logger = logger;
             _mapper = mapper;
             _webTokenService = webTokenService;
             _urlService = urlService;
@@ -54,9 +50,7 @@ namespace TutoringApp.Services.Auth
 
             if (!identityResult.Succeeded)
             {
-                var errorMessage = $"Could not register user: {identityResult.Errors.First().Description}";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not register user: {identityResult.Errors.First().Description}");
             }
 
             await _userManager.AddToRoleAsync(user, AppRoles.Student);
@@ -92,15 +86,12 @@ namespace TutoringApp.Services.Auth
                 var identityResult = await _userManager.ConfirmEmailAsync(user, decodedToken);
                 if (!identityResult.Succeeded)
                 {
-                    _logger.LogInformation($"Could not confirm {email}: {identityResult.Errors.First()}");
                     throw new InvalidOperationException($"Could not confirm {email} because the token was incorrect.");
                 }
             }
             else
             {
-                var errorMessage = $"Could not confirm {email} because it is not registered.";
-                _logger.LogInformation(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not confirm {email} because it is not registered.");
             }
         }
 
@@ -125,9 +116,7 @@ namespace TutoringApp.Services.Auth
         {
             if (!userRegistration.Email.IsKtuEmail())
             {
-                const string errorMessage = "Could not register user: email is not in ktu.edu domain.";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException("Could not register user: email is not in ktu.edu domain.");
             }
 
             if (
@@ -137,9 +126,7 @@ namespace TutoringApp.Services.Auth
                 || userRegistration.StudentYear == StudentYearEnum.Undefined
                 )
             {
-                const string errorMessage = "Could not register user: incomplete information.";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException("Could not register user: incomplete information.");
             }
         }
 
@@ -147,31 +134,23 @@ namespace TutoringApp.Services.Auth
         {
             if (user is null)
             {
-                var errorMessage = $"Could not login: email '{userLogin.Email}' was not found.";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException($"Could not login: email '{userLogin.Email}' was not found.");
             }
 
             if (!user.EmailConfirmed)
             {
-                var errorMessage = $"Could not login: user '{userLogin.Email}' was not confirmed via email.";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException($"Could not login: user '{userLogin.Email}' was not confirmed via email.");
             }
 
             if (!user.IsConfirmed)
             {
-                var errorMessage = $"Could not login: user '{userLogin.Email}' was not confirmed by our Administrator just yet.";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException($"Could not login: user '{userLogin.Email}' was not confirmed by our Administrator just yet.");
             }
 
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, userLogin.Password);
             if (!isPasswordValid)
             {
-                var errorMessage = $"Could not login: password was not correct for user '{userLogin.Email}'";
-                _logger.LogError(errorMessage);
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException($"Could not login: password was not correct for user '{userLogin.Email}'");
             }
         }
         #endregion

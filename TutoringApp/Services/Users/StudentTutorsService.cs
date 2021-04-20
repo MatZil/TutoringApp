@@ -1,5 +1,4 @@
 ﻿using IdentityServer4.Extensions;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +18,6 @@ namespace TutoringApp.Services.Users
     {
         private readonly IRepository<StudentTutor> _studentTutorsRepository;
         private readonly ICurrentUserService _currentUserService;
-        private readonly ILogger<IStudentTutorsService> _logger;
         private readonly IModuleTutorsRepository _moduleTutorsRepository;
         private readonly IRepository<TutoringSession> _tutoringSessionsRepository;
         private readonly IRepository<StudentTutorIgnore> _studentTutorIgnoresRepository;
@@ -28,7 +26,6 @@ namespace TutoringApp.Services.Users
         public StudentTutorsService(
             IRepository<StudentTutor> studentTutorsRepository,
             ICurrentUserService currentUserService,
-            ILogger<IStudentTutorsService> logger,
             IModuleTutorsRepository moduleTutorsRepository,
             IRepository<TutoringSession> tutoringSessionsRepository,
             IRepository<StudentTutorIgnore> studentTutorIgnoresRepository,
@@ -36,7 +33,6 @@ namespace TutoringApp.Services.Users
         {
             _studentTutorsRepository = studentTutorsRepository;
             _currentUserService = currentUserService;
-            _logger = logger;
             _moduleTutorsRepository = moduleTutorsRepository;
             _tutoringSessionsRepository = tutoringSessionsRepository;
             _studentTutorIgnoresRepository = studentTutorIgnoresRepository;
@@ -48,25 +44,19 @@ namespace TutoringApp.Services.Users
             var currentUserId = _currentUserService.GetUserId();
             if (currentUserId == tutorId)
             {
-                var errorMessage = $"Could not add tutor (id='{tutorId}'): you can't add yourself.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not add tutor (id='{tutorId}'): you can't add yourself.");
             }
 
             var tutorExists = await _moduleTutorsRepository.Exists(moduleId, tutorId);
             if (!tutorExists)
             {
-                var errorMessage = $"Could not add tutor (id='{tutorId}'): not found.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not add tutor (id='{tutorId}'): not found.");
             }
 
             var tutorIgnoresStudent = await _studentTutorIgnoresRepository.Exists(sti => sti.TutorId == tutorId && sti.StudentId == currentUserId);
             if (tutorIgnoresStudent)
             {
-                var errorMessage = $"Could not add tutor (id='{tutorId}'): he has ignored you.";
-                _logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                throw new InvalidOperationException($"Could not add tutor (id='{tutorId}'): he has ignored you.");
             }
 
             var studentTutor = new StudentTutor

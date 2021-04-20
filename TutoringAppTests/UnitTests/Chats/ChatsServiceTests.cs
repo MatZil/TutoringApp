@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Linq;
@@ -40,7 +39,6 @@ namespace TutoringAppTests.UnitTests.Chats
                 new ChatMessagesRepository(setup.Context),
                 _currentUserServiceMock.Object,
                 setup.UserManager,
-                new Mock<ILogger<IChatsService>>().Object,
                 new TimeService(),
                 new Mock<IHubsService>().Object
                 );

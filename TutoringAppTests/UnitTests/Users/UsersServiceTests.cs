@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -37,7 +36,6 @@ namespace TutoringAppTests.UnitTests.Users
                 setup.UserManager,
                 _currentUserServiceMock.Object,
                 UnitTestSetup.Mapper,
-                new Mock<ILogger<IUsersService>>().Object,
                 new ModuleTutorsRepository(setup.Context)
             );
         }
