@@ -1,5 +1,6 @@
 export interface TutoringSessionFinishedNotification {
   sessionId: number;
   tutorName: string;
-  isStudent: boolean;
+  openNotificationDialog: boolean;
+  participantId: string;
 }

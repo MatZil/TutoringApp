@@ -4,6 +4,7 @@
     {
         public int SessionId { get; set; }
         public string TutorName { get; set; }
-        public bool IsStudent { get; set; }
+        public bool OpenNotificationDialog { get; set; }
+        public string ParticipantId { get; set; }
     }
 }

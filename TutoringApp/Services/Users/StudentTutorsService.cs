@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TutoringApp.Data.Dtos.Tutoring.TutoringSessions;
 using TutoringApp.Data.Dtos.Users;
 using TutoringApp.Data.Models;
 using TutoringApp.Data.Models.Enums;
@@ -21,6 +22,7 @@ namespace TutoringApp.Services.Users
         private readonly IModuleTutorsRepository _moduleTutorsRepository;
         private readonly IRepository<TutoringSession> _tutoringSessionsRepository;
         private readonly IRepository<StudentTutorIgnore> _studentTutorIgnoresRepository;
+        private readonly IHubsService _hubsService;
 
         public StudentTutorsService(
             IRepository<StudentTutor> studentTutorsRepository,
@@ -28,7 +30,8 @@ namespace TutoringApp.Services.Users
             ILogger<IStudentTutorsService> logger,
             IModuleTutorsRepository moduleTutorsRepository,
             IRepository<TutoringSession> tutoringSessionsRepository,
-            IRepository<StudentTutorIgnore> studentTutorIgnoresRepository)
+            IRepository<StudentTutorIgnore> studentTutorIgnoresRepository,
+            IHubsService hubsService)
         {
             _studentTutorsRepository = studentTutorsRepository;
             _currentUserService = currentUserService;
@@ -36,6 +39,7 @@ namespace TutoringApp.Services.Users
             _moduleTutorsRepository = moduleTutorsRepository;
             _tutoringSessionsRepository = tutoringSessionsRepository;
             _studentTutorIgnoresRepository = studentTutorIgnoresRepository;
+            _hubsService = hubsService;
         }
 
         public async Task AddStudentTutor(string tutorId, int moduleId)
@@ -77,7 +81,7 @@ namespace TutoringApp.Services.Users
         public async Task RemoveStudentTutor(string tutorId, int moduleId)
         {
             var currentUserId = _currentUserService.GetUserId();
-            var studentTutorQuery = await _studentTutorsRepository.GetFiltered(st => 
+            var studentTutorQuery = await _studentTutorsRepository.GetFiltered(st =>
                 st.StudentId == currentUserId
                 && st.TutorId == tutorId
                 && st.ModuleId == moduleId);
@@ -89,6 +93,12 @@ namespace TutoringApp.Services.Users
                 await _studentTutorsRepository.Delete(studentTutor);
 
                 await RemoveUpcomingTutoringSessions(currentUserId, tutorId, moduleId);
+
+                var studentNotification = new TutoringSessionFinishedNotificationDto { ParticipantId = tutorId };
+                await _hubsService.SendSessionFinishedNotificationToUser(currentUserId, studentNotification);
+
+                var tutorNotification = new TutoringSessionFinishedNotificationDto { ParticipantId = currentUserId };
+                await _hubsService.SendSessionFinishedNotificationToUser(tutorId, tutorNotification);
             }
         }
 
@@ -107,6 +117,12 @@ namespace TutoringApp.Services.Users
                 await _studentTutorsRepository.Delete(tutorStudent);
 
                 await RemoveUpcomingTutoringSessions(studentId, currentUserId, moduleId);
+
+                var tutorNotification = new TutoringSessionFinishedNotificationDto { ParticipantId = studentId };
+                await _hubsService.SendSessionFinishedNotificationToUser(currentUserId, tutorNotification);
+
+                var studentNotification = new TutoringSessionFinishedNotificationDto { ParticipantId = currentUserId };
+                await _hubsService.SendSessionFinishedNotificationToUser(studentId, studentNotification);
             }
         }
 
@@ -125,6 +141,12 @@ namespace TutoringApp.Services.Users
 
             var studentTutorEntities = await _studentTutorsRepository.GetFiltered(st => st.TutorId == currentUserId && st.StudentId == studentId);
             await _studentTutorsRepository.DeleteMany(studentTutorEntities);
+
+            var tutorNotification = new TutoringSessionFinishedNotificationDto { ParticipantId = studentId };
+            await _hubsService.SendSessionFinishedNotificationToUser(currentUserId, tutorNotification);
+
+            var studentNotification = new TutoringSessionFinishedNotificationDto { ParticipantId = currentUserId };
+            await _hubsService.SendSessionFinishedNotificationToUser(studentId, studentNotification);
         }
 
         public async Task<IEnumerable<IgnoredStudentDto>> GetIgnoredStudents()
@@ -141,7 +163,7 @@ namespace TutoringApp.Services.Users
 
         public async Task UnignoreStudent(string studentId)
         {
-            var ignoreQuery = await _studentTutorIgnoresRepository.GetFiltered(i => 
+            var ignoreQuery = await _studentTutorIgnoresRepository.GetFiltered(i =>
                 i.TutorId == _currentUserService.GetUserId()
                 && i.StudentId == studentId
                 );

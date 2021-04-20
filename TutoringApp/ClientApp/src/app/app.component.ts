@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { filter, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { TutoringSessionEvaluation } from './models/tutoring/tutoring-sessions/tutoring-session-evaluation';
 import { TutoringSessionOnGoing } from './models/tutoring/tutoring-sessions/tutoring-session-on-going';
 import { AuthService } from './services/auth/auth.service';
@@ -25,11 +26,14 @@ export class AppComponent implements OnInit {
 
   private onGoingSession: TutoringSessionOnGoing;
 
+  private messageCleared = false;
+
   constructor(
     private authService: AuthService,
     private hubsService: HubsService,
     private tutoringSessionsService: TutoringSessionsService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +45,7 @@ export class AppComponent implements OnInit {
     this.initializeOnGoingTutoringSession();
     this.initializeLogoutAction();
     this.initializeLoginAction();
+    this.initializeRouteChangeSubscription();
     this.initializeOnGoingSessionSubscription();
   }
 
@@ -49,9 +54,31 @@ export class AppComponent implements OnInit {
       filter(s => !!s),
       filter(_ => !this.onGoingSession),
       tap(s => this.onGoingSession = s),
-      tap(_ => this.messageService.add({ severity: 'info', detail: this.getTutoringSessionLink(), sticky: true, closable: false }))
+      tap(_ => this.handleUrlChangedEvent(this.router.url))
     )
       .subscribe();
+  }
+
+  private initializeRouteChangeSubscription(): void {
+    console.log(this.onGoingSession);
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(event => (event as NavigationEnd).url),
+      tap(url => this.handleUrlChangedEvent(url))
+    )
+      .subscribe();
+  }
+
+  private handleUrlChangedEvent(url: string): void {
+    if (this.onGoingSession) {
+      if (url === this.getTutoringSessionLink()) {
+        this.messageService.clear();
+        this.messageCleared = true;
+      } else if (this.messageCleared) {
+        this.messageService.add({ severity: 'info', detail: this.getTutoringSessionLink(), sticky: true, closable: false });
+        this.messageCleared = false;
+      }
+    }
   }
 
   private preserveAuthenticationState(): void {
@@ -82,9 +109,10 @@ export class AppComponent implements OnInit {
   private initializeTutoringSessionListener(): void {
     this.tutoringSessionsService.tutoringSessionFinished().pipe(
       filter(notification => !!notification),
+      filter(notification => notification.participantId === this.onGoingSession.participantId),
       tap(_ => this.onGoingSession = null),
       tap(_ => this.messageService.clear()),
-      filter(n => n.isStudent),
+      filter(n => n.openNotificationDialog),
       tap(_ => this.isTutoringEvaluationVisible = true),
       tap(notification => this.evaluationHeader = `How do you rate tutoring session with ${notification.tutorName}?`),
       tap(notification => this.sessionId = notification.sessionId)
@@ -108,16 +136,20 @@ export class AppComponent implements OnInit {
       filter(s => !!s),
       filter(_ => !this.onGoingSession),
       tap(s => this.onGoingSession = s),
-      tap(_ => this.messageService.add({ severity: 'info', detail: this.getTutoringSessionLink(), sticky: true, closable: false }))
+      tap(_ => this.handleUrlChangedEvent(this.router.url))
     )
       .subscribe();
   }
 
-  private getTutoringSessionLink(): string {
+  public getTutoringSessionLink(): string {
+    if (!this.onGoingSession) {
+      return '';
+    }
+
     const subRoute = this.onGoingSession.isStudent
       ? `tutors/${this.onGoingSession.participantId}`
       : `students/${this.onGoingSession.participantId}`;
 
-    return `modules/${this.onGoingSession.moduleId}/${subRoute}`;
+    return `/modules/${this.onGoingSession.moduleId}/${subRoute}`;
   }
 }

@@ -221,10 +221,10 @@ namespace TutoringApp.Services.Tutoring
                     session.StatusChangeDate = currentTime;
                     await _tutoringSessionsRepository.Update(session);
 
-                    var notification = new TutoringSessionFinishedNotificationDto { SessionId = session.Id, TutorName = session.Tutor.FirstName + " " + session.Tutor.LastName, IsStudent = true };
-                    var notification2 = new TutoringSessionFinishedNotificationDto { IsStudent = false };
-                    await _hubsService.SendSessionFinishedNotificationToUser(session.StudentId, notification);
-                    await _hubsService.SendSessionFinishedNotificationToUser(session.TutorId, notification2);
+                    var studentNotification = new TutoringSessionFinishedNotificationDto { SessionId = session.Id, ParticipantId = session.TutorId, TutorName = session.Tutor.FirstName + " " + session.Tutor.LastName, OpenNotificationDialog = true };
+                    var tutorNotification = new TutoringSessionFinishedNotificationDto { ParticipantId = session.StudentId };
+                    await _hubsService.SendSessionFinishedNotificationToUser(session.StudentId, studentNotification);
+                    await _hubsService.SendSessionFinishedNotificationToUser(session.TutorId, tutorNotification);
 
                     if (session.IsSubscribed)
                     {
@@ -250,20 +250,22 @@ namespace TutoringApp.Services.Tutoring
                     session.IsReminderSent = true;
                     await _tutoringSessionsRepository.Update(session);
                 }
-                else if (timeDifference.TotalMinutes < 0 && timeDifference.TotalMinutes > -30)
+                else if (timeDifference.TotalMinutes < 0 && timeDifference.TotalMinutes > -1)
                 {
-                    var onGoing = new TutoringSessionOnGoingDto
+                    var studentNotification = new TutoringSessionOnGoingDto
                     {
                         ModuleId = session.ModuleId,
-                        ParticipantId = session.TutorId
+                        ParticipantId = session.TutorId,
+                        IsStudent = true
                     };
-                    await _hubsService.SendSessionOnGoingNotificationToUser(session.StudentId, onGoing);
-                    var onGoing2 = new TutoringSessionOnGoingDto
+                    await _hubsService.SendSessionOnGoingNotificationToUser(session.StudentId, studentNotification);
+
+                    var tutorNotification = new TutoringSessionOnGoingDto
                     {
                         ModuleId = session.ModuleId,
                         ParticipantId = session.StudentId
                     };
-                    await _hubsService.SendSessionOnGoingNotificationToUser(session.TutorId, onGoing2);
+                    await _hubsService.SendSessionOnGoingNotificationToUser(session.TutorId, tutorNotification);
                 }
             }
         }
