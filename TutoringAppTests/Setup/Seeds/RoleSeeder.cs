@@ -10,7 +10,6 @@ namespace TutoringAppTests.Setup.Seeds
         {
             await roleManager.CreateAsync(new IdentityRole { Name = AppRoles.Student });
             await roleManager.CreateAsync(new IdentityRole { Name = AppRoles.Admin });
-            await roleManager.CreateAsync(new IdentityRole { Name = AppRoles.Lecturer });
         }
     }
 }

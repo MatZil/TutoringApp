@@ -18,7 +18,6 @@ import { TutorTableComponent } from '../../users/tutor-table/tutor-table.compone
 export class ModuleViewComponent implements OnInit {
   private moduleId: number;
   public isAdmin = false;
-  public isLecturer = false;
 
   @ViewChild(TutorTableComponent)
   public tutorTableComponent: TutorTableComponent;
@@ -46,7 +45,6 @@ export class ModuleViewComponent implements OnInit {
 
   private initializeIsAdmin(): void {
     this.isAdmin = this.authService.currentUserBelongsToRole(AppConstants.AdminRole);
-    this.isLecturer = this.authService.currentUserBelongsToRole(AppConstants.LecturerRole);
   }
   //#endregion
 

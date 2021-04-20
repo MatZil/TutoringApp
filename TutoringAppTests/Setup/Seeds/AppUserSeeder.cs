@@ -95,23 +95,6 @@ namespace TutoringAppTests.Setup.Seeds
             await userManager.CreateAsync(firstAdmin, "Password1");
             await userManager.AddToRoleAsync(firstAdmin, AppRoles.Admin);
 
-            var firstLecturer = new AppUser
-            {
-                Email = "matas.lecturer@ktu.edu",
-                UserName = "matas.lecturer@ktu.edu",
-                EmailConfirmed = true,
-                IsConfirmed = true,
-                FirstName = "Matas",
-                LastName = "Zilinskas",
-                Faculty = "Informatics",
-                StudyBranch = "Software Systems",
-                StudentCycle = StudentCycleEnum.Bachelor,
-                StudentYear = StudentYearEnum.FourthYear
-            };
-
-            await userManager.CreateAsync(firstLecturer, "Password1");
-            await userManager.AddToRoleAsync(firstLecturer, AppRoles.Lecturer);
-
             var emailUnconfirmedStudent = new AppUser
             {
                 Email = "matas.emailunconfirmed@ktu.edu",

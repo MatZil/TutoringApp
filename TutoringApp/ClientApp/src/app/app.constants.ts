@@ -6,7 +6,6 @@ const constants: AppConstants = {
   ModuleViewRoute: 'modules/:id',
   StudentRole: 'Student',
   AdminRole: 'Admin',
-  LecturerRole: 'Lecturer',
   RoleClaimType: 'Role',
   EmailClaimType: 'Email',
   UserIdClaimType: 'UserId',
@@ -29,7 +28,6 @@ interface AppConstants {
 
   readonly StudentRole: string;
   readonly AdminRole: string;
-  readonly LecturerRole: string;
 }
 
 export const AppConstants: AppConstants = constants;
