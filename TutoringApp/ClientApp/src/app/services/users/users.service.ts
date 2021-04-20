@@ -40,6 +40,14 @@ export class UsersService {
   public getUser(userId: string): Observable<UserDto> {
     return this.httpService.get(this.usersController, userId);
   }
+
+  public studentTutorExists(studentId: string, tutorId: string): Observable<boolean> {
+    const queryParams = studentId
+      ? `?studentId=${studentId}`
+      : `?tutorId=${tutorId}`;
+
+    return this.httpService.get(this.usersController, `student-tutor-exists${queryParams}`);
+  }
   //#endregion
 
   //#region Admin side

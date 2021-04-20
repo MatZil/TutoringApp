@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using IdentityServer4.Extensions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -173,6 +174,22 @@ namespace TutoringApp.Services.Users
             {
                 await _studentTutorIgnoresRepository.Delete(ignore);
             }
+        }
+
+        public async Task<bool> StudentTutorExists(string studentId, string tutorId)
+        {
+            if (!studentId.IsNullOrEmpty() && !tutorId.IsNullOrEmpty())
+            {
+                throw new InvalidOperationException("Invalid request.");
+            }
+
+            var userId = _currentUserService.GetUserId();
+            var exists = await _studentTutorsRepository.Exists(st => 
+                (!studentId.IsNullOrEmpty() && st.TutorId == userId && st.StudentId == studentId)
+                || (!tutorId.IsNullOrEmpty() && st.StudentId == userId && st.TutorId == tutorId)
+            );
+
+            return exists;
         }
 
         private async Task RemoveUpcomingTutoringSessions(string studentId, string tutorId, int? moduleId = null)

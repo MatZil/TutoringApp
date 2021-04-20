@@ -12,5 +12,6 @@ namespace TutoringApp.Services.Interfaces
         Task IgnoreTutorStudent(string studentId);
         Task<IEnumerable<IgnoredStudentDto>> GetIgnoredStudents();
         Task UnignoreStudent(string studentId);
+        Task<bool> StudentTutorExists(string studentId, string tutorId);
     }
 }

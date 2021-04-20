@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ModulesService } from 'src/app/services/modules/modules.service';
@@ -38,10 +38,21 @@ export class TutorViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeRouteParams();
+
+    this.protectRoute();
+
     this.initializeAssignments();
     this.initializeTutor();
 
     this.currentRoute = this.router.url;
+  }
+
+  private protectRoute(): void {
+    this.usersService.studentTutorExists(null, this.tutorId).pipe(
+      filter(exists => !exists),
+      tap(_ => this.router.navigateByUrl('/'))
+    )
+      .subscribe();
   }
 
   private initializeTutor(): void {

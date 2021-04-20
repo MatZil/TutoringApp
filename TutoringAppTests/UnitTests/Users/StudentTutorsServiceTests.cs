@@ -41,7 +41,8 @@ namespace TutoringAppTests.UnitTests.Users
                 new Mock<ILogger<IStudentTutorsService>>().Object,
                 new ModuleTutorsRepository(setup.Context),
                 new TutoringSessionsRepository(setup.Context),
-                new StudentTutorIgnoresRepository(setup.Context)
+                new StudentTutorIgnoresRepository(setup.Context),
+                new Mock<IHubsService>().Object
             );
         }
 
@@ -200,6 +201,38 @@ namespace TutoringAppTests.UnitTests.Users
             var exists = await _context.StudentTutorIgnores.AnyAsync();
 
             Assert.False(exists);
+        }
+
+        [Fact]
+        public async Task When_QueryingExists_Expect_NotExists()
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.tutorius3@ktu.edu").Id);
+
+            var exists = await _studentTutorsService.StudentTutorExists(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id, null);
+
+            Assert.False(exists);
+        }
+
+        [Fact]
+        public async Task When_QueryingExists_Expect_Exists()
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu").Id);
+
+            var exists = await _studentTutorsService.StudentTutorExists(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id, null);
+
+            Assert.True(exists);
+        }
+
+        [Fact]
+        public async Task When_QueryingExists_Expect_Exception()
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+                await _studentTutorsService.StudentTutorExists("a", "a")
+            );
         }
     }
 }

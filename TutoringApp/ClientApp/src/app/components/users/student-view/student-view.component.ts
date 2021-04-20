@@ -2,7 +2,7 @@ import { LocationStrategy } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { Assignment } from 'src/app/models/tutoring/assignments/assignment';
 import { TutoringSessionNew } from 'src/app/models/tutoring/tutoring-sessions/tutoring-session-new';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -56,10 +56,21 @@ export class StudentViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeRouteParams();
+
+    this.protectRoute();
+
     this.initializeAssignments();
     this.initializeStudent();
 
     this.currentRoute = this.router.url;
+  }
+
+  private protectRoute(): void {
+    this.usersService.studentTutorExists(this.studentId, null).pipe(
+      filter(exists => !exists),
+      tap(_ => this.router.navigateByUrl('/'))
+    )
+      .subscribe();
   }
 
   private initializeRouteParams(): void {

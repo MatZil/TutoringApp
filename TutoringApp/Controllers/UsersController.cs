@@ -158,6 +158,21 @@ namespace TutoringApp.Controllers
             }
         }
 
+        [HttpGet("student-tutor-exists")]
+        public async Task<IActionResult> StudentTutorExists([FromQuery] string studentId, [FromQuery] string tutorId)
+        {
+            try
+            {
+                var exists = await _studentTutorsService.StudentTutorExists(studentId, tutorId);
+
+                return Ok(exists);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         #region Chats
 
         [HttpPost("{userId}/chat-messages")]
