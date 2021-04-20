@@ -18,17 +18,20 @@ namespace TutoringApp.Services.Tutoring
         private readonly ICurrentUserService _currentUserService;
         private readonly IRepository<Assignment> _assignmentsRepository;
         private readonly IRepository<StudentTutor> _studentTutorsRepository;
+        private readonly IFilesService _filesService;
 
         private const string AssignmentsRoot = "Assignments/";
 
         public AssignmentsService(
             ICurrentUserService currentUserService,
             IRepository<Assignment> assignmentsRepository,
-            IRepository<StudentTutor> studentTutorsRepository)
+            IRepository<StudentTutor> studentTutorsRepository,
+            IFilesService filesService)
         {
             _currentUserService = currentUserService;
             _assignmentsRepository = assignmentsRepository;
             _studentTutorsRepository = studentTutorsRepository;
+            _filesService = filesService;
         }
 
         public async Task UploadAssignments(int moduleId, string studentId, IFormFileCollection formFiles)
@@ -37,15 +40,14 @@ namespace TutoringApp.Services.Tutoring
 
             await ValidateAssignmentsUpload(moduleId, studentId, formFiles);
 
-            Directory.CreateDirectory($"{AssignmentsRoot}{moduleId}");
-            Directory.CreateDirectory($"{AssignmentsRoot}{moduleId}/{tutorId}");
-            Directory.CreateDirectory($"{AssignmentsRoot}{moduleId}/{tutorId}/{studentId}");
+            _filesService.CreateDirectory($"{AssignmentsRoot}{moduleId}");
+            _filesService.CreateDirectory($"{AssignmentsRoot}{moduleId}/{tutorId}");
+            _filesService.CreateDirectory($"{AssignmentsRoot}{moduleId}/{tutorId}/{studentId}");
 
             var assignmentEntities = new List<Assignment>();
             foreach (var formFile in formFiles)
             {
-                await using var stream = new FileStream($"{AssignmentsRoot}{moduleId}/{tutorId}/{studentId}/{formFile.FileName}", FileMode.Create);
-                await formFile.CopyToAsync(stream);
+                await _filesService.UploadFile(formFile, $"{AssignmentsRoot}{moduleId}/{tutorId}/{studentId}/{formFile.FileName}");
 
                 assignmentEntities.Add(new Assignment
                 {
@@ -107,9 +109,8 @@ namespace TutoringApp.Services.Tutoring
         {
             var assignment = await ValidateSubmissionUpload(assignmentId, formFiles);
 
-            Directory.CreateDirectory($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions");
-            await using var stream = new FileStream($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions/{formFiles[0].FileName}", FileMode.Create);
-            await formFiles[0].CopyToAsync(stream);
+            _filesService.CreateDirectory($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions");
+            await _filesService.UploadFile(formFiles[0], $"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions/{formFiles[0].FileName}");
 
             assignment.SubmissionFileName = formFiles[0].FileName;
             await _assignmentsRepository.Update(assignment);
@@ -178,10 +179,10 @@ namespace TutoringApp.Services.Tutoring
                 throw new InvalidOperationException("Could not delete assignment: you are not the tutor of this assignment.");
             }
 
-            File.Delete($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/{assignment.AssignmentFileName}");
+            _filesService.DeleteFile($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/{assignment.AssignmentFileName}");
             if (!assignment.SubmissionFileName.IsNullOrEmpty())
             {
-                File.Delete($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions/{assignment.SubmissionFileName}");
+                _filesService.DeleteFile($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions/{assignment.SubmissionFileName}");
             }
 
             await _assignmentsRepository.Delete(assignment);
@@ -210,7 +211,7 @@ namespace TutoringApp.Services.Tutoring
                 ? fileName
                 : $"Submissions/{fileName}";
 
-            return File.OpenRead($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/{name}");
+            return _filesService.DownloadFile($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/{name}");
         }
     }
 }

@@ -24,8 +24,6 @@ namespace TutoringApp.Configurations
         public static void ConfigureDependencyInjections(this IServiceCollection services)
         {
             services
-
-                // Services
                 .AddScoped<IAuthService, AuthService>()
                 .AddScoped<IWebTokenService, WebTokenService>()
                 .AddScoped<IEmailService, EmailService>()
@@ -41,8 +39,7 @@ namespace TutoringApp.Configurations
                 .AddScoped<IHubsService, HubsService>()
                 .AddScoped<ITutoringSessionsService, TutoringSessionsService>()
                 .AddScoped<IAssignmentsService, AssignmentsService>()
-
-                // Infrastructure
+                .AddScoped<IFilesService, FilesService>()
                 .AddSingleton<IEmailSender, EmailSender>()
                 .AddSingleton<IUserIdProvider, UserIdProvider>()
                 .AddScoped<IRepository<Assignment>, AssignmentsRepository>()
