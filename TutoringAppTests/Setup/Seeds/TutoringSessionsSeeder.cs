@@ -33,6 +33,19 @@ namespace TutoringAppTests.Setup.Seeds
                 {
                     Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu"),
                     Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
+                    CreationDate = DateTimeOffset.Now.AddDays(-3),
+                    IsReminderSent = true,
+                    IsSubscribed = true,
+                    ModuleId = 1,
+                    SessionDate = DateTimeOffset.Now.AddHours(-1),
+                    Status = TutoringSessionStatusEnum.Finished,
+                    StatusChangeDate = DateTimeOffset.Now.AddHours(-1),
+                    Evaluation = TutoringSessionEvaluationEnum.Good
+                },
+                new TutoringSession
+                {
+                    Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu"),
+                    Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
                     CreationDate = DateTimeOffset.Now.AddDays(-1),
                     IsReminderSent = true,
                     IsSubscribed = true,
@@ -47,9 +60,31 @@ namespace TutoringAppTests.Setup.Seeds
                     Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
                     CreationDate = DateTimeOffset.Now.AddHours(-5),
                     IsReminderSent = true,
+                    IsSubscribed = true,
+                    ModuleId = 1,
+                    SessionDate = DateTimeOffset.Now.AddMinutes(-31),
+                    Status = TutoringSessionStatusEnum.Upcoming
+                },
+                new TutoringSession
+                {
+                    Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu"),
+                    Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
+                    CreationDate = DateTimeOffset.Now.AddHours(-5),
+                    IsReminderSent = true,
                     IsSubscribed = false,
                     ModuleId = 1,
-                    SessionDate = DateTimeOffset.Now.AddMinutes(-3),
+                    SessionDate = DateTimeOffset.Now,
+                    Status = TutoringSessionStatusEnum.Upcoming
+                },
+                new TutoringSession
+                {
+                    Tutor = userManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu"),
+                    Student = userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu"),
+                    CreationDate = DateTimeOffset.Now.AddHours(-5),
+                    IsReminderSent = false,
+                    IsSubscribed = false,
+                    ModuleId = 1,
+                    SessionDate = DateTimeOffset.Now.AddMinutes(14),
                     Status = TutoringSessionStatusEnum.Upcoming
                 },
                 new TutoringSession

@@ -39,7 +39,10 @@ namespace TutoringApp.Services.Tutoring
                 .Include(u => u.TutoringApplications)
                 .FirstOrDefaultAsync(u => u.Id == currentUserId);
 
-            ValidateTutoringApplication(currentUser, currentUserId, moduleId);
+            if (currentUser.TutorModules.Any(tm => tm.ModuleId == moduleId))
+            {
+                throw new InvalidOperationException($"Could not apply for tutoring: user (id='{currentUser.Id}') is already a tutor in this module.");
+            }
 
             var tutoringApplication = new TutoringApplication
             {
@@ -102,19 +105,6 @@ namespace TutoringApp.Services.Tutoring
             await _tutoringApplicationsRepository.Delete(application);
 
             return (application.Student.Email, application.Module.Name);
-        }
-
-        private void ValidateTutoringApplication(AppUser user, string userId, int moduleId)
-        {
-            if (user is null)
-            {
-                throw new InvalidOperationException($"Could not apply for tutoring: user (id='{userId}') was not found.");
-            }
-
-            if (user.TutorModules.Any(tm => tm.ModuleId == moduleId))
-            {
-                throw new InvalidOperationException($"Could not apply for tutoring: user (id='{userId}') is already a tutor in this module.");
-            }
         }
     }
 }

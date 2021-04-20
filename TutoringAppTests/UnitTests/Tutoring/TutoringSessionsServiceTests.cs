@@ -23,6 +23,7 @@ namespace TutoringAppTests.UnitTests.Tutoring
         private readonly Mock<ICurrentUserService> _currentUserServiceMock;
         private readonly UserManager<AppUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly Mock<IHubsService> _hubsServiceMock;
 
         public TutoringSessionsServiceTests()
         {
@@ -36,13 +37,15 @@ namespace TutoringAppTests.UnitTests.Tutoring
                 .Setup(s => s.GetUserId())
                 .Returns(setup.UserManager.Users.First(u => u.Email == "matas.tutorius1@ktu.edu").Id);
 
+            _hubsServiceMock = new Mock<IHubsService>();
+
             _tutoringSessionsService = new TutoringSessionsService(
                 new TutoringSessionsRepository(setup.Context),
                 setup.UserManager,
                 _currentUserServiceMock.Object,
                 new TimeService(),
                 new Mock<IEmailService>().Object,
-                new Mock<IHubsService>().Object
+                _hubsServiceMock.Object
             );
         }
 
@@ -54,6 +57,9 @@ namespace TutoringAppTests.UnitTests.Tutoring
             Assert.Collection(sessions,
                 s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
+                s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
+                s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
+                s => Assert.Equal(TutoringSessionStatusEnum.Finished, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Finished, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Cancelled, s.Status)
                 );
@@ -71,6 +77,9 @@ namespace TutoringAppTests.UnitTests.Tutoring
             Assert.Collection(sessions,
                 s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
+                s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
+                s => Assert.Equal(TutoringSessionStatusEnum.Upcoming, s.Status),
+                s => Assert.Equal(TutoringSessionStatusEnum.Finished, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Finished, s.Status),
                 s => Assert.Equal(TutoringSessionStatusEnum.Cancelled, s.Status)
             );
@@ -130,9 +139,9 @@ namespace TutoringAppTests.UnitTests.Tutoring
         public async Task When_CancellingTutoringSession_Expect_SessionCancelled()
         {
             var cancelDto = new TutoringSessionCancelDto { Reason = "Test reason" };
-            await _tutoringSessionsService.CancelTutoringSession(3, cancelDto);
+            await _tutoringSessionsService.CancelTutoringSession(4, cancelDto);
 
-            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 3);
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 4);
 
             Assert.Equal(TutoringSessionStatusEnum.Cancelled, session.Status);
             Assert.Equal(DateTimeOffset.Now.Date, session.StatusChangeDate.GetValueOrDefault().Date);
@@ -143,9 +152,9 @@ namespace TutoringAppTests.UnitTests.Tutoring
         public async Task When_CancellingSubscribedTutoringSession_Expect_NewSessionCreated()
         {
             var cancelDto = new TutoringSessionCancelDto { Reason = "Test reason" };
-            await _tutoringSessionsService.CancelTutoringSession(4, cancelDto);
+            await _tutoringSessionsService.CancelTutoringSession(7, cancelDto);
 
-            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 5);
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 8);
 
             Assert.Equal(TutoringSessionStatusEnum.Upcoming, session.Status);
             Assert.Equal(DateTimeOffset.Now.AddDays(14).Date, session.SessionDate.Date);
@@ -177,11 +186,31 @@ namespace TutoringAppTests.UnitTests.Tutoring
         [Fact]
         public async Task When_InvertingSessionSubscription_Expect_SubscriptionInverted()
         {
-            await _tutoringSessionsService.InvertTutoringSessionSubscription(4);
+            await _tutoringSessionsService.InvertTutoringSessionSubscription(7);
 
-            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 4);
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 7);
 
             Assert.False(session.IsSubscribed);
+        }
+
+        [Fact]
+        public async Task When_InvertingSessionSubscriptionAsNotTutor_Expect_Exception()
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.tutorius2@ktu.edu").Id);
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _tutoringSessionsService.InvertTutoringSessionSubscription(4)
+            );
+        }
+
+        [Fact]
+        public async Task When_InvertingNotUpcomingSessionSubscription_Expect_Exception()
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _tutoringSessionsService.InvertTutoringSessionSubscription(2)
+            );
         }
 
         [Fact]
@@ -197,12 +226,80 @@ namespace TutoringAppTests.UnitTests.Tutoring
                 Comment = "Lacked charisma"
             };
 
-            await _tutoringSessionsService.EvaluateTutoringSession(2, evaluation);
+            await _tutoringSessionsService.EvaluateTutoringSession(3, evaluation);
 
-            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 2);
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 3);
 
             Assert.Equal(TutoringSessionEvaluationEnum.Good, session.Evaluation);
             Assert.Equal("Lacked charisma", session.EvaluationComment);
+        }
+
+        [Fact]
+        public async Task When_EvaluatingNonExistingTutoringSession_Expect_Exception()
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id);
+
+            var evaluation = new TutoringSessionEvaluationDto
+            {
+                Evaluation = TutoringSessionEvaluationEnum.Good,
+                Comment = "Lacked charisma"
+            };
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _tutoringSessionsService.EvaluateTutoringSession(99, evaluation)
+            );
+        }
+
+        [Fact]
+        public async Task When_EvaluatingTutoringSessionAsTutor_Expect_Exception()
+        {
+            var evaluation = new TutoringSessionEvaluationDto
+            {
+                Evaluation = TutoringSessionEvaluationEnum.Good,
+                Comment = "Lacked charisma"
+            };
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _tutoringSessionsService.EvaluateTutoringSession(3, evaluation)
+            );
+        }
+
+        [Fact]
+        public async Task When_EvaluatingUpcomingTutoringSession_Expect_Exception()
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id);
+
+            var evaluation = new TutoringSessionEvaluationDto
+            {
+                Evaluation = TutoringSessionEvaluationEnum.Good,
+                Comment = "Lacked charisma"
+            };
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _tutoringSessionsService.EvaluateTutoringSession(4, evaluation)
+            );
+        }
+
+        [Fact]
+        public async Task When_EvaluatingEvaluatedTutoringSession_Expect_Exception()
+        {
+            _currentUserServiceMock
+                .Setup(s => s.GetUserId())
+                .Returns(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id);
+
+            var evaluation = new TutoringSessionEvaluationDto
+            {
+                Evaluation = TutoringSessionEvaluationEnum.Good,
+                Comment = "Lacked charisma"
+            };
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await _tutoringSessionsService.EvaluateTutoringSession(2, evaluation)
+            );
         }
 
         [Fact]
@@ -212,6 +309,37 @@ namespace TutoringAppTests.UnitTests.Tutoring
 
             Assert.Equal(1, session.ModuleId);
             Assert.Equal(_userManager.Users.First(u => u.Email == "matas.zilinskas@ktu.edu").Id, session.ParticipantId);
+        }
+
+        [Fact]
+        public async Task When_RecheckingUpcomingSessions_Expect_FinishedSessionsClosed()
+        {
+            await _tutoringSessionsService.RecheckUpcomingTutoringSessions();
+
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 4);
+
+            Assert.Equal(TutoringSessionStatusEnum.Finished, session.Status);
+        }
+
+        [Fact]
+        public async Task When_RecheckingUpcomingSessions_Expect_OnGoingSessionsNotified()
+        {
+            await _tutoringSessionsService.RecheckUpcomingTutoringSessions();
+
+            _hubsServiceMock.Verify(
+                s => s.SendSessionOnGoingNotificationToUser(It.IsAny<string>(), It.IsAny<TutoringSessionOnGoingDto>()),
+                Times.Exactly(2)
+                );
+        }
+
+        [Fact]
+        public async Task When_RecheckingUpcomingSessions_Expect_UpcomingSessionsReminded()
+        {
+            await _tutoringSessionsService.RecheckUpcomingTutoringSessions();
+
+            var session = await _context.TutoringSessions.FirstAsync(ts => ts.Id == 6);
+
+            Assert.True(session.IsReminderSent);
         }
     }
 }
