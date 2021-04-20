@@ -75,6 +75,11 @@ namespace TutoringApp.Services.Tutoring
                 throw new InvalidOperationException("Could not update assignments: you are not a tutor in this module.");
             }
 
+            if (formFiles.Any(f => f.Length > 5242880))
+            {
+                throw new InvalidOperationException("Could not update assignments: files are too big.");
+            }
+
             var existingAssignments = await _assignmentsRepository.GetFiltered(a =>
                 a.ModuleId == moduleId
                 && a.TutorId == tutorId
@@ -115,6 +120,7 @@ namespace TutoringApp.Services.Tutoring
             assignment.SubmissionFileName = formFiles[0].FileName;
             await _assignmentsRepository.Update(assignment);
         }
+
         private async Task<Assignment> ValidateSubmissionUpload(int assignmentId, IFormFileCollection formFiles)
         {
             var assignment = await _assignmentsRepository.GetById(assignmentId);
@@ -122,6 +128,11 @@ namespace TutoringApp.Services.Tutoring
             if (formFiles.Count != 1)
             {
                 throw new InvalidOperationException("Could not upload submission: you may only upload a single file.");
+            }
+
+            if (formFiles[0].Length > 5242880)
+            {
+                throw new InvalidOperationException("Could not upload submission: file is too large.");
             }
 
             if (assignment is null)

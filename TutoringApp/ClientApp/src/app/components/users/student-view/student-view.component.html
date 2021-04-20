@@ -37,7 +37,7 @@
         (click)="initializeTutoringSessionCreation()"></button>
       <span class="assignments-upload-button">
         <p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" (uploadHandler)="updateAssignments($event)"
-          accept=".pdf" chooseLabel="Upload Assignments" mode="basic">
+          accept=".pdf" chooseLabel="Upload Assignments" mode="basic" [maxFileSize]="5242880">
         </p-fileUpload>
       </span>
       <button pButton label="Ignore" (click)="confirmStudentIgnore()" class="p-button-danger"></button>

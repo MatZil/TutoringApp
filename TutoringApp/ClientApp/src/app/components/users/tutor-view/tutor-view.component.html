@@ -16,7 +16,7 @@
       </span>
       <span *ngIf="!assignment.submissionFileName" class="submission-upload-button">
         <p-fileUpload chooseLabel="Submit" chooseIcon="pi pi-plus" [auto]="true" [customUpload]="true"
-          (uploadHandler)="uploadSubmission($event, assignment.id)" mode="basic"></p-fileUpload>
+          (uploadHandler)="uploadSubmission($event, assignment.id)" mode="basic" [maxFileSize]="5242880"></p-fileUpload>
       </span>
     </li>
   </ol>
