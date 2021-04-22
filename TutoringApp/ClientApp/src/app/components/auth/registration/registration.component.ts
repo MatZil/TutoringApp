@@ -71,7 +71,7 @@ export class RegistrationComponent implements OnInit {
     if (isValid) {
       this.authService.register(this.registrationFormGroup.value).subscribe(
         _ => this.router.navigate([''], { queryParams: { useCase: HomepageMessageUseCaseEnum.RegistrationSuccess } }),
-        err => this.messageService.add({ severity: 'error', summary: 'Errorrraaa', detail: `${err.error}` })
+        err => this.messageService.add({ severity: 'error', summary: 'Error', detail: `${err.error}` })
       );
     }
   }
