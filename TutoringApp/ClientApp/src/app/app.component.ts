@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
     this.hubsService.startConnections();
 
     this.initializeTutoringSessionListener();
-    this.initializeOnGoingTutoringSession();
     this.initializeLogoutAction();
     this.initializeLoginAction();
     this.initializeRouteChangeSubscription();
@@ -60,7 +59,6 @@ export class AppComponent implements OnInit {
   }
 
   private initializeRouteChangeSubscription(): void {
-    console.log(this.onGoingSession);
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       map(event => (event as NavigationEnd).url),
