@@ -250,7 +250,7 @@ namespace TutoringApp.Services.Tutoring
                     session.IsReminderSent = true;
                     await _tutoringSessionsRepository.Update(session);
                 }
-                else if (timeDifference.TotalMinutes < 0 && timeDifference.TotalMinutes > -1)
+                else if (timeDifference.TotalMinutes < 0)
                 {
                     var studentNotification = new TutoringSessionOnGoingDto
                     {
