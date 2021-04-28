@@ -202,7 +202,7 @@ namespace TutoringAppTests.UnitTests.Tutoring
         }
 
         [Fact]
-        public async Task When_UploadingSubmissionToSubmittedAssignment_Expect_Exception()
+        public async Task When_UploadingSubmissionToEvaluatedAssignment_Expect_EvaluationReset()
         {
             _currentUserServiceMock
                 .Setup(s => s.GetUserId())
@@ -210,12 +210,15 @@ namespace TutoringAppTests.UnitTests.Tutoring
 
             var formFiles = new FormFileCollection
             {
-                new FormFile(Stream.Null, 0, 666, "any", "submit.pdf")
+                new FormFile(Stream.Null, 0, 666, "any", "submit-edit.pdf")
             };
 
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _assignmentsService.UploadSubmission(2, formFiles)
-            );
+            await _assignmentsService.UploadSubmission(1, formFiles);
+
+            var updatedAssignment = await _context.Assignments.FirstAsync(a => a.Id == 1);
+
+            Assert.Null(updatedAssignment.SubmissionEvaluation);
+            Assert.Equal("submit-edit.pdf", updatedAssignment.SubmissionFileName);
         }
 
         [Fact]

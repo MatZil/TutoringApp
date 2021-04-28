@@ -114,6 +114,12 @@ namespace TutoringApp.Services.Tutoring
         {
             var assignment = await ValidateSubmissionUpload(assignmentId, formFiles);
 
+            if (!assignment.SubmissionFileName.IsNullOrEmpty())
+            {
+                _filesService.DeleteFile($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions/{assignment.SubmissionFileName}");
+                assignment.SubmissionEvaluation = null;
+            }
+
             _filesService.CreateDirectory($"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions");
             await _filesService.UploadFile(formFiles[0], $"{AssignmentsRoot}{assignment.ModuleId}/{assignment.TutorId}/{assignment.StudentId}/Submissions/{formFiles[0].FileName}");
 
@@ -144,11 +150,6 @@ namespace TutoringApp.Services.Tutoring
             if (assignment.StudentId != currentUserId)
             {
                 throw new InvalidOperationException("Could not upload submission: you are not the student of this assignment.");
-            }
-
-            if (!assignment.SubmissionFileName.IsNullOrEmpty())
-            {
-                throw new InvalidOperationException("Could not upload submission: you have already submitted a file.");
             }
 
             return assignment;
