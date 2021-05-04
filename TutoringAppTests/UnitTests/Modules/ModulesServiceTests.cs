@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TutoringApp.Data;
 using TutoringApp.Data.Dtos.Modules;
 using TutoringApp.Data.Models;
+using TutoringApp.Data.Models.Enums;
 using TutoringApp.Infrastructure.Repositories.ModelRepositories;
 using TutoringApp.Services.Interfaces;
 using TutoringApp.Services.Modules;
@@ -132,7 +133,7 @@ namespace TutoringAppTests.UnitTests.Modules
         [InlineData(99)]
         public async Task When_GettingNonExistingModule_Expect_Exception(int moduleId)
         {
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await _modulesService.GetModule(moduleId)
             );
         }

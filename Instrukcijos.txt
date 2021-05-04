@@ -1,0 +1,16 @@
+Ši programa yra įdiegta - internetinę svetainę galima pasiekti adresu: https://student4student.azurewebsites.net
+
+Administratoriaus prisijungimo duomenys:
+
+Email: tutoring-administrator@ktu.edu
+Password: asdasd
+
+Tutoriaus prisijungimo duomenys:
+
+Email: tutoring-tutor@ktu.edu
+Password: asdasd
+
+Mokinio prisijungimo duomenys:
+
+Email: tutoring-student@ktu.edu
+Password: asdasd
