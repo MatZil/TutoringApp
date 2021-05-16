@@ -29,9 +29,16 @@ export class HubsService {
 
   private startMainHubConnection(): void {
     this.authService.isAuthenticated$.pipe(
-      filter(isAuth => isAuth),
-      tap(_ => this.initalizeHubConnection())
+      tap(isAuthenticated => this.handleAuthenticateEvent(isAuthenticated))
     ).subscribe();
+  }
+
+  private handleAuthenticateEvent(isAuthenticated: boolean): void {
+    if (isAuthenticated) {
+      this.initalizeHubConnection();
+    } else {
+      this.hubConnection.stop();
+    }
   }
 
   private async initalizeHubConnection() {
