@@ -36,7 +36,7 @@ export class HubsService {
   private handleAuthenticateEvent(isAuthenticated: boolean): void {
     if (isAuthenticated) {
       this.initalizeHubConnection();
-    } else {
+    } else if (this.hubConnection) {
       this.hubConnection.stop();
     }
   }
